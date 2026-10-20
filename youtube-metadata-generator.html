@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123c36">
+
+  <title>YouTube Metadata Generator: Titles, Tags &amp; Descriptions</title>
+  <meta name="description" content="Generate YouTube title ideas, video descriptions, keyword suggestions, tags, calls to action, and content improvement tips with AI.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://onlinetoolsandconverters.cc/youtube-metadata-generator.html">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Online Tools &amp; Converters">
+  <meta property="og:title" content="YouTube Metadata Generator">
+  <meta property="og:description" content="Create YouTube title suggestions, descriptions, keyword ideas, tags, and calls to action using AI.">
+  <meta property="og:url" content="https://onlinetoolsandconverters.cc/youtube-metadata-generator.html">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="YouTube Metadata Generator">
+  <meta name="twitter:description" content="Generate YouTube video metadata suggestions with AI.">
+
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://onlinetoolsandconverters.cc/youtube-metadata-generator.html#webpage",
+        "url": "https://onlinetoolsandconverters.cc/youtube-metadata-generator.html",
+        "name": "YouTube Metadata Generator",
+        "description": "Generate YouTube title ideas, descriptions, keyword suggestions, tags, calls to action, and content improvement tips.",
+        "isPartOf": {
+          "@type": "WebSite",
+          "name": "Online Tools & Converters",
+          "url": "https://onlinetoolsandconverters.cc/"
+        },
+        "inLanguage": "en"
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "YouTube Metadata Generator",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "Any",
+        "url": "https://onlinetoolsandconverters.cc/youtube-metadata-generator.html",
+        "description": "An AI-powered browser tool for generating YouTube title ideas, descriptions, keywords, tags, calls to action, and content improvement suggestions."
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://onlinetoolsandconverters.cc/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "YouTube Metadata Generator",
+            "item": "https://onlinetoolsandconverters.cc/youtube-metadata-generator.html"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body>
+  <div class="ytmg-page">
+
+    <a class="skip-link" href="#ytmg-main">Skip to content</a>
+
+    <header class="ytmg-header">
+      <a class="ytmg-brand" href="index.html">
+        <span aria-hidden="true">OT</span>
+        Online Tools &amp; Converters
+      </a>
+
+      <nav class="ytmg-nav" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="index.html#tools">All tools</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </header>
+
+    <main id="ytmg-main">
+
+      <!-- Page introduction -->
+      <section class="ytmg-hero" aria-labelledby="ytmg-page-title">
+        <span class="ytmg-label">AI-powered creator tool</span>
+
+        <h1 id="ytmg-page-title">YouTube Metadata Generator</h1>
+
+        <p>
+          Create YouTube video title ideas, descriptions, keyword suggestions,
+          tags, calls to action, and content improvement tips. Describe your
+          video topic, choose your preferences, and let AI help you prepare
+          metadata to review before publishing.
+        </p>
+      </section>
+
+      <!-- Generator form -->
+      <section
+        class="ytmg-card"
+        id="ytmg-generator"
+        aria-labelledby="ytmg-form-heading"
+      >
+        <h2 id="ytmg-form-heading">Generate YouTube metadata</h2>
+
+        <p class="ytmg-intro">
+          Give the AI enough information to understand your video.
+          You can enter only a topic or include a summary for more context.
+        </p>
+
+        <form id="ytmg-form">
+          <div class="ytmg-form-grid">
+
+            <div class="ytmg-field ytmg-field-full">
+              <label for="ytmg-topic">
+                Video topic or working title
+                <span class="ytmg-required" aria-hidden="true">*</span>
+              </label>
+
+              <input
+                id="ytmg-topic"
+                name="topic"
+                type="text"
+                maxlength="200"
+                placeholder="Example: How to start a YouTube channel"
+                autocomplete="off"
+                required
+              >
+
+              <small class="ytmg-help">
+                Describe the main subject of your video as clearly as possible.
+              </small>
+            </div>
+
+            <div class="ytmg-field ytmg-field-full">
+              <label for="ytmg-content">
+                Video summary or transcript (optional)
+              </label>
+
+              <textarea
+                id="ytmg-content"
+                name="content"
+                maxlength="12000"
+                placeholder="Summarize the video's main points, explain what viewers will learn, or paste a relevant transcript excerpt..."
+              ></textarea>
+
+              <small class="ytmg-help">
+                Your text is sent to the site's AI API to generate suggestions.
+                Do not submit passwords, confidential data, or sensitive personal information.
+              </small>
+            </div>
+
+            <div class="ytmg-field">
+              <label for="ytmg-audience">Target audience</label>
+
+              <input
+                id="ytmg-audience"
+                name="audience"
+                type="text"
+                maxlength="160"
+                placeholder="Example: Beginner content creators"
+              >
+
+              <small class="ytmg-help">
+                Who is most likely to watch this video?
+              </small>
+            </div>
+
+            <div class="ytmg-field">
+              <label for="ytmg-tone">Writing style</label>
+
+              <select id="ytmg-tone" name="tone">
+                <option value="Engaging and clear">Engaging and clear</option>
+                <option value="Professional">Professional</option>
+                <option value="Friendly and conversational">Friendly and conversational</option>
+                <option value="Educational">Educational</option>
+                <option value="Funny and entertaining">Funny and entertaining</option>
+                <option value="Persuasive">Persuasive</option>
+                <option value="Curiosity-driven but accurate">Curiosity-driven but accurate</option>
+              </select>
+            </div>
+
+            <div class="ytmg-field">
+              <label for="ytmg-language">Output language</label>
+
+              <select id="ytmg-language" name="language">
+                <option value="English">English</option>
+                <option value="Nepali">Nepali</option>
+                <option value="Hindi">Hindi</option>
+                <option value="Spanish">Spanish</option>
+                <option value="French">French</option>
+                <option value="Portuguese">Portuguese</option>
+                <option value="German">German</option>
+                <option value="Arabic">Arabic</option>
+                <option value="Japanese">Japanese</option>
+              </select>
+            </div>
+
+            <div class="ytmg-field">
+              <label for="ytmg-purpose">Main video goal</label>
+
+              <select id="ytmg-purpose" name="purpose">
+                <option value="Educate or explain">Educate or explain</option>
+                <option value="Entertain">Entertain</option>
+                <option value="Review a product or service">Review a product or service</option>
+                <option value="Promote a business or product">Promote a business or product</option>
+                <option value="Tell a story">Tell a story</option>
+                <option value="Share a tutorial">Share a tutorial</option>
+                <option value="Share news or commentary">Share news or commentary</option>
+              </select>
+            </div>
+
+          </div>
+
+          <div class="ytmg-form-actions">
+            <button class="ytmg-btn" id="ytmg-submit" type="submit">
+              Generate YouTube Metadata
+            </button>
+
+            <button class="ytmg-btn ytmg-btn-secondary" id="ytmg-reset" type="reset">
+              Clear Form
+            </button>
+          </div>
+
+          <p
+            class="ytmg-status"
+            id="ytmg-status"
+            role="status"
+            aria-live="polite"
+            data-type="info"
+          >Ready to generate. Enter a video topic to begin.</p>
+
+          <p class="ytmg-disclaimer">
+            AI-generated suggestions may be inaccurate or incomplete.
+            Review the results and make sure they accurately describe your video.
+            This tool does not upload videos or publish changes to YouTube.
+          </p>
+        </form>
+      </section>
+
+      <!-- Results: populated by the existing shared script.js -->
+      <section
+        class="ytmg-card"
+        id="ytmg-results"
+        aria-labelledby="ytmg-results-title"
+        hidden
+      >
+        <div class="ytmg-results-heading">
+          <div>
+            <h2 id="ytmg-results-title">Your generated metadata</h2>
+            <p>
+              Review each suggestion and copy the sections you want to use.
+            </p>
+          </div>
+
+          <button class="ytmg-btn" id="ytmg-copy-all" type="button">
+            Copy All Results
+          </button>
+        </div>
+
+        <section class="ytmg-result-section" aria-labelledby="ytmg-titles-heading">
+          <h3 id="ytmg-titles-heading">YouTube title ideas</h3>
+          <div class="ytmg-result-content" id="ytmg-titles"></div>
+          <div class="ytmg-copy-row">
+            <button class="ytmg-copy-btn" type="button" data-copy="titles">
+              Copy titles
+            </button>
+          </div>
+        </section>
+
+        <section class="ytmg-result-section" aria-labelledby="ytmg-description-heading">
+          <h3 id="ytmg-description-heading">Video description</h3>
+          <div class="ytmg-result-content" id="ytmg-description"></div>
+          <div class="ytmg-copy-row">
+            <button class="ytmg-copy-btn" type="button" data-copy="description">
+              Copy description
+            </button>
+          </div>
+        </section>
+
+        <section class="ytmg-result-section" aria-labelledby="ytmg-keywords-heading">
+          <h3 id="ytmg-keywords-heading">Keyword ideas</h3>
+          <div class="ytmg-result-content" id="ytmg-keywords"></div>
+          <div class="ytmg-copy-row">
+            <button class="ytmg-copy-btn" type="button" data-copy="keywords">
+              Copy keywords
+            </button>
+          </div>
+        </section>
+
+        <section class="ytmg-result-section" aria-labelledby="ytmg-tags-heading">
+          <h3 id="ytmg-tags-heading">Tags and hashtags</h3>
+          <div class="ytmg-result-content" id="ytmg-tags"></div>
+          <div class="ytmg-copy-row">
+            <button class="ytmg-copy-btn" type="button" data-copy="tags">
+              Copy tags
+            </button>
+          </div>
+        </section>
+
+        <section class="ytmg-result-section" aria-labelledby="ytmg-cta-heading">
+          <h3 id="ytmg-cta-heading">Call to action</h3>
+          <div class="ytmg-result-content" id="ytmg-cta"></div>
+          <div class="ytmg-copy-row">
+            <button class="ytmg-copy-btn" type="button" data-copy="cta">
+              Copy call to action
+            </button>
+          </div>
+        </section>
+
+        <section class="ytmg-result-section" aria-labelledby="ytmg-tips-heading">
+          <h3 id="ytmg-tips-heading">Content improvement tips</h3>
+          <div class="ytmg-result-content" id="ytmg-tips"></div>
+          <div class="ytmg-copy-row">
+            <button class="ytmg-copy-btn" type="button" data-copy="tips">
+              Copy tips
+            </button>
+          </div>
+        </section>
+
+        <p class="ytmg-disclaimer">
+          These suggestions are not verified keyword-volume or ranking data.
+          Choose only relevant metadata and avoid misleading titles or tags.
+        </p>
+      </section>
+
+      <!-- Instructions -->
+      <section class="ytmg-card" aria-labelledby="ytmg-how-heading">
+        <h2 id="ytmg-how-heading">How to use the YouTube Metadata Generator</h2>
+
+        <div class="ytmg-info-grid">
+          <div class="ytmg-info-item">
+            <h3>1. Describe your video</h3>
+            <p>
+              Enter a topic or working title. Add a summary or transcript
+              excerpt when you have more details to share.
+            </p>
+          </div>
+
+          <div class="ytmg-info-item">
+            <h3>2. Choose your preferences</h3>
+            <p>
+              Select the target audience, writing style, output language,
+              and main purpose of your video.
+            </p>
+          </div>
+
+          <div class="ytmg-info-item">
+            <h3>3. Generate and review</h3>
+            <p>
+              Generate your metadata, review its accuracy, and copy the
+              sections you want to edit or use.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SEO-focused supporting content -->
+      <section class="ytmg-card" aria-labelledby="ytmg-about-heading">
+        <h2 id="ytmg-about-heading">What is YouTube metadata?</h2>
+
+        <p>
+          YouTube metadata is information associated with a video, such as
+          its title, description, and tags. Clear, relevant metadata helps
+          communicate what a video contains to viewers and provides context
+          about its subject.
+        </p>
+
+        <p>
+          A useful YouTube video title should describe the content accurately
+          and make the topic clear. A good description explains what viewers
+          can expect, while relevant keywords and tags can help organize the
+          subject of the video.
+        </p>
+
+        <p>
+          This AI YouTube metadata generator creates starting-point suggestions
+          from your topic and optional summary. It does not check live keyword
+          search volumes, access private channel analytics, or guarantee
+          rankings, views, or subscribers. Review all suggestions before
+          publishing and keep them relevant to the actual video.
+        </p>
+      </section>
+
+      <!-- Frequently asked questions -->
+      <section class="ytmg-card" aria-labelledby="ytmg-faq-heading">
+        <h2 id="ytmg-faq-heading">Frequently asked questions</h2>
+
+        <div class="ytmg-faq-item">
+          <h3>What does a YouTube metadata generator do?</h3>
+          <p>
+            It helps create draft video titles, descriptions, keyword ideas,
+            tags, calls to action, and content improvement suggestions from
+            information you provide about your video.
+          </p>
+        </div>
+
+        <div class="ytmg-faq-item">
+          <h3>Can this tool write a YouTube video description?</h3>
+          <p>
+            Yes. Enter your video topic and optional summary to request a
+            description draft. Review it carefully and correct any detail
+            that does not match your video.
+          </p>
+        </div>
+
+        <div class="ytmg-faq-item">
+          <h3>Does the generator guarantee higher rankings or more views?</h3>
+          <p>
+            No. Metadata alone cannot guarantee rankings, views, watch time,
+            or subscribers. Audience interest, video quality, viewer
+            satisfaction, and other factors also matter.
+          </p>
+        </div>
+
+        <div class="ytmg-faq-item">
+          <h3>Does this tool publish directly to my YouTube channel?</h3>
+          <p>
+            No. It generates text suggestions only. It does not upload a video,
+            connect to your YouTube account, or publish changes to a channel.
+          </p>
+        </div>
+
+        <div class="ytmg-faq-item">
+          <h3>Why might metadata generation fail?</h3>
+          <p>
+            Generation may fail if the API is unavailable, the AI service
+            returns an error, or the request takes too long. Check the status
+            message and try again. If the issue persists, check the Cloudflare
+            API Worker and its logs.
+          </p>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="ytmg-footer">
+      <p>
+        <a href="index.html">Home</a> ·
+        <a href="about.html">About</a> ·
+        <a href="contact.html">Contact</a> ·
+        <a href="privacy-policy.html">Privacy Policy</a> ·
+        <a href="terms-of-use.html">Terms of Use</a>
+      </p>
+
+      <p>
+        Online Tools &amp; Converters ·
+        <span id="current-year">2026</span>
+      </p>
+    </footer>
+
+  </div>
+</body>
+</html>
