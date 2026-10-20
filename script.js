@@ -2,6 +2,14 @@
    ONLINE TOOLS & CONVERTERS
    Main script for onlinetoolsandconverters.cc
    File: /script.js
+
+   Includes:
+   - Shared utility helpers
+   - Clipboard and download functions
+   - Responsive navigation
+   - Homepage tool directory and search
+   - Generic copy and download buttons
+   - YouTube Metadata Generator connected to Cloudflare AI
    ========================================================= */
 
 (() => {
@@ -47,6 +55,7 @@
     if (bytes === 0) return "0 Bytes";
 
     const units = ["Bytes", "KB", "MB", "GB", "TB", "PB"];
+
     const exponent = Math.min(
       Math.floor(Math.log(bytes) / Math.log(1000)),
       units.length - 1
@@ -69,6 +78,7 @@
     if (bytes === 0) return "0 Bytes";
 
     const units = ["Bytes", "KiB", "MiB", "GiB", "TiB", "PiB"];
+
     const exponent = Math.min(
       Math.floor(Math.log(bytes) / Math.log(1024)),
       units.length - 1
@@ -269,6 +279,7 @@
 
   /* ---------------------------------------------------------
      Responsive navigation
+
      Supports:
        .nav-toggle + .primary-nav
        .menu-toggle + .main-nav
@@ -294,6 +305,7 @@
         if (initialized.has(button)) return;
 
         const header = button.closest("header") || document;
+
         const nav =
           $(navSelector, header) ||
           $(navSelector, document);
@@ -377,6 +389,7 @@
 
   /* ---------------------------------------------------------
      Homepage directory
+
      Powers:
        #toolSearch
        #clearToolSearch
@@ -393,7 +406,7 @@
     const grid = $("#toolGrid");
     const searchInput = $("#toolSearch");
 
-    // Tool pages don't have this directory, so exit safely.
+    // Tool pages do not have this directory, so exit safely.
     if (!grid || !searchInput) return;
 
     const cards = $$("[data-tool-card]", grid);
@@ -462,6 +475,7 @@
 
     function updateDirectory() {
       const rawQuery = normalizeText(searchInput.value);
+
       const terms = rawQuery
         .split(/\s+/)
         .filter(Boolean);
@@ -563,7 +577,6 @@
       button.addEventListener("click", () => {
         chooseCategory(button.dataset.filter || "all");
 
-        // Let the filter apply before moving to the directory.
         const directory = $("#tools");
 
         if (directory) {
@@ -608,6 +621,603 @@
   }
 
 
+  /* =========================================================
+     YOUTUBE METADATA GENERATOR
+     Connects youtube-metadata-generator.html to Cloudflare AI.
+
+     Expected HTML form:
+       #ytmg-form
+       #ytmg-topic
+       #ytmg-content
+       #ytmg-audience
+       #ytmg-tone
+       #ytmg-language
+       #ytmg-purpose
+       #ytmg-submit
+       #ytmg-reset
+       #ytmg-status
+
+     Expected API response data:
+       title_options
+       description
+       keywords
+       tags
+       call_to_action
+       improvement_tips
+     ========================================================= */
+
+  function initializeYouTubeMetadataGenerator() {
+    const form = $("#ytmg-form");
+
+    // This function runs only on the YouTube generator page.
+    if (!form) return;
+
+    const API_URL =
+      "https://metadata-ai-api.robin-roosevelt-pro.workers.dev";
+
+    const topicInput = $("#ytmg-topic");
+    const contentInput = $("#ytmg-content");
+    const audienceInput = $("#ytmg-audience");
+    const toneInput = $("#ytmg-tone");
+    const languageInput = $("#ytmg-language");
+    const purposeInput = $("#ytmg-purpose");
+
+    const submitButton = $("#ytmg-submit");
+    const resetButton = $("#ytmg-reset");
+    const statusBox = $("#ytmg-status");
+    const resultsBox = $("#ytmg-results");
+    const copyAllButton = $("#ytmg-copy-all");
+
+    const outputElements = {
+      titles: $("#ytmg-titles"),
+      description: $("#ytmg-description"),
+      keywords: $("#ytmg-keywords"),
+      tags: $("#ytmg-tags"),
+      cta: $("#ytmg-cta"),
+      tips: $("#ytmg-tips"),
+    };
+
+    const outputLabels = {
+      titles: "Title ideas",
+      description: "Video description",
+      keywords: "Keyword ideas",
+      tags: "Tags and hashtags",
+      cta: "Call to action",
+      tips: "Content improvement tips",
+    };
+
+    // Stop safely if the expected HTML has not been added.
+    const requiredElements = [
+      topicInput,
+      contentInput,
+      audienceInput,
+      toneInput,
+      languageInput,
+      purposeInput,
+      submitButton,
+      resetButton,
+      statusBox,
+      resultsBox,
+      copyAllButton,
+      ...Object.values(outputElements),
+    ];
+
+    if (requiredElements.some((element) => !element)) {
+      console.error(
+        "YouTube Metadata Generator: Some expected HTML elements are missing."
+      );
+      return;
+    }
+
+    let latestResult = null;
+    let activeController = null;
+
+    /* ---------- Status messages ---------- */
+
+    function updateGeneratorStatus(message, type = "info") {
+      statusBox.textContent = String(message ?? "");
+      statusBox.dataset.type = type;
+      statusBox.setAttribute("role", "status");
+      statusBox.setAttribute("aria-live", "polite");
+    }
+
+    /* ---------- Safely convert API values to text ---------- */
+
+    function resultToText(value) {
+      if (value === null || value === undefined) {
+        return "";
+      }
+
+      if (Array.isArray(value)) {
+        return value
+          .map((item) => resultToText(item))
+          .filter(Boolean)
+          .join("\n");
+      }
+
+      if (typeof value === "object") {
+        if (typeof value.text === "string") {
+          return value.text.trim();
+        }
+
+        return JSON.stringify(value, null, 2);
+      }
+
+      return String(value).trim();
+    }
+
+    /* ---------- Convert API fields into lists ---------- */
+
+    function resultToList(value, splitCommas = false) {
+      if (Array.isArray(value)) {
+        return value
+          .map((item) => resultToText(item))
+          .filter(Boolean);
+      }
+
+      const text = resultToText(value);
+
+      if (!text) return [];
+
+      // Some APIs return a JSON array encoded as a string.
+      try {
+        const parsed = JSON.parse(text);
+
+        if (Array.isArray(parsed)) {
+          return parsed
+            .map((item) => resultToText(item))
+            .filter(Boolean);
+        }
+      } catch (error) {
+        // Ordinary text is also an acceptable response.
+      }
+
+      let items = text
+        .split(/\r?\n/)
+        .map((item) =>
+          item
+            .replace(/^\s*(?:[-*•]|\d+[.)])\s*/, "")
+            .trim()
+        )
+        .filter(Boolean);
+
+      // Keywords and tags are sometimes returned on one comma-separated line.
+      if (items.length === 1 && splitCommas) {
+        items = items[0]
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean);
+      }
+
+      return items;
+    }
+
+    /* ---------- Safe result rendering ---------- */
+
+    function showResultText(element, value, fallback) {
+      element.replaceChildren();
+
+      const paragraph = document.createElement("p");
+      paragraph.className = "ytmg-result-text";
+      paragraph.textContent = resultToText(value) || fallback;
+
+      element.appendChild(paragraph);
+    }
+
+    function showResultList(
+      element,
+      value,
+      fallback,
+      splitCommas = false
+    ) {
+      element.replaceChildren();
+
+      const items = resultToList(value, splitCommas);
+
+      if (items.length === 0) {
+        const paragraph = document.createElement("p");
+        paragraph.className = "ytmg-result-text";
+        paragraph.textContent = fallback;
+        element.appendChild(paragraph);
+        return;
+      }
+
+      // Use an ordered list for title ideas and unordered lists elsewhere.
+      const list = document.createElement(
+        element.id === "ytmg-titles" ? "ol" : "ul"
+      );
+
+      items.forEach((item) => {
+        const listItem = document.createElement("li");
+
+        // textContent prevents generated content from being interpreted as HTML.
+        listItem.textContent = item;
+        list.appendChild(listItem);
+      });
+
+      element.appendChild(list);
+    }
+
+    /* ---------- Validate the API response ---------- */
+
+    function normalizeAPIResponse(payload) {
+      if (!payload || typeof payload !== "object") {
+        throw new Error(
+          "The API returned an unexpected response."
+        );
+      }
+
+      if (payload.success === false || payload.error) {
+        throw new Error(
+          resultToText(payload.error || payload.message) ||
+          "The AI service could not generate metadata."
+        );
+      }
+
+      const data =
+        payload.data ||
+        payload.result ||
+        payload;
+
+      if (!data || typeof data !== "object") {
+        throw new Error(
+          "The API did not return metadata. Please try again."
+        );
+      }
+
+      const expectedFields = [
+        "title_options",
+        "description",
+        "keywords",
+        "tags",
+        "call_to_action",
+        "improvement_tips",
+      ];
+
+      const hasContent = expectedFields.some((key) => {
+        return resultToText(data[key]).length > 0;
+      });
+
+      if (!hasContent) {
+        throw new Error(
+          "The AI returned an empty result. Try a more specific video topic."
+        );
+      }
+
+      return data;
+    }
+
+    /* ---------- Display the generated results ---------- */
+
+    function renderGeneratorResults(data) {
+      showResultList(
+        outputElements.titles,
+        data.title_options,
+        "No title suggestions were returned."
+      );
+
+      showResultText(
+        outputElements.description,
+        data.description,
+        "No description was returned."
+      );
+
+      showResultList(
+        outputElements.keywords,
+        data.keywords,
+        "No keyword suggestions were returned.",
+        true
+      );
+
+      showResultList(
+        outputElements.tags,
+        data.tags,
+        "No tags were returned.",
+        true
+      );
+
+      showResultList(
+        outputElements.cta,
+        data.call_to_action,
+        "No call to action was returned."
+      );
+
+      showResultList(
+        outputElements.tips,
+        data.improvement_tips,
+        "No improvement tips were returned."
+      );
+
+      latestResult = data;
+      resultsBox.hidden = false;
+    }
+
+    /* ---------- Prepare result text for copying ---------- */
+
+    function getSectionText(sectionKey) {
+      if (!latestResult) return "";
+
+      const responseKeys = {
+        titles: "title_options",
+        description: "description",
+        keywords: "keywords",
+        tags: "tags",
+        cta: "call_to_action",
+        tips: "improvement_tips",
+      };
+
+      const responseKey = responseKeys[sectionKey];
+
+      if (!responseKey) return "";
+
+      return resultToText(latestResult[responseKey]);
+    }
+
+    function getAllResultsText() {
+      if (!latestResult) return "";
+
+      return Object.keys(outputLabels)
+        .map((key) => {
+          const value = getSectionText(key);
+
+          return value
+            ? outputLabels[key] + "\n" + value
+            : "";
+        })
+        .filter(Boolean)
+        .join("\n\n");
+    }
+
+    async function copyGeneratorResult(text) {
+      if (!String(text ?? "").trim()) {
+        updateGeneratorStatus(
+          "There is no generated content to copy yet.",
+          "error"
+        );
+        return;
+      }
+
+      try {
+        await copyText(text);
+
+        updateGeneratorStatus(
+          "Copied to clipboard successfully.",
+          "success"
+        );
+      } catch (error) {
+        updateGeneratorStatus(
+          error.message ||
+            "Copy failed. Please select the result and copy it manually.",
+          "error"
+        );
+      }
+    }
+
+    /* ---------- Generate metadata through the Cloudflare API ---------- */
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      // Cancel a previous request if a new one is started.
+      if (activeController) {
+        activeController.abort();
+        activeController = null;
+      }
+
+      const topic = topicInput.value.trim();
+      const content = contentInput.value.trim();
+      const audience = audienceInput.value.trim();
+      const tone = toneInput.value;
+      const language = languageInput.value;
+      const purpose = purposeInput.value;
+
+      if (!topic) {
+        updateGeneratorStatus(
+          "Please enter a video topic before generating metadata.",
+          "error"
+        );
+
+        topicInput.focus();
+        return;
+      }
+
+      if (topic.length > 200) {
+        updateGeneratorStatus(
+          "Please keep the video topic to 200 characters or fewer.",
+          "error"
+        );
+
+        topicInput.focus();
+        return;
+      }
+
+      if (content.length > 12000) {
+        updateGeneratorStatus(
+          "Please shorten the video summary or transcript to 12,000 characters or fewer.",
+          "error"
+        );
+
+        contentInput.focus();
+        return;
+      }
+
+      /*
+       * These field names match the existing Cloudflare API Worker:
+       * platform, topic, content, audience, tone and language.
+       */
+      const requestBody = {
+        platform: "YouTube",
+        topic,
+        content: [
+          content,
+          "Main video goal: " + purpose,
+        ]
+          .filter(Boolean)
+          .join("\n\n"),
+        audience: audience || "General YouTube audience",
+        tone,
+        language,
+      };
+
+      const controller = new AbortController();
+      activeController = controller;
+
+      const timeoutId = window.setTimeout(() => {
+        controller.abort();
+      }, 90000);
+
+      submitButton.disabled = true;
+      submitButton.textContent = "Generating...";
+
+      resultsBox.hidden = true;
+
+      updateGeneratorStatus(
+        "Connecting to the AI service. Your metadata is being generated...",
+        "info"
+      );
+
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+          signal: controller.signal,
+        });
+
+        let payload;
+
+        try {
+          payload = await response.json();
+        } catch (error) {
+          throw new Error(
+            "The API did not return valid JSON. Check your Cloudflare Worker response."
+          );
+        }
+
+        if (!response.ok) {
+          const apiMessage = resultToText(
+            payload.error || payload.message
+          );
+
+          throw new Error(
+            apiMessage ||
+              "The API request failed with HTTP " +
+                response.status +
+                "."
+          );
+        }
+
+        const data = normalizeAPIResponse(payload);
+
+        // Ignore responses from a request that is no longer active.
+        if (activeController !== controller) return;
+
+        renderGeneratorResults(data);
+
+        updateGeneratorStatus(
+          "Metadata generated successfully. Review the suggestions before publishing.",
+          "success"
+        );
+
+        resultsBox.scrollIntoView({
+          behavior: window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+          ).matches
+            ? "auto"
+            : "smooth",
+          block: "start",
+        });
+      } catch (error) {
+        // Ignore an older request after it has been cancelled.
+        if (activeController !== controller) return;
+
+        if (error.name === "AbortError") {
+          updateGeneratorStatus(
+            "The request timed out or was cancelled. Please try again. If this persists, check the API Worker logs.",
+            "error"
+          );
+        } else {
+          const originalMessage =
+            error.message ||
+            "An unexpected error occurred.";
+
+          updateGeneratorStatus(
+            "Generation failed: " +
+              originalMessage +
+              " Check that the API Worker is deployed, the AI binding is configured, and its CORS settings allow this website.",
+            "error"
+          );
+
+          console.error(
+            "YouTube Metadata Generator error:",
+            error
+          );
+        }
+      } finally {
+        window.clearTimeout(timeoutId);
+
+        // Only the currently active request may update the button state.
+        if (activeController === controller) {
+          activeController = null;
+          submitButton.disabled = false;
+          submitButton.textContent =
+            "Generate YouTube Metadata";
+        }
+      }
+    });
+
+    /* ---------- Individual copy buttons ---------- */
+
+    $$("[data-copy]", resultsBox).forEach((button) => {
+      button.addEventListener("click", async () => {
+        const sectionKey = button.dataset.copy;
+        const text = getSectionText(sectionKey);
+
+        await copyGeneratorResult(text);
+      });
+    });
+
+    /* ---------- Copy every generated section ---------- */
+
+    copyAllButton.addEventListener("click", async () => {
+      await copyGeneratorResult(getAllResultsText());
+    });
+
+    /* ---------- Clear and reset the generator ---------- */
+
+    form.addEventListener("reset", () => {
+      if (activeController) {
+        activeController.abort();
+        activeController = null;
+      }
+
+      latestResult = null;
+      resultsBox.hidden = true;
+
+      Object.values(outputElements).forEach((element) => {
+        element.replaceChildren();
+      });
+
+      submitButton.disabled = false;
+      submitButton.textContent =
+        "Generate YouTube Metadata";
+
+      updateGeneratorStatus(
+        "Form cleared. Enter a new video topic to begin.",
+        "info"
+      );
+    });
+
+    // The reset button's default HTML reset behavior handles the form fields.
+    resetButton.addEventListener("click", () => {
+      // No manual field changes are needed here.
+    });
+  }
+
+
   /* ---------------------------------------------------------
      Optional generic copy buttons
 
@@ -648,6 +1258,7 @@
               "error"
             );
           }
+
           return;
         }
 
@@ -662,7 +1273,11 @@
           await copyText(text);
 
           if (statusTarget) {
-            setStatus(statusTarget, "Copied successfully.", "success");
+            setStatus(
+              statusTarget,
+              "Copied successfully.",
+              "success"
+            );
           } else {
             button.textContent = "Copied!";
 
@@ -732,7 +1347,11 @@
           downloadText(text, filename, mimeType);
 
           if (statusTarget) {
-            setStatus(statusTarget, "Download started.", "success");
+            setStatus(
+              statusTarget,
+              "Download started.",
+              "success"
+            );
           }
         } catch (error) {
           if (statusTarget) {
@@ -784,6 +1403,7 @@
     initializeToolDirectory();
     initializeCopyButtons();
     initializeDownloadButtons();
+    initializeYouTubeMetadataGenerator();
   }
 
   if (document.readyState === "loading") {

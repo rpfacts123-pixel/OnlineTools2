@@ -2170,3 +2170,578 @@ tr:last-child td {
     transition-duration: .01ms !important;
   }
 }
+
+
+/* =========================================================
+   YOUTUBE METADATA GENERATOR
+   Additional styles for youtube-metadata-generator.html
+   Uses the existing site colors and typography.
+   These styles are isolated from other tool pages.
+   ========================================================= */
+
+/* ---------- Page wrapper ---------- */
+
+.ytmg-page {
+  width: min(100% - 40px, 1050px);
+  margin-inline: auto;
+  padding: 25px 0 55px;
+  color: var(--ink);
+  font-family: var(--font);
+  line-height: 1.65;
+}
+
+.ytmg-page *,
+.ytmg-page *::before,
+.ytmg-page *::after {
+  box-sizing: border-box;
+}
+
+/* ---------- Header and navigation ---------- */
+
+.ytmg-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 38px;
+  padding-bottom: 17px;
+  border-bottom: 1px solid var(--line);
+}
+
+.ytmg-brand {
+  color: var(--forest);
+  font-size: 1rem;
+  font-weight: 850;
+  letter-spacing: -.025em;
+  overflow-wrap: anywhere;
+}
+
+.ytmg-brand:hover {
+  color: var(--green);
+  text-decoration: none;
+}
+
+.ytmg-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.ytmg-nav a {
+  display: inline-block;
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: .88rem;
+  font-weight: 700;
+}
+
+.ytmg-nav a:hover {
+  background: var(--forest-soft);
+  color: var(--forest);
+  text-decoration: none;
+}
+
+/* ---------- Page hero ---------- */
+
+.ytmg-hero {
+  max-width: 780px;
+  margin: 0 auto 30px;
+  text-align: center;
+}
+
+.ytmg-label {
+  display: inline-block;
+  margin-bottom: 13px;
+  padding: 5px 12px;
+  border: 1px solid #cbdcc7;
+  border-radius: 999px;
+  background: var(--forest-soft);
+  color: var(--forest);
+  font-size: .78rem;
+  font-weight: 850;
+  letter-spacing: .035em;
+}
+
+.ytmg-hero h1 {
+  margin: 0 0 16px;
+  color: var(--forest);
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 1.12;
+  letter-spacing: -.045em;
+  overflow-wrap: anywhere;
+}
+
+.ytmg-hero p {
+  max-width: 700px;
+  margin: 0 auto;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.85;
+}
+
+/* ---------- Main cards ---------- */
+
+.ytmg-card {
+  min-width: 0;
+  margin: 22px 0;
+  padding: clamp(18px, 4vw, 30px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
+}
+
+.ytmg-card > h2,
+.ytmg-card h2 {
+  color: var(--forest);
+  font-size: clamp(1.3rem, 3vw, 1.65rem);
+  letter-spacing: -.025em;
+  line-height: 1.35;
+}
+
+.ytmg-intro {
+  margin: 0 0 23px;
+  color: var(--muted);
+  font-size: .93rem;
+  line-height: 1.8;
+}
+
+/* ---------- Generator form ---------- */
+
+.ytmg-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 19px;
+}
+
+.ytmg-field {
+  min-width: 0;
+}
+
+.ytmg-field-full {
+  grid-column: 1 / -1;
+}
+
+.ytmg-field label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--ink);
+  font-size: .91rem;
+  font-weight: 750;
+}
+
+.ytmg-required {
+  color: var(--err);
+}
+
+.ytmg-field input,
+.ytmg-field select,
+.ytmg-field textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  padding: 11px 13px;
+  border: 1px solid #d4ded6;
+  border-radius: var(--radius-xs);
+  background: var(--white);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.ytmg-field textarea {
+  min-height: 145px;
+  resize: vertical;
+}
+
+.ytmg-field input::placeholder,
+.ytmg-field textarea::placeholder {
+  color: #87938b;
+  opacity: 1;
+}
+
+.ytmg-field input:focus,
+.ytmg-field select:focus,
+.ytmg-field textarea:focus {
+  border-color: var(--green);
+  outline: 3px solid rgba(23, 107, 87, .12);
+}
+
+.ytmg-help {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: .81rem;
+  line-height: 1.65;
+}
+
+/* ---------- Action buttons ---------- */
+
+.ytmg-form-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 23px;
+}
+
+.ytmg-btn {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 17px;
+  border: 1px solid var(--forest);
+  border-radius: 10px;
+  background: var(--forest);
+  color: var(--white);
+  font-family: var(--font);
+  font-size: .91rem;
+  font-weight: 800;
+  line-height: 1.4;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background .16s ease,
+    border-color .16s ease,
+    transform .16s ease;
+}
+
+.ytmg-btn:hover {
+  border-color: var(--forest-dark);
+  background: var(--forest-dark);
+  color: var(--white);
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.ytmg-btn:focus-visible,
+.ytmg-copy-btn:focus-visible {
+  outline: 3px solid rgba(23, 107, 87, .28);
+  outline-offset: 3px;
+}
+
+.ytmg-btn:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.ytmg-btn-secondary {
+  border-color: var(--line);
+  background: var(--white);
+  color: var(--forest);
+}
+
+.ytmg-btn-secondary:hover {
+  border-color: #b7c9b9;
+  background: var(--forest-soft);
+  color: var(--forest);
+}
+
+/* ---------- Status and notices ---------- */
+
+.ytmg-status {
+  margin: 15px 0 0;
+  padding: 11px 13px;
+  border: 1px solid #dce5de;
+  border-radius: 9px;
+  background: #f7f8f3;
+  color: var(--muted);
+  font-size: .88rem;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.ytmg-status[data-type="error"] {
+  border-color: #f1c5c1;
+  background: #fff3f1;
+  color: #9c2620;
+}
+
+.ytmg-status[data-type="success"] {
+  border-color: #bfdbc7;
+  background: #edf7ed;
+  color: #215b3e;
+}
+
+.ytmg-disclaimer {
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-size: .81rem;
+  line-height: 1.75;
+}
+
+/* ---------- Generated results ---------- */
+
+.ytmg-results-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.ytmg-results-heading h2 {
+  margin-bottom: 5px;
+}
+
+.ytmg-results-heading p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .89rem;
+}
+
+.ytmg-result-section {
+  min-width: 0;
+  margin-top: 15px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.ytmg-result-section h3 {
+  margin: 0 0 13px;
+  color: var(--forest);
+  font-size: 1.02rem;
+  letter-spacing: -.01em;
+}
+
+.ytmg-result-content {
+  min-width: 0;
+  color: #405149;
+  font-size: .93rem;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.ytmg-result-content ol,
+.ytmg-result-content ul {
+  margin: 0;
+  padding-left: 23px;
+}
+
+.ytmg-result-content li {
+  padding: 4px 0;
+  overflow-wrap: anywhere;
+}
+
+.ytmg-result-text {
+  margin: 0;
+  color: #405149;
+  font-size: .93rem;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.ytmg-copy-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 13px;
+}
+
+.ytmg-copy-btn {
+  display: inline-flex;
+  min-height: 35px;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 11px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--forest);
+  font-family: var(--font);
+  font-size: .82rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease;
+}
+
+.ytmg-copy-btn:hover {
+  border-color: #b7c9b9;
+  background: var(--forest-soft);
+}
+
+/* ---------- How-to information cards ---------- */
+
+.ytmg-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 13px;
+  margin-top: 19px;
+}
+
+.ytmg-info-item {
+  min-width: 0;
+  padding: 17px;
+  border: 1px solid #dce5de;
+  border-radius: 12px;
+  background: #f7f8f3;
+}
+
+.ytmg-info-item h3 {
+  margin: 0 0 8px;
+  color: var(--forest);
+  font-size: .98rem;
+  line-height: 1.5;
+}
+
+.ytmg-info-item p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .87rem;
+  line-height: 1.75;
+}
+
+/* ---------- Frequently asked questions ---------- */
+
+.ytmg-faq-item {
+  padding: 17px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.ytmg-faq-item:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.ytmg-faq-item h3 {
+  margin: 0 0 7px;
+  color: var(--forest);
+  font-size: .99rem;
+  line-height: 1.5;
+  letter-spacing: -.01em;
+}
+
+.ytmg-faq-item p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .91rem;
+  line-height: 1.8;
+}
+
+/* ---------- Page footer ---------- */
+
+.ytmg-footer {
+  margin-top: 36px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: .85rem;
+  text-align: center;
+}
+
+.ytmg-footer p {
+  margin-bottom: 9px;
+}
+
+.ytmg-footer a {
+  color: var(--green);
+  font-weight: 700;
+}
+
+.ytmg-footer a:hover {
+  color: var(--forest-dark);
+  text-decoration: underline;
+}
+
+/* ---------- Responsive layout ---------- */
+
+@media (max-width: 760px) {
+  .ytmg-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 29px;
+  }
+
+  .ytmg-nav {
+    gap: 5px;
+  }
+
+  .ytmg-nav a {
+    padding: 7px 9px;
+  }
+
+  .ytmg-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ytmg-results-heading {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 560px) {
+  .ytmg-page {
+    width: min(100% - 30px, 1050px);
+    padding: 18px 0 40px;
+  }
+
+  .ytmg-hero {
+    margin-bottom: 23px;
+    text-align: left;
+  }
+
+  .ytmg-hero p {
+    margin-left: 0;
+    font-size: .94rem;
+  }
+
+  .ytmg-card {
+    margin: 17px 0;
+    padding: 17px;
+    border-radius: 13px;
+  }
+
+  .ytmg-form-grid {
+    grid-template-columns: 1fr;
+    gap: 17px;
+  }
+
+  .ytmg-field-full {
+    grid-column: auto;
+  }
+
+  .ytmg-form-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ytmg-form-actions .ytmg-btn {
+    width: 100%;
+  }
+
+  .ytmg-results-heading .ytmg-btn {
+    width: 100%;
+  }
+
+  .ytmg-result-section {
+    padding: 14px;
+  }
+
+  .ytmg-copy-btn {
+    min-height: 38px;
+  }
+}
+
+/* ---------- Reduced motion accessibility ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .ytmg-page *,
+  .ytmg-page *::before,
+  .ytmg-page *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+}
