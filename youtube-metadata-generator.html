@@ -1,27 +1,28 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#123c36">
+  <meta name="color-scheme" content="light">
 
-  <title>YouTube Metadata Generator: Titles, Tags &amp; Descriptions</title>
-  <meta name="description" content="Generate YouTube title ideas, video descriptions, keyword suggestions, tags, calls to action, and content improvement tips with AI.">
+  <title>Free YouTube Metadata Generator – Titles, Tags &amp; Descriptions</title>
+  <meta name="description" content="Generate YouTube title ideas, video descriptions, keywords, tags, hashtags and calls to action with AI. Try this free YouTube metadata generator online.">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href="https://onlinetoolsandconverters.cc/youtube-metadata-generator.html">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Online Tools &amp; Converters">
-  <meta property="og:title" content="YouTube Metadata Generator">
-  <meta property="og:description" content="Create YouTube title suggestions, descriptions, keyword ideas, tags, and calls to action using AI.">
+  <meta property="og:title" content="Free YouTube Metadata Generator">
+  <meta property="og:description" content="Create YouTube title ideas, descriptions, keywords, tags and calls to action with AI.">
   <meta property="og:url" content="https://onlinetoolsandconverters.cc/youtube-metadata-generator.html">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="YouTube Metadata Generator">
-  <meta name="twitter:description" content="Generate YouTube video metadata suggestions with AI.">
+  <meta name="twitter:title" content="Free YouTube Metadata Generator">
+  <meta name="twitter:description" content="Generate YouTube titles, descriptions, keywords and tags online.">
 
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
+  <link rel="icon" href="/favicon.ico">
 
   <script type="application/ld+json">
   {
@@ -31,8 +32,8 @@
         "@type": "WebPage",
         "@id": "https://onlinetoolsandconverters.cc/youtube-metadata-generator.html#webpage",
         "url": "https://onlinetoolsandconverters.cc/youtube-metadata-generator.html",
-        "name": "YouTube Metadata Generator",
-        "description": "Generate YouTube title ideas, descriptions, keyword suggestions, tags, calls to action, and content improvement tips.",
+        "name": "Free YouTube Metadata Generator",
+        "description": "Generate YouTube title ideas, video descriptions, keywords, tags, hashtags and calls to action.",
         "isPartOf": {
           "@type": "WebSite",
           "name": "Online Tools & Converters",
@@ -41,12 +42,14 @@
         "inLanguage": "en"
       },
       {
-        "@type": "SoftwareApplication",
+        "@type": "WebApplication",
         "name": "YouTube Metadata Generator",
         "applicationCategory": "MultimediaApplication",
         "operatingSystem": "Any",
+        "browserRequirements": "Requires JavaScript and an internet connection",
         "url": "https://onlinetoolsandconverters.cc/youtube-metadata-generator.html",
-        "description": "An AI-powered browser tool for generating YouTube title ideas, descriptions, keywords, tags, calls to action, and content improvement suggestions."
+        "description": "A browser-based tool that generates YouTube metadata suggestions from a video topic and user preferences.",
+        "isAccessibleForFree": true
       },
       {
         "@type": "BreadcrumbList",
@@ -68,397 +71,2208 @@
     ]
   }
   </script>
+
+  <style>
+    :root {
+      --primary: #123c36;
+      --primary-dark: #0b2b27;
+      --accent: #d9f36a;
+      --accent-hover: #c9e65c;
+      --page: #f5f7f3;
+      --surface: #ffffff;
+      --text: #182421;
+      --muted: #61716b;
+      --border: #dfe7e1;
+      --success: #176943;
+      --error: #ad2e2e;
+      --radius: 20px;
+      --shadow: 0 12px 35px rgba(18, 60, 54, .07);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 90px;
+    }
+
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+        BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body,
+    input,
+    textarea,
+    select,
+    button {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+        BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: .65;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 12px;
+      z-index: 999;
+      padding: 12px 16px;
+      border-radius: 8px;
+      background: white;
+      color: var(--primary);
+    }
+
+    .skip-link:focus {
+      top: 12px;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid rgba(223, 231, 225, .9);
+      background: rgba(255, 255, 255, .96);
+      backdrop-filter: blur(14px);
+    }
+
+    .header-inner {
+      width: min(1120px, calc(100% - 36px));
+      min-height: 72px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 850;
+      letter-spacing: -.4px;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: var(--primary);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .5px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .nav a {
+      color: #465650;
+      font-size: 14px;
+      font-weight: 650;
+      text-decoration: none;
+    }
+
+    .nav a:hover,
+    .footer a:hover {
+      color: var(--primary);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .container {
+      width: min(1000px, calc(100% - 36px));
+      margin-inline: auto;
+    }
+
+    .hero {
+      padding: 60px 0 28px;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 210px;
+      align-items: center;
+      gap: 36px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 11px;
+      border: 1px solid #d8e7c5;
+      border-radius: 999px;
+      background: #edf5df;
+      color: #365b2e;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .65px;
+      text-transform: uppercase;
+    }
+
+    .eyebrow-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #54863c;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 750px;
+      margin: 18px 0 16px;
+      color: var(--primary-dark);
+      font-size: clamp(34px, 5.5vw, 54px);
+      line-height: 1.08;
+      letter-spacing: -2.2px;
+    }
+
+    .hero-copy {
+      max-width: 680px;
+      margin-bottom: 0;
+      color: #586761;
+      font-size: 17px;
+      line-height: 1.8;
+    }
+
+    .hero-art {
+      width: 190px;
+      height: 190px;
+      display: grid;
+      place-items: center;
+      justify-self: center;
+      border: 1px solid #dce7d6;
+      border-radius: 34px;
+      background:
+        radial-gradient(circle at 28% 24%, #f6fadf 0, transparent 45%),
+        linear-gradient(145deg, #e8f0e2, #ffffff);
+      transform: rotate(2deg);
+    }
+
+    .hero-art-inner {
+      width: 112px;
+      height: 125px;
+      padding: 16px 12px;
+      border: 1px solid #d9e4dc;
+      border-radius: 17px;
+      background: #fff;
+      box-shadow: 0 12px 24px rgba(18, 60, 54, .12);
+      transform: rotate(-2deg);
+    }
+
+    .mini-line {
+      height: 7px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      background: #e5ebe6;
+    }
+
+    .mini-line.strong {
+      width: 72%;
+      background: #9bb9a6;
+    }
+
+    .mini-play {
+      width: 35px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      margin: 12px 0;
+      border-radius: 9px;
+      background: var(--primary);
+      color: var(--accent);
+      font-size: 13px;
+    }
+
+    .trust-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 22px;
+    }
+
+    .trust-pill {
+      padding: 7px 11px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255,255,255,.75);
+      color: #52615a;
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    main {
+      padding-bottom: 40px;
+    }
+
+    .panel {
+      margin: 20px 0;
+      padding: clamp(20px, 4vw, 34px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .panel-heading {
+      margin-bottom: 8px;
+      color: var(--primary-dark);
+      font-size: clamp(22px, 3vw, 28px);
+      line-height: 1.25;
+      letter-spacing: -.7px;
+    }
+
+    .panel-intro {
+      max-width: 700px;
+      margin-bottom: 25px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .field {
+      min-width: 0;
+    }
+
+    .field-full {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      color: #263c34;
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    .required {
+      color: var(--error);
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      min-height: 49px;
+      padding: 12px 14px;
+      border: 1px solid #d6e0d9;
+      border-radius: 12px;
+      outline: none;
+      background: #fff;
+      color: var(--text);
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+
+    .field textarea {
+      min-height: 125px;
+      resize: vertical;
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder {
+      color: #9aa6a0;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus {
+      border-color: #548e7c;
+      box-shadow: 0 0 0 3px rgba(84, 142, 124, .15);
+    }
+
+    .field-help {
+      display: block;
+      margin-top: 7px;
+      color: #78847d;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .character-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .character-count {
+      flex-shrink: 0;
+      color: #85918a;
+      font-size: 12px;
+    }
+
+    .form-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-top: 25px;
+    }
+
+    .btn {
+      min-height: 47px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 11px 18px;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 14px;
+      text-decoration: none;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+    }
+
+    .btn:not(:disabled):active {
+      transform: translateY(1px);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: #20574c;
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      color: #182b20;
+    }
+
+    .btn-accent:hover:not(:disabled) {
+      background: var(--accent-hover);
+    }
+
+    .btn-secondary {
+      border-color: var(--border);
+      background: #fff;
+      color: #344b41;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      border-color: #afc3b7;
+      background: #f7faf6;
+    }
+
+    .btn-small {
+      min-height: 37px;
+      padding: 7px 11px;
+      border-radius: 9px;
+      font-size: 12px;
+    }
+
+    .status {
+      margin: 18px 0 0;
+      padding: 12px 14px;
+      border: 1px solid #e1e8e1;
+      border-radius: 11px;
+      background: #f7faf7;
+      color: #45564d;
+      font-size: 13px;
+    }
+
+    .status[data-type="success"] {
+      border-color: #bfdfcb;
+      background: #f0faf3;
+      color: var(--success);
+    }
+
+    .status[data-type="error"] {
+      border-color: #f0cece;
+      background: #fff5f5;
+      color: var(--error);
+    }
+
+    .disclaimer {
+      margin: 13px 0 0;
+      color: #748078;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .loader-box {
+      margin-top: 18px;
+      padding: 18px;
+      border: 1px solid #d9e7d9;
+      border-radius: 14px;
+      background: #f7faf5;
+    }
+
+    .loader-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .spinner {
+      width: 25px;
+      height: 25px;
+      flex: 0 0 25px;
+      border: 3px solid #d8e4d9;
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loader-title {
+      margin: 0;
+      color: var(--primary);
+      font-size: 14px;
+      font-weight: 850;
+    }
+
+    .loader-subtitle {
+      margin: 2px 0 0;
+      color: #6a7a70;
+      font-size: 12px;
+    }
+
+    .loader-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .elapsed-time {
+      color: #4c6558;
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+      font-weight: 750;
+    }
+
+    .indeterminate-track {
+      height: 5px;
+      overflow: hidden;
+      margin-top: 14px;
+      border-radius: 10px;
+      background: #e2eade;
+    }
+
+    .indeterminate-bar {
+      width: 35%;
+      height: 100%;
+      border-radius: inherit;
+      background: #578c70;
+      animation: move-bar 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes move-bar {
+      from { transform: translateX(-10%); }
+      to { transform: translateX(205%); }
+    }
+
+    .results-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .results-toolbar .panel-intro {
+      margin-bottom: 0;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .result-section {
+      padding: 21px 0;
+      border-top: 1px solid #e6ece7;
+    }
+
+    .result-section:first-of-type {
+      border-top: 0;
+    }
+
+    .result-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 11px;
+    }
+
+    .result-title-row h3 {
+      margin: 0;
+      color: var(--primary);
+      font-size: 17px;
+      letter-spacing: -.25px;
+    }
+
+    .result-content {
+      padding: 15px;
+      overflow-wrap: anywhere;
+      border: 1px solid #e3eae4;
+      border-radius: 12px;
+      background: #fbfcfa;
+      color: #35433c;
+      font-size: 14px;
+      white-space: pre-wrap;
+    }
+
+    .result-content p {
+      margin: 0;
+    }
+
+    .result-content ul,
+    .result-content ol {
+      margin: 0;
+      padding-left: 22px;
+    }
+
+    .result-content li + li {
+      margin-top: 9px;
+    }
+
+    .result-empty {
+      color: #7a867e;
+      font-size: 13px;
+      font-style: italic;
+    }
+
+    .copy-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 9px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 15px;
+      margin-top: 24px;
+    }
+
+    .info-card {
+      padding: 19px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #fbfcfa;
+    }
+
+    .info-number {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 12px;
+      border-radius: 9px;
+      background: #e9f1dc;
+      color: #375c32;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .info-card h3 {
+      margin-bottom: 7px;
+      color: var(--primary);
+      font-size: 15px;
+    }
+
+    .info-card p {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .content-panel h2 {
+      color: var(--primary-dark);
+      font-size: 25px;
+      letter-spacing: -.7px;
+    }
+
+    .content-panel h3 {
+      margin-top: 24px;
+      margin-bottom: 8px;
+      color: #25473c;
+      font-size: 17px;
+    }
+
+    .content-panel p {
+      color: #56655d;
+      font-size: 14px;
+    }
+
+    .faq-item {
+      padding: 19px 0;
+      border-top: 1px solid #e7ece7;
+    }
+
+    .faq-item:first-of-type {
+      border-top: 0;
+    }
+
+    .faq-item h3 {
+      margin: 0 0 8px;
+      color: var(--primary);
+      font-size: 16px;
+    }
+
+    .faq-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .related-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .related-links a {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: white;
+      color: #3b5c4c;
+      font-size: 13px;
+      text-decoration: none;
+    }
+
+    .related-links a:hover {
+      border-color: #9cbbaa;
+      background: #f1f7ef;
+    }
+
+    .site-footer {
+      margin-top: 36px;
+      padding: 32px 0;
+      border-top: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .footer-inner p {
+      margin: 0;
+      color: #718078;
+      font-size: 12px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .footer-links a {
+      color: #52645a;
+      font-size: 12px;
+      text-decoration: none;
+    }
+
+    .ad-slot {
+      margin: 24px 0;
+      min-height: 0;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 760px) {
+      .hero {
+        padding-top: 38px;
+      }
+
+      .hero-inner {
+        grid-template-columns: 1fr;
+        gap: 25px;
+      }
+
+      .hero-art {
+        display: none;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 17px;
+      }
+
+      .field-full {
+        grid-column: auto;
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        gap: 12px;
+      }
+
+      .nav a {
+        font-size: 12px;
+      }
+
+      .brand {
+        font-size: 13px;
+      }
+
+      .brand-mark {
+        width: 34px;
+        height: 34px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header-inner,
+      .container {
+        width: min(100% - 24px, 1000px);
+      }
+
+      .header-inner {
+        min-height: 64px;
+        gap: 10px;
+      }
+
+      .nav {
+        gap: 10px;
+      }
+
+      .nav a:nth-child(3),
+      .nav a:nth-child(4) {
+        display: none;
+      }
+
+      h1 {
+        font-size: 37px;
+        letter-spacing: -1.6px;
+      }
+
+      .hero-copy {
+        font-size: 15px;
+      }
+
+      .panel {
+        margin: 14px 0;
+        padding: 19px 16px;
+        border-radius: 16px;
+      }
+
+      .form-actions,
+      .form-actions .btn {
+        width: 100%;
+      }
+
+      .form-actions {
+        align-items: stretch;
+      }
+
+      .results-toolbar {
+        flex-direction: column;
+      }
+
+      .toolbar-actions,
+      .toolbar-actions .btn {
+        width: 100%;
+      }
+
+      .loader-bottom {
+        align-items: flex-start;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
 </head>
 
 <body>
-  <div class="ytmg-page">
+  <a class="skip-link" href="#main">Skip to main content</a>
 
-    <a class="skip-link" href="#ytmg-main">Skip to content</a>
-
-    <header class="ytmg-header">
-      <a class="ytmg-brand" href="index.html">
-        <span aria-hidden="true">OT</span>
-        Online Tools &amp; Converters
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/index.html" aria-label="Online Tools and Converters home">
+        <span class="brand-mark" aria-hidden="true">OT</span>
+        <span>Online Tools &amp; Converters</span>
       </a>
 
-      <nav class="ytmg-nav" aria-label="Main navigation">
-        <a href="index.html">Home</a>
-        <a href="index.html#tools">All tools</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="/index.html">Home</a>
+        <a href="/index.html#tools">All tools</a>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
       </nav>
-    </header>
+    </div>
+  </header>
 
-    <main id="ytmg-main">
+  <section class="hero">
+    <div class="container hero-inner">
+      <div>
+        <span class="eyebrow">
+          <span class="eyebrow-dot" aria-hidden="true"></span>
+          Creator productivity tool
+        </span>
 
-      <!-- Page introduction -->
-      <section class="ytmg-hero" aria-labelledby="ytmg-page-title">
-        <span class="ytmg-label">AI-powered creator tool</span>
+        <h1>Free YouTube Metadata Generator</h1>
 
-        <h1 id="ytmg-page-title">YouTube Metadata Generator</h1>
-
-        <p>
-          Create YouTube video title ideas, descriptions, keyword suggestions,
-          tags, calls to action, and content improvement tips. Describe your
-          video topic, choose your preferences, and let AI help you prepare
-          metadata to review before publishing.
-        </p>
-      </section>
-
-      <!-- Generator form -->
-      <section
-        class="ytmg-card"
-        id="ytmg-generator"
-        aria-labelledby="ytmg-form-heading"
-      >
-        <h2 id="ytmg-form-heading">Generate YouTube metadata</h2>
-
-        <p class="ytmg-intro">
-          Give the AI enough information to understand your video.
-          You can enter only a topic or include a summary for more context.
+        <p class="hero-copy">
+          Create YouTube title ideas, video descriptions, keyword suggestions,
+          tags, hashtags and calls to action with AI. Describe your video,
+          choose your preferences and generate editable suggestions in one place.
         </p>
 
-        <form id="ytmg-form">
-          <div class="ytmg-form-grid">
+        <div class="trust-row" aria-label="Tool features">
+          <span class="trust-pill">✓ Multiple title ideas</span>
+          <span class="trust-pill">✓ Copy-ready results</span>
+          <span class="trust-pill">✓ No YouTube login needed</span>
+        </div>
+      </div>
 
-            <div class="ytmg-field ytmg-field-full">
-              <label for="ytmg-topic">
-                Video topic or working title
-                <span class="ytmg-required" aria-hidden="true">*</span>
-              </label>
+      <div class="hero-art" aria-hidden="true">
+        <div class="hero-art-inner">
+          <div class="mini-line strong"></div>
+          <div class="mini-line"></div>
+          <div class="mini-play">▶</div>
+          <div class="mini-line"></div>
+          <div class="mini-line strong"></div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-              <input
-                id="ytmg-topic"
-                name="topic"
-                type="text"
-                maxlength="200"
-                placeholder="Example: How to start a YouTube channel"
-                autocomplete="off"
-                required
-              >
+  <main id="main" class="container">
 
-              <small class="ytmg-help">
-                Describe the main subject of your video as clearly as possible.
-              </small>
-            </div>
+    <section class="panel" id="generator" aria-labelledby="generator-heading">
+      <h2 class="panel-heading" id="generator-heading">
+        Generate YouTube metadata
+      </h2>
 
-            <div class="ytmg-field ytmg-field-full">
-              <label for="ytmg-content">
-                Video summary or transcript (optional)
-              </label>
+      <p class="panel-intro">
+        Start with a topic or working title. A short summary helps the AI
+        understand your actual video and produce more relevant suggestions.
+      </p>
 
-              <textarea
-                id="ytmg-content"
-                name="content"
-                maxlength="12000"
-                placeholder="Summarize the video's main points, explain what viewers will learn, or paste a relevant transcript excerpt..."
-              ></textarea>
+      <form id="metadata-form">
+        <div class="form-grid">
 
-              <small class="ytmg-help">
-                Your text is sent to the site's AI API to generate suggestions.
-                Do not submit passwords, confidential data, or sensitive personal information.
-              </small>
-            </div>
-
-            <div class="ytmg-field">
-              <label for="ytmg-audience">Target audience</label>
-
-              <input
-                id="ytmg-audience"
-                name="audience"
-                type="text"
-                maxlength="160"
-                placeholder="Example: Beginner content creators"
-              >
-
-              <small class="ytmg-help">
-                Who is most likely to watch this video?
-              </small>
-            </div>
-
-            <div class="ytmg-field">
-              <label for="ytmg-tone">Writing style</label>
-
-              <select id="ytmg-tone" name="tone">
-                <option value="Engaging and clear">Engaging and clear</option>
-                <option value="Professional">Professional</option>
-                <option value="Friendly and conversational">Friendly and conversational</option>
-                <option value="Educational">Educational</option>
-                <option value="Funny and entertaining">Funny and entertaining</option>
-                <option value="Persuasive">Persuasive</option>
-                <option value="Curiosity-driven but accurate">Curiosity-driven but accurate</option>
-              </select>
-            </div>
-
-            <div class="ytmg-field">
-              <label for="ytmg-language">Output language</label>
-
-              <select id="ytmg-language" name="language">
-                <option value="English">English</option>
-                <option value="Nepali">Nepali</option>
-                <option value="Hindi">Hindi</option>
-                <option value="Spanish">Spanish</option>
-                <option value="French">French</option>
-                <option value="Portuguese">Portuguese</option>
-                <option value="German">German</option>
-                <option value="Arabic">Arabic</option>
-                <option value="Japanese">Japanese</option>
-              </select>
-            </div>
-
-            <div class="ytmg-field">
-              <label for="ytmg-purpose">Main video goal</label>
-
-              <select id="ytmg-purpose" name="purpose">
-                <option value="Educate or explain">Educate or explain</option>
-                <option value="Entertain">Entertain</option>
-                <option value="Review a product or service">Review a product or service</option>
-                <option value="Promote a business or product">Promote a business or product</option>
-                <option value="Tell a story">Tell a story</option>
-                <option value="Share a tutorial">Share a tutorial</option>
-                <option value="Share news or commentary">Share news or commentary</option>
-              </select>
-            </div>
-
+          <div class="field field-full">
+            <label for="topic">
+              Video topic or working title <span class="required">*</span>
+            </label>
+            <input
+              id="topic"
+              name="topic"
+              type="text"
+              maxlength="200"
+              placeholder="Example: How to start a YouTube channel in 2026"
+              autocomplete="off"
+              required
+            >
+            <small class="field-help">
+              Be specific about the main subject of the video.
+            </small>
           </div>
 
-          <div class="ytmg-form-actions">
-            <button class="ytmg-btn" id="ytmg-submit" type="submit">
-              Generate YouTube Metadata
-            </button>
-
-            <button class="ytmg-btn ytmg-btn-secondary" id="ytmg-reset" type="reset">
-              Clear Form
-            </button>
+          <div class="field field-full">
+            <label for="content">Video summary or transcript excerpt (optional)</label>
+            <textarea
+              id="content"
+              name="content"
+              maxlength="12000"
+              placeholder="What does the video cover? What will viewers learn? Add a summary or a relevant transcript excerpt..."
+            ></textarea>
+            <div class="character-row">
+              <small class="field-help">
+                Do not include passwords, confidential information or sensitive personal data.
+              </small>
+              <span id="content-count" class="character-count">0 / 12000</span>
+            </div>
           </div>
 
-          <p
-            class="ytmg-status"
-            id="ytmg-status"
-            role="status"
-            aria-live="polite"
-            data-type="info"
-          >Ready to generate. Enter a video topic to begin.</p>
-
-          <p class="ytmg-disclaimer">
-            AI-generated suggestions may be inaccurate or incomplete.
-            Review the results and make sure they accurately describe your video.
-            This tool does not upload videos or publish changes to YouTube.
-          </p>
-        </form>
-      </section>
-
-      <!-- Results: populated by the existing shared script.js -->
-      <section
-        class="ytmg-card"
-        id="ytmg-results"
-        aria-labelledby="ytmg-results-title"
-        hidden
-      >
-        <div class="ytmg-results-heading">
-          <div>
-            <h2 id="ytmg-results-title">Your generated metadata</h2>
-            <p>
-              Review each suggestion and copy the sections you want to use.
-            </p>
+          <div class="field">
+            <label for="audience">Target audience</label>
+            <input
+              id="audience"
+              name="audience"
+              type="text"
+              maxlength="160"
+              placeholder="Example: Beginner creators"
+            >
+            <small class="field-help">Who is the video intended to help or entertain?</small>
           </div>
 
-          <button class="ytmg-btn" id="ytmg-copy-all" type="button">
-            Copy All Results
+          <div class="field">
+            <label for="tone">Writing style</label>
+            <select id="tone" name="tone">
+              <option value="Engaging and clear">Engaging and clear</option>
+              <option value="Professional">Professional</option>
+              <option value="Friendly and conversational">Friendly and conversational</option>
+              <option value="Educational">Educational</option>
+              <option value="Funny and entertaining">Funny and entertaining</option>
+              <option value="Curiosity-driven but accurate">Curiosity-driven but accurate</option>
+              <option value="Persuasive">Persuasive</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="language">Output language</label>
+            <select id="language" name="language">
+              <option value="English">English</option>
+              <option value="Nepali">Nepali</option>
+              <option value="Hindi">Hindi</option>
+              <option value="Spanish">Spanish</option>
+              <option value="French">French</option>
+              <option value="Portuguese">Portuguese</option>
+              <option value="German">German</option>
+              <option value="Arabic">Arabic</option>
+              <option value="Japanese">Japanese</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="purpose">Main video goal</label>
+            <select id="purpose" name="purpose">
+              <option value="Educate or explain">Educate or explain</option>
+              <option value="Share a tutorial">Share a tutorial</option>
+              <option value="Entertain">Entertain</option>
+              <option value="Review a product or service">Review a product or service</option>
+              <option value="Promote a business or product">Promote a business or product</option>
+              <option value="Tell a story">Tell a story</option>
+              <option value="Share news or commentary">Share news or commentary</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-primary" id="generate-button" type="submit">
+            <span aria-hidden="true">✦</span>
+            Generate Metadata
+          </button>
+
+          <button class="btn btn-secondary" type="reset" id="clear-button">
+            Clear form
           </button>
         </div>
 
-        <section class="ytmg-result-section" aria-labelledby="ytmg-titles-heading">
-          <h3 id="ytmg-titles-heading">YouTube title ideas</h3>
-          <div class="ytmg-result-content" id="ytmg-titles"></div>
-          <div class="ytmg-copy-row">
-            <button class="ytmg-copy-btn" type="button" data-copy="titles">
-              Copy titles
+        <div id="loader" class="loader-box" hidden>
+          <div class="loader-top">
+            <div class="spinner" aria-hidden="true"></div>
+            <div>
+              <p class="loader-title" id="loader-title">Generating your metadata…</p>
+              <p class="loader-subtitle">
+                Waiting for the AI service to prepare its response.
+              </p>
+            </div>
+          </div>
+
+          <div class="indeterminate-track" aria-hidden="true">
+            <div class="indeterminate-bar"></div>
+          </div>
+
+          <div class="loader-bottom">
+            <span class="elapsed-time" id="elapsed-time">Elapsed: 0 seconds</span>
+            <button class="btn btn-secondary btn-small" id="cancel-button" type="button">
+              Cancel request
             </button>
           </div>
-        </section>
+        </div>
 
-        <section class="ytmg-result-section" aria-labelledby="ytmg-description-heading">
-          <h3 id="ytmg-description-heading">Video description</h3>
-          <div class="ytmg-result-content" id="ytmg-description"></div>
-          <div class="ytmg-copy-row">
-            <button class="ytmg-copy-btn" type="button" data-copy="description">
-              Copy description
-            </button>
-          </div>
-        </section>
+        <p
+          class="status"
+          id="status"
+          role="status"
+          aria-live="polite"
+          data-type="info"
+        >Ready. Enter your video topic to begin.</p>
 
-        <section class="ytmg-result-section" aria-labelledby="ytmg-keywords-heading">
-          <h3 id="ytmg-keywords-heading">Keyword ideas</h3>
-          <div class="ytmg-result-content" id="ytmg-keywords"></div>
-          <div class="ytmg-copy-row">
-            <button class="ytmg-copy-btn" type="button" data-copy="keywords">
-              Copy keywords
-            </button>
-          </div>
-        </section>
-
-        <section class="ytmg-result-section" aria-labelledby="ytmg-tags-heading">
-          <h3 id="ytmg-tags-heading">Tags and hashtags</h3>
-          <div class="ytmg-result-content" id="ytmg-tags"></div>
-          <div class="ytmg-copy-row">
-            <button class="ytmg-copy-btn" type="button" data-copy="tags">
-              Copy tags
-            </button>
-          </div>
-        </section>
-
-        <section class="ytmg-result-section" aria-labelledby="ytmg-cta-heading">
-          <h3 id="ytmg-cta-heading">Call to action</h3>
-          <div class="ytmg-result-content" id="ytmg-cta"></div>
-          <div class="ytmg-copy-row">
-            <button class="ytmg-copy-btn" type="button" data-copy="cta">
-              Copy call to action
-            </button>
-          </div>
-        </section>
-
-        <section class="ytmg-result-section" aria-labelledby="ytmg-tips-heading">
-          <h3 id="ytmg-tips-heading">Content improvement tips</h3>
-          <div class="ytmg-result-content" id="ytmg-tips"></div>
-          <div class="ytmg-copy-row">
-            <button class="ytmg-copy-btn" type="button" data-copy="tips">
-              Copy tips
-            </button>
-          </div>
-        </section>
-
-        <p class="ytmg-disclaimer">
-          These suggestions are not verified keyword-volume or ranking data.
-          Choose only relevant metadata and avoid misleading titles or tags.
+        <p class="disclaimer">
+          AI-generated suggestions can contain errors. Review all results for
+          accuracy and relevance before publishing. This tool does not upload
+          videos or make changes to your YouTube channel.
         </p>
-      </section>
+      </form>
+    </section>
 
-      <!-- Instructions -->
-      <section class="ytmg-card" aria-labelledby="ytmg-how-heading">
-        <h2 id="ytmg-how-heading">How to use the YouTube Metadata Generator</h2>
+    <!-- Monetization placement:
+         Add approved responsive ad code here when ready.
+         Keep ads clearly distinguishable from the tool and its buttons. -->
+    <aside
+      class="ad-slot"
+      id="ad-after-generator"
+      data-ad-placement="after-generator"
+      aria-label="Advertisement placement"
+      hidden
+    ></aside>
 
-        <div class="ytmg-info-grid">
-          <div class="ytmg-info-item">
-            <h3>1. Describe your video</h3>
-            <p>
-              Enter a topic or working title. Add a summary or transcript
-              excerpt when you have more details to share.
-            </p>
-          </div>
-
-          <div class="ytmg-info-item">
-            <h3>2. Choose your preferences</h3>
-            <p>
-              Select the target audience, writing style, output language,
-              and main purpose of your video.
-            </p>
-          </div>
-
-          <div class="ytmg-info-item">
-            <h3>3. Generate and review</h3>
-            <p>
-              Generate your metadata, review its accuracy, and copy the
-              sections you want to edit or use.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- SEO-focused supporting content -->
-      <section class="ytmg-card" aria-labelledby="ytmg-about-heading">
-        <h2 id="ytmg-about-heading">What is YouTube metadata?</h2>
-
-        <p>
-          YouTube metadata is information associated with a video, such as
-          its title, description, and tags. Clear, relevant metadata helps
-          communicate what a video contains to viewers and provides context
-          about its subject.
-        </p>
-
-        <p>
-          A useful YouTube video title should describe the content accurately
-          and make the topic clear. A good description explains what viewers
-          can expect, while relevant keywords and tags can help organize the
-          subject of the video.
-        </p>
-
-        <p>
-          This AI YouTube metadata generator creates starting-point suggestions
-          from your topic and optional summary. It does not check live keyword
-          search volumes, access private channel analytics, or guarantee
-          rankings, views, or subscribers. Review all suggestions before
-          publishing and keep them relevant to the actual video.
-        </p>
-      </section>
-
-      <!-- Frequently asked questions -->
-      <section class="ytmg-card" aria-labelledby="ytmg-faq-heading">
-        <h2 id="ytmg-faq-heading">Frequently asked questions</h2>
-
-        <div class="ytmg-faq-item">
-          <h3>What does a YouTube metadata generator do?</h3>
-          <p>
-            It helps create draft video titles, descriptions, keyword ideas,
-            tags, calls to action, and content improvement suggestions from
-            information you provide about your video.
+    <section class="panel" id="results" aria-labelledby="results-heading" hidden>
+      <div class="results-toolbar">
+        <div>
+          <h2 class="panel-heading" id="results-heading">Your generated metadata</h2>
+          <p class="panel-intro">
+            Review the suggestions, edit anything that needs correcting,
+            and copy the sections you want to use.
           </p>
         </div>
 
-        <div class="ytmg-faq-item">
-          <h3>Can this tool write a YouTube video description?</h3>
-          <p>
-            Yes. Enter your video topic and optional summary to request a
-            description draft. Review it carefully and correct any detail
-            that does not match your video.
-          </p>
+        <div class="toolbar-actions">
+          <button class="btn btn-accent btn-small" id="copy-all-button" type="button">
+            Copy all
+          </button>
+          <button class="btn btn-secondary btn-small" id="download-button" type="button">
+            Download TXT
+          </button>
+          <button class="btn btn-secondary btn-small" id="regenerate-button" type="button">
+            Regenerate
+          </button>
         </div>
+      </div>
 
-        <div class="ytmg-faq-item">
-          <h3>Does the generator guarantee higher rankings or more views?</h3>
-          <p>
-            No. Metadata alone cannot guarantee rankings, views, watch time,
-            or subscribers. Audience interest, video quality, viewer
-            satisfaction, and other factors also matter.
-          </p>
+      <div class="result-section">
+        <div class="result-title-row">
+          <h3>YouTube title ideas</h3>
+          <button class="btn btn-secondary btn-small" type="button" data-copy="titles">
+            Copy titles
+          </button>
         </div>
+        <div class="result-content" id="result-titles"></div>
+      </div>
 
-        <div class="ytmg-faq-item">
-          <h3>Does this tool publish directly to my YouTube channel?</h3>
-          <p>
-            No. It generates text suggestions only. It does not upload a video,
-            connect to your YouTube account, or publish changes to a channel.
-          </p>
+      <div class="result-section">
+        <div class="result-title-row">
+          <h3>Video description</h3>
+          <button class="btn btn-secondary btn-small" type="button" data-copy="description">
+            Copy description
+          </button>
         </div>
+        <div class="result-content" id="result-description"></div>
+      </div>
 
-        <div class="ytmg-faq-item">
-          <h3>Why might metadata generation fail?</h3>
-          <p>
-            Generation may fail if the API is unavailable, the AI service
-            returns an error, or the request takes too long. Check the status
-            message and try again. If the issue persists, check the Cloudflare
-            API Worker and its logs.
-          </p>
+      <div class="result-section">
+        <div class="result-title-row">
+          <h3>Keyword ideas</h3>
+          <button class="btn btn-secondary btn-small" type="button" data-copy="keywords">
+            Copy keywords
+          </button>
         </div>
-      </section>
+        <div class="result-content" id="result-keywords"></div>
+      </div>
 
-    </main>
+      <div class="result-section">
+        <div class="result-title-row">
+          <h3>Video tags and hashtags</h3>
+          <button class="btn btn-secondary btn-small" type="button" data-copy="tags">
+            Copy tags
+          </button>
+        </div>
+        <div class="result-content" id="result-tags"></div>
+      </div>
 
-    <footer class="ytmg-footer">
-      <p>
-        <a href="index.html">Home</a> ·
-        <a href="about.html">About</a> ·
-        <a href="contact.html">Contact</a> ·
-        <a href="privacy-policy.html">Privacy Policy</a> ·
-        <a href="terms-of-use.html">Terms of Use</a>
+      <div class="result-section">
+        <div class="result-title-row">
+          <h3>Call to action</h3>
+          <button class="btn btn-secondary btn-small" type="button" data-copy="cta">
+            Copy CTA
+          </button>
+        </div>
+        <div class="result-content" id="result-cta"></div>
+      </div>
+
+      <div class="result-section">
+        <div class="result-title-row">
+          <h3>Content improvement tips</h3>
+          <button class="btn btn-secondary btn-small" type="button" data-copy="tips">
+            Copy tips
+          </button>
+        </div>
+        <div class="result-content" id="result-tips"></div>
+      </div>
+
+      <p class="disclaimer">
+        Suggestions are not live keyword-volume metrics or ranking predictions.
+        Select only titles, keywords and tags that accurately describe the video.
+      </p>
+    </section>
+
+    <!-- Monetization placement:
+         Optional second approved ad unit can be added below results.
+         Do not put ads where they may be mistaken for tool controls. -->
+    <aside
+      class="ad-slot"
+      id="ad-after-results"
+      data-ad-placement="after-results"
+      aria-label="Advertisement placement"
+      hidden
+    ></aside>
+
+    <section class="panel" aria-labelledby="how-heading">
+      <h2 class="panel-heading" id="how-heading">
+        How to use this YouTube metadata generator
+      </h2>
+
+      <p class="panel-intro">
+        Prepare useful metadata drafts in three simple steps.
       </p>
 
-      <p>
-        Online Tools &amp; Converters ·
-        <span id="current-year">2026</span>
-      </p>
-    </footer>
+      <div class="info-grid">
+        <article class="info-card">
+          <span class="info-number" aria-hidden="true">01</span>
+          <h3>Describe the video</h3>
+          <p>
+            Enter your topic or working title. Add a summary when you want
+            suggestions based on more context.
+          </p>
+        </article>
 
-  </div>
+        <article class="info-card">
+          <span class="info-number" aria-hidden="true">02</span>
+          <h3>Choose your preferences</h3>
+          <p>
+            Select the audience, style, output language and main goal so
+            the generated text better fits your intended viewers.
+          </p>
+        </article>
+
+        <article class="info-card">
+          <span class="info-number" aria-hidden="true">03</span>
+          <h3>Review and copy</h3>
+          <p>
+            Generate the draft, check it for accuracy and copy individual
+            sections or download the complete result as a text file.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel content-panel" aria-labelledby="metadata-heading">
+      <h2 id="metadata-heading">What is YouTube metadata?</h2>
+
+      <p>
+        YouTube metadata is information that describes a video, including its
+        title, description and tags. It gives viewers and the platform context
+        about the subject of your content. A metadata generator can help creators
+        prepare and compare different ways to describe the same video.
+      </p>
+
+      <h3>Write useful YouTube video titles</h3>
+
+      <p>
+        A clear title tells people what a video covers without making promises
+        the content cannot fulfill. When considering alternative YouTube titles,
+        compare their clarity, specificity and relevance to the actual video.
+        A curiosity-driven title can still be accurate; it does not need to
+        exaggerate the content to attract attention.
+      </p>
+
+      <h3>Create a helpful video description</h3>
+
+      <p>
+        A YouTube video description can summarize the main topic, explain what
+        viewers will learn and include useful links or timestamps when relevant.
+        Edit generated text to reflect the video's actual contents. Remove
+        unsupported claims, irrelevant phrases and generic filler before
+        publishing.
+      </p>
+
+      <h3>Generate keyword ideas and tags</h3>
+
+      <p>
+        Keyword suggestions can help you think about the words and phrases
+        viewers might use when describing a topic. Tags may be useful for
+        relevant variations, names and common misspellings, but they should
+        not become a collection of unrelated popular terms. This tool generates
+        suggestions; it does not measure current search volume or verify that
+        a keyword is competitive.
+      </p>
+
+      <h3>Use AI suggestions responsibly</h3>
+
+      <p>
+        AI can produce text that sounds convincing even when it contains errors.
+        Check names, dates, statistics, product claims and every factual detail.
+        Do not use a generated title or description that misrepresents the
+        video. This generator does not connect to your YouTube account,
+        retrieve private channel analytics, publish videos or guarantee more
+        impressions, views, watch time or subscribers.
+      </p>
+
+      <h3>Who can use this tool?</h3>
+
+      <p>
+        YouTube creators, educators, tutorial publishers, reviewers, businesses
+        and video marketers can use the generator to draft metadata. It can
+        also help newer creators brainstorm title options and organize the
+        description before uploading a video. The final choice should always
+        be based on the audience, the actual content and the creator's judgment.
+      </p>
+    </section>
+
+    <section class="panel" aria-labelledby="faq-heading">
+      <h2 class="panel-heading" id="faq-heading">Frequently asked questions</h2>
+
+      <div class="faq-item">
+        <h3>Is this YouTube metadata generator free?</h3>
+        <p>
+          The page is designed as a free-to-use tool. Actual availability can
+          depend on the AI service, backend limits and any usage restrictions
+          configured by the site operator.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <h3>What can the generator create?</h3>
+        <p>
+          It can request title ideas, a video description, keyword suggestions,
+          tags and hashtags, a call to action, and tips for improving your
+          content presentation. The exact sections returned depend on the
+          configured AI backend response.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Can I generate YouTube metadata in another language?</h3>
+        <p>
+          Choose a supported output language before submitting your topic.
+          AI output quality may vary by language, so review grammar, spelling,
+          local terms and meaning before using the generated text.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Does the tool provide real search-volume data?</h3>
+        <p>
+          No. It generates keyword ideas rather than measured search volume,
+          verified search trends, or live competition statistics. Use a
+          dedicated keyword research source when you need measured data.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Does metadata guarantee better YouTube rankings?</h3>
+        <p>
+          No. A generator cannot guarantee rankings, views, watch time or
+          subscribers. Performance depends on many factors, including the
+          video itself and how viewers respond to it.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Why might generation fail or take a long time?</h3>
+        <p>
+          The request may fail if the API Worker is unavailable, the AI service
+          returns an error, the request format does not match the backend, or
+          the response takes too long. Check the status message and try again.
+          Persistent failures should be investigated in the Worker logs.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Is my video published or uploaded by this tool?</h3>
+        <p>
+          No. The tool generates text suggestions. It does not publish metadata,
+          upload files, or modify your YouTube channel.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Is the content I submit sent to an AI service?</h3>
+        <p>
+          Yes. The topic and any summary or transcript excerpt you provide are
+          sent to the site's configured AI API to generate suggestions. Avoid
+          submitting confidential information. Review the site's privacy policy
+          for its applicable data handling practices.
+        </p>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="more-tools-heading">
+      <h2 class="panel-heading" id="more-tools-heading">Explore more online tools</h2>
+      <p class="panel-intro">
+        Visit the tools directory to discover other browser-based utilities
+        for everyday tasks.
+      </p>
+      <div class="related-links">
+        <a href="/index.html#tools">Browse all tools</a>
+        <a href="/about.html">About this website</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="current-year">2026</span> Online Tools &amp; Converters.</p>
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href="/index.html">Home</a>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy-policy.html">Privacy Policy</a>
+        <a href="/terms-of-use.html">Terms of Use</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    "use strict";
+
+    /*
+     * AI BACKEND
+     * This is the existing Worker endpoint previously supplied for this site.
+     * The page calls the Worker; it does not call Gemini or another model
+     * directly and it does not contain a provider API key.
+     */
+    const API_URL =
+      "https://metadata-ai-api.robin-roosevelt-pro.workers.dev";
+
+    const form = document.getElementById("metadata-form");
+    const topicInput = document.getElementById("topic");
+    const contentInput = document.getElementById("content");
+    const audienceInput = document.getElementById("audience");
+    const toneInput = document.getElementById("tone");
+    const languageInput = document.getElementById("language");
+    const purposeInput = document.getElementById("purpose");
+
+    const submitButton = document.getElementById("generate-button");
+    const cancelButton = document.getElementById("cancel-button");
+    const resetButton = document.getElementById("clear-button");
+    const statusElement = document.getElementById("status");
+    const loader = document.getElementById("loader");
+    const loaderTitle = document.getElementById("loader-title");
+    const elapsedElement = document.getElementById("elapsed-time");
+    const resultsSection = document.getElementById("results");
+
+    document.getElementById("current-year").textContent =
+      String(new Date().getFullYear());
+
+    const sectionElements = {
+      titles: document.getElementById("result-titles"),
+      description: document.getElementById("result-description"),
+      keywords: document.getElementById("result-keywords"),
+      tags: document.getElementById("result-tags"),
+      cta: document.getElementById("result-cta"),
+      tips: document.getElementById("result-tips")
+    };
+
+    const sectionLabels = {
+      titles: "YouTube title ideas",
+      description: "Video description",
+      keywords: "Keyword ideas",
+      tags: "Video tags and hashtags",
+      cta: "Call to action",
+      tips: "Content improvement tips"
+    };
+
+    let activeController = null;
+    let elapsedInterval = null;
+    let requestStartTime = 0;
+    let timedOut = false;
+    let lastResults = null;
+
+    function setStatus(message, type = "info") {
+      statusElement.textContent = message;
+      statusElement.dataset.type = type;
+    }
+
+    function stopElapsedClock() {
+      if (elapsedInterval !== null) {
+        window.clearInterval(elapsedInterval);
+        elapsedInterval = null;
+      }
+    }
+
+    function elapsedSeconds() {
+      if (!requestStartTime) return 0;
+      return Math.max(0, Math.floor((Date.now() - requestStartTime) / 1000));
+    }
+
+    function updateElapsedText() {
+      const seconds = elapsedSeconds();
+      elapsedElement.textContent =
+        "Elapsed: " + seconds + (seconds === 1 ? " second" : " seconds");
+    }
+
+    function startLoading() {
+      requestStartTime = Date.now();
+      timedOut = false;
+      loader.hidden = false;
+      loaderTitle.textContent = "Generating your metadata…";
+      submitButton.disabled = true;
+      submitButton.textContent = "Generating…";
+      updateElapsedText();
+
+      elapsedInterval = window.setInterval(updateElapsedText, 250);
+    }
+
+    function stopLoading() {
+      stopElapsedClock();
+      loader.hidden = true;
+      submitButton.disabled = false;
+      submitButton.innerHTML = '<span aria-hidden="true">✦</span> Generate Metadata';
+      activeController = null;
+    }
+
+    function cancelGeneration() {
+      if (!activeController) return;
+
+      timedOut = false;
+      activeController.abort();
+      setStatus("The generation request was canceled.", "info");
+      stopLoading();
+    }
+
+    cancelButton.addEventListener("click", cancelGeneration);
+
+    contentInput.addEventListener("input", () => {
+      document.getElementById("content-count").textContent =
+        contentInput.value.length + " / 12000";
+    });
+
+    form.addEventListener("reset", () => {
+      if (activeController) {
+        activeController.abort();
+      }
+
+      timedOut = false;
+      stopLoading();
+      lastResults = null;
+      resultsSection.hidden = true;
+
+      window.setTimeout(() => {
+        document.getElementById("content-count").textContent =
+          contentInput.value.length + " / 12000";
+        setStatus("Form cleared. Enter a video topic to begin.", "info");
+      }, 0);
+    });
+
+    function buildPrompt(input) {
+      return [
+        "You are a careful YouTube metadata writing assistant.",
+        "Generate useful draft metadata based only on the supplied video information.",
+        "Do not invent facts, statistics, product specifications, or events.",
+        "Do not claim you have live keyword search volume or ranking data.",
+        "Use the chosen output language and writing style.",
+        "Keep titles relevant and accurate rather than misleading or clickbait-heavy.",
+        "Return ONLY a valid JSON object, with no Markdown fences or commentary.",
+        "Use exactly this JSON structure:",
+        "{",
+        '  "titles": ["Title idea 1", "Title idea 2", "Title idea 3", "Title idea 4", "Title idea 5"],',
+        '  "description": "A complete, readable draft description.",',
+        '  "keywords": ["keyword one", "keyword two", "keyword three"],',
+        '  "tags": ["relevant tag one", "relevant tag two"],',
+        '  "hashtags": ["#RelevantHashtag"],',
+        '  "cta": ["A suitable call to action"],',
+        '  "tips": ["A practical content improvement tip"]',
+        "}",
+        "",
+        "VIDEO TOPIC: " + input.topic,
+        "VIDEO SUMMARY OR TRANSCRIPT EXCERPT: " + (input.content || "Not provided"),
+        "TARGET AUDIENCE: " + (input.audience || "Not specified"),
+        "WRITING STYLE: " + input.tone,
+        "OUTPUT LANGUAGE: " + input.language,
+        "MAIN VIDEO GOAL: " + input.purpose,
+        "",
+        "Make the description useful and easy to edit.",
+        "Use only relevant tags and hashtags.",
+        "Make the tips specific to the supplied video topic.",
+        "Do not claim keyword suggestions have verified search volume.",
+        "Do not include unsupported factual claims in any section."
+      ].join("\n");
+    }
+
+    function makeRequestPayload(input) {
+      const prompt = buildPrompt(input);
+
+      /*
+       * The aliases support common Worker implementations.
+       * Keep the key names required by your existing Worker if it uses a
+       * specific request schema. Unneeded extra properties are normally ignored.
+       */
+      return {
+        type: "youtube_metadata",
+        topic: input.topic,
+        videoTopic: input.topic,
+        title: input.topic,
+        videoTitle: input.topic,
+
+        content: input.content,
+        text: input.content || input.topic,
+        summary: input.content,
+        transcript: input.content,
+        videoDescription: input.content,
+
+        audience: input.audience,
+        targetAudience: input.audience,
+
+        tone: input.tone,
+        style: input.tone,
+
+        language: input.language,
+        outputLanguage: input.language,
+
+        purpose: input.purpose,
+        goal: input.purpose,
+        videoType: input.purpose,
+
+        prompt: prompt,
+        instructions: prompt
+      };
+    }
+
+    function safeJsonParse(text) {
+      if (typeof text !== "string") return null;
+
+      const trimmed = text.trim();
+      if (!trimmed) return null;
+
+      try {
+        return JSON.parse(trimmed);
+      } catch (_) {
+        // Some AI models wrap JSON in Markdown fences or extra text.
+      }
+
+      const unfenced = trimmed
+        .replace(/^```(?:json)?\s*/i, "")
+        .replace(/\s*```$/, "")
+        .trim();
+
+      try {
+        return JSON.parse(unfenced);
+      } catch (_) {
+        // Try to recover a JSON object embedded in surrounding text.
+      }
+
+      const firstBrace = unfenced.indexOf("{");
+      const lastBrace = unfenced.lastIndexOf("}");
+
+      if (firstBrace !== -1 && lastBrace > firstBrace) {
+        try {
+          return JSON.parse(unfenced.slice(firstBrace, lastBrace + 1));
+        } catch (_) {
+          return null;
+        }
+      }
+
+      return null;
+    }
+
+    function parseHttpBody(bodyText) {
+      const parsed = safeJsonParse(bodyText);
+      return parsed !== null ? parsed : { rawText: bodyText };
+    }
+
+    function collectObjects(root) {
+      const objects = [];
+      const seen = new Set();
+      const queue = [{ value: root, depth: 0 }];
+
+      while (queue.length && objects.length < 45) {
+        const entry = queue.shift();
+        const value = entry.value;
+
+        if (value === null || typeof value !== "object") continue;
+        if (seen.has(value)) continue;
+
+        seen.add(value);
+        objects.push(value);
+
+        if (entry.depth >= 5) continue;
+
+        for (const child of Object.values(value)) {
+          if (child && typeof child === "object") {
+            queue.push({ value: child, depth: entry.depth + 1 });
+          }
+        }
+      }
+
+      return objects;
+    }
+
+    function getField(objects, aliases) {
+      const normalizedAliases = aliases.map(
+        key => key.toLowerCase().replace(/[^a-z0-9]/g, "")
+      );
+
+      for (const object of objects) {
+        for (const [key, value] of Object.entries(object)) {
+          const normalizedKey = key.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+          if (
+            normalizedAliases.includes(normalizedKey) &&
+            value !== null &&
+            value !== undefined &&
+            value !== ""
+          ) {
+            return value;
+          }
+        }
+      }
+
+      return null;
+    }
+
+    function valueToText(value) {
+      if (value === null || value === undefined) return "";
+
+      if (typeof value === "string") return value.trim();
+      if (typeof value === "number" || typeof value === "boolean") {
+        return String(value);
+      }
+
+      if (Array.isArray(value)) {
+        return value.map(item => valueToText(item)).filter(Boolean).join("\n");
+      }
+
+      if (typeof value === "object") {
+        const preferredKeys = [
+          "title", "text", "name", "keyword", "tag", "tip", "suggestion", "value"
+        ];
+
+        for (const key of preferredKeys) {
+          if (value[key] !== undefined && value[key] !== null) {
+            return valueToText(value[key]);
+          }
+        }
+
+        return Object.entries(value)
+          .map(([key, item]) => key + ": " + valueToText(item))
+          .filter(line => !line.endsWith(": "))
+          .join("\n");
+      }
+
+      return "";
+    }
+
+    function extractRawText(root) {
+      if (root && typeof root.rawText === "string") {
+        return root.rawText.trim();
+      }
+
+      const objects = collectObjects(root);
+      const possibleText = getField(objects, [
+        "output_text", "generated_text", "responseText", "rawText", "text"
+      ]);
+
+      if (typeof possibleText === "string" && possibleText.trim()) {
+        return possibleText.trim();
+      }
+
+      /*
+       * Common Workers AI responses contain a string inside "response".
+       * Only use it as raw fallback text; structured fields are checked first.
+       */
+      const responseValue = getField(objects, ["response", "result"]);
+      if (typeof responseValue === "string" && responseValue.trim()) {
+        return responseValue.trim();
+      }
+
+      if (typeof root === "string") return root.trim();
+      return "";
+    }
+
+    function parseResponseObject(root) {
+      if (typeof root === "string") {
+        return safeJsonParse(root) || { rawText: root };
+      }
+
+      if (!root || typeof root !== "object") {
+        return { rawText: String(root ?? "") };
+      }
+
+      /*
+       * If a known wrapper carries JSON as a string, parse it before
+       * looking for fields. This accommodates common API response shapes.
+       */
+      const candidateKeys = ["data", "result", "output", "response", "content"];
+
+      for (const key of candidateKeys) {
+        const candidate = root[key];
+
+        if (typeof candidate === "string") {
+          const parsed = safeJsonParse(candidate);
+          if (parsed && typeof parsed === "object") {
+            return { ...root, ...parsed };
+          }
+        }
+      }
+
+      return root;
+    }
+
+    function normalizeResponse(apiResponse) {
+      const root = parseResponseObject(apiResponse);
+      const objects = collectObjects(root);
+
+      const titleValue = getField(objects, [
+        "titles", "titleIdeas", "titleSuggestions", "title_ideas",
+        "suggestedTitles", "youtubeTitles", "titleOptions"
+      ]);
+
+      const descriptionValue = getField(objects, [
+        "description", "videoDescription", "youtubeDescription",
+        "generatedDescription", "descriptionText"
+      ]);
+
+      const keywordValue = getField(objects, [
+        "keywords", "keywordIdeas", "keywordSuggestions",
+        "searchKeywords", "targetKeywords"
+      ]);
+
+      const tagsValue = getField(objects, [
+        "tags", "videoTags", "youtubeTags", "tagIdeas", "tagSuggestions"
+      ]);
+
+      const hashtagValue = getField(objects, [
+        "hashtags", "hashTags", "hashtagIdeas"
+      ]);
+
+      const ctaValue = getField(objects, [
+        "cta", "callToAction", "call_to_action", "callToActions",
+        "ctaSuggestions"
+      ]);
+
+      const tipsValue = getField(objects, [
+        "tips", "improvementTips", "contentTips", "recommendations",
+        "optimizationTips"
+      ]);
+
+      let rawText = extractRawText(root);
+
+      /*
+       * Some APIs return the generated text inside a JSON string.
+       * Attempt to decode that text into the expected section structure.
+       */
+      if (rawText) {
+        const parsedRaw = safeJsonParse(rawText);
+
+        if (parsedRaw && typeof parsedRaw === "object") {
+          return normalizeResponse(parsedRaw);
+        }
+      }
+
+      const combinedTags = [
+        valueToText(tagsValue),
+        valueToText(hashtagValue)
+      ].filter(Boolean).join("\n");
+
+      let results = {
+        titles: valueToText(titleValue),
+        description: valueToText(descriptionValue),
+        keywords: valueToText(keywordValue),
+        tags: combinedTags,
+        cta: valueToText(ctaValue),
+        tips: valueToText(tipsValue)
+      };
+
+      const hasStructuredContent = Object.values(results).some(
+        value => value && value.trim()
+      );
+
+      /*
+       * Preserve a plain-text AI response instead of silently discarding it.
+       */
+      if (!hasStructuredContent && rawText) {
+        results.description = rawText;
+      }
+
+      return results;
+    }
+
+    function renderResult(element, text, listPreferred = false) {
+      element.replaceChildren();
+
+      const value = String(text || "").trim();
+
+      if (!value) {
+        const empty = document.createElement("p");
+        empty.className = "result-empty";
+        empty.textContent =
+          "This section was not included in the API response. You can try generating again.";
+        element.appendChild(empty);
+        return;
+      }
+
+      /*
+       * Render line-separated items as a list when appropriate.
+       * All API output is inserted as text, never as executable HTML.
+       */
+      const lines = value
+        .split(/\n+/)
+        .map(line => line.replace(/^\s*(?:[-*•]|\d+[.)])\s*/, "").trim())
+        .filter(Boolean);
+
+      if (listPreferred && lines.length > 1) {
+        const list = document.createElement("ul");
+
+        for (const line of lines) {
+          const item = document.createElement("li");
+          item.textContent = line;
+          list.appendChild(item);
+        }
+
+        element.appendChild(list);
+        return;
+      }
+
+      const paragraph = document.createElement("p");
+      paragraph.textContent = value;
+      element.appendChild(paragraph);
+    }
+
+    function displayResults(results) {
+      lastResults = results;
+
+      renderResult(sectionElements.titles, results.titles, true);
+      renderResult(sectionElements.description, results.description);
+      renderResult(sectionElements.keywords, results.keywords, true);
+      renderResult(sectionElements.tags, results.tags, true);
+      renderResult(sectionElements.cta, results.cta, true);
+      renderResult(sectionElements.tips, results.tips, true);
+
+      resultsSection.hidden = false;
+      resultsSection.scrollIntoView({
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "auto"
+          : "smooth",
+        block: "start"
+      });
+    }
+
+    async function readErrorMessage(response) {
+      const bodyText = await response.text();
+      const parsed = safeJsonParse(bodyText);
+
+      if (parsed && typeof parsed === "object") {
+        return parsed.error || parsed.message || parsed.detail ||
+          ("The API returned HTTP " + response.status + ".");
+      }
+
+      if (!response.ok) {
+        return "The API returned HTTP " + response.status + ".";
+      }
+
+      return bodyText || "The API returned an empty response.";
+    }
+
+    async function generateMetadata() {
+      const topic = topicInput.value.trim();
+
+      if (!topic) {
+        topicInput.focus();
+        setStatus("Enter a video topic or working title first.", "error");
+        return;
+      }
+
+      if (activeController) return;
+
+      const input = {
+        topic: topic,
+        content: contentInput.value.trim(),
+        audience: audienceInput.value.trim(),
+        tone: toneInput.value,
+        language: languageInput.value,
+        purpose: purposeInput.value
+      };
+
+      activeController = new AbortController();
+      const thisController = activeController;
+      let timeoutId = null;
+
+      startLoading();
+      setStatus("Connecting to the AI service and generating suggestions…", "info");
+
+      timeoutId = window.setTimeout(() => {
+        if (activeController === thisController) {
+          timedOut = true;
+          thisController.abort();
+        }
+      }, 90000);
+
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          mode: "cors",
+          credentials: "omit",
+          cache: "no-store",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/plain;q=0.9, */*;q=0.8"
+          },
+          body: JSON.stringify(makeRequestPayload(input)),
+          signal: thisController.signal
+        });
+
+        const bodyText = await response.text();
+        let apiResponse = parseHttpBody(bodyText);
+
+        if (!response.ok) {
+          const message =
+            apiResponse.error ||
+            apiResponse.message ||
+            ("The API returned HTTP " + response.status + ".");
+          throw new Error(message);
+        }
+
+        if (
+          apiResponse &&
+          typeof apiResponse === "object" &&
+          apiResponse.success === false
+        ) {
+          throw new Error(
+            apiResponse.error ||
+            apiResponse.message ||
+            "The API reported that generation failed."
+          );
+        }
+
+        /*
+         * A successful HTTP response must still contain usable content.
+         */
+        const normalized = normalizeResponse(apiResponse);
+        const hasOutput = Object.values(normalized).some(
+          value => typeof value === "string" && value.trim()
+        );
+
+        if (!hasOutput) {
+          throw new Error(
+            "The API responded, but no readable metadata was found. Check the Worker response format."
+          );
+        }
+
+        const seconds = elapsedSeconds();
+        displayResults(normalized);
+
+        setStatus(
+          "Metadata generated successfully in " +
+          seconds + (seconds === 1 ? " second." : " seconds.") +
+          " Review the suggestions before using them.",
+          "success"
+        );
+      } catch (error) {
+        if (error && error.name === "AbortError") {
+          if (timedOut) {
+            setStatus(
+              "The request timed out after 90 seconds. Check whether the API Worker and AI service are responding, then try again.",
+              "error"
+            );
+          }
+          // A manual cancellation already displayed its own status message.
+          return;
+        }
+
+        const message = error && error.message ? error.message : "";
+
+        if (
+          message.includes("Failed to fetch") ||
+          message.includes("NetworkError") ||
+          message.includes("Load failed")
+        ) {
+          setStatus(
+            "Could not reach the AI API. Check the Worker URL, CORS settings, deployment status and browser connection.",
+            "error"
+          );
+        } else {
+          setStatus(
+            "Generation failed: " + (message || "Unexpected API error."),
+            "error"
+          );
+        }
+      } finally {
+        if (timeoutId !== null) {
+          window.clearTimeout(timeoutId);
+        }
+
+        if (activeController === thisController) {
+          stopLoading();
+        }
+      }
+    }
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+      generateMetadata();
+    });
+
+    document.getElementById("regenerate-button").addEventListener("click", () => {
+      if (!form.reportValidity()) return;
+      generateMetadata();
+    });
+
+    async function copyText(text) {
+      if (!text || !text.trim()) {
+        setStatus("There is no text available to copy yet.", "error");
+        return false;
+      }
+
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          const temporary = document.createElement("textarea");
+          temporary.value = text;
+          temporary.setAttribute("readonly", "");
+          temporary.style.position = "fixed";
+          temporary.style.left = "-9999px";
+          document.body.appendChild(temporary);
+          temporary.select();
+
+          const copied = document.execCommand("copy");
+          temporary.remove();
+
+          if (!copied) {
+            throw new Error("Copy command was not successful.");
+          }
+        }
+
+        return true;
+      } catch (_) {
+        setStatus(
+          "Automatic copying was blocked by the browser. Select the result text and copy it manually.",
+          "error"
+        );
+        return false;
+      }
+    }
+
+    function collectAllResults() {
+      if (!lastResults) return "";
+
+      return Object.keys(sectionLabels)
+        .map(key => {
+          const value = lastResults[key] || "";
+          return sectionLabels[key] + "\n" +
+            (value.trim() || "(No content returned)") + "\n";
+        })
+        .join("\n");
+    }
+
+    document.getElementById("copy-all-button").addEventListener("click", async () => {
+      const copied = await copyText(collectAllResults());
+
+      if (copied) {
+        setStatus("All generated metadata was copied to the clipboard.", "success");
+      }
+    });
+
+    document.querySelectorAll("[data-copy]").forEach(button => {
+      button.addEventListener("click", async () => {
+        const key = button.dataset.copy;
+        const text = lastResults && lastResults[key] ? lastResults[key] : "";
+        const copied = await copyText(text);
+
+        if (copied) {
+          setStatus(sectionLabels[key] + " copied to the clipboard.", "success");
+        }
+      });
+    });
+
+    document.getElementById("download-button").addEventListener("click", () => {
+      const text = collectAllResults();
+
+      if (!text.trim()) {
+        setStatus("Generate metadata before downloading results.", "error");
+        return;
+      }
+
+      const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+      const objectUrl = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+
+      link.href = objectUrl;
+      link.download = "youtube-metadata-suggestions.txt";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      URL.revokeObjectURL(objectUrl);
+      setStatus("Your metadata text file has been prepared for download.", "success");
+    });
+  </script>
 </body>
 </html>
