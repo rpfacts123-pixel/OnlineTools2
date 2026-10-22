@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Contact Online Tools &amp; Converters</title>
+  <meta name="description" content="Contact Online Tools & Converters with questions, tool issues, suggestions, or feedback about our online utilities.">
+  <link rel="canonical" href="https://onlinetoolsandconverters.cc/contact.html">
+
+  <link rel="stylesheet" href="/style.css">
+  <script src="/script.js" defer></script>
+
+  <style>
+    .contact-page { max-width: 1050px; margin: 0 auto; padding: 40px 20px 64px; }
+    .contact-hero { padding: 38px 0 28px; }
+    .contact-label { color: var(--accent-color, #2563eb); font-weight: 700; font-size: .88rem; letter-spacing: .08em; text-transform: uppercase; }
+    .contact-hero h1 { font-size: clamp(2rem, 5vw, 3rem); line-height: 1.15; margin: 12px 0 18px; }
+    .contact-hero p { max-width: 720px; font-size: 1.08rem; line-height: 1.8; }
+    .contact-layout { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(250px, .7fr); gap: 22px; align-items: start; }
+    .contact-card { padding: 26px; border: 1px solid var(--border-color, #e5e7eb); border-radius: 16px; background: var(--card-background, #fff); }
+    .contact-card h2 { margin-top: 0; font-size: 1.4rem; }
+    .contact-field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 18px; }
+    .contact-field label { font-weight: 650; }
+    .contact-field input, .contact-field select, .contact-field textarea { width: 100%; box-sizing: border-box; padding: 12px 13px; border: 1px solid var(--border-color, #cbd5e1); border-radius: 9px; font: inherit; background: transparent; color: inherit; }
+    .contact-field textarea { min-height: 145px; resize: vertical; }
+    .contact-field input:focus, .contact-field select:focus, .contact-field textarea:focus { outline: 2px solid #2563eb; outline-offset: 2px; }
+    .contact-submit { display: inline-block; border: 0; border-radius: 9px; padding: 12px 18px; font: inherit; font-weight: 700; background: #1d4ed8; color: white; cursor: pointer; }
+    .contact-submit:hover { background: #1e40af; }
+    .contact-note { font-size: .94rem; line-height: 1.7; }
+    .contact-status { margin-top: 16px; line-height: 1.6; }
+    .page-header { border-bottom: 1px solid var(--border-color, #e5e7eb); }
+    .page-header-inner { max-width: 1100px; margin: auto; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .page-brand { display: flex; align-items: center; gap: 10px; color: inherit; text-decoration: none; font-weight: 800; }
+    .page-logo { display: inline-grid; place-items: center; width: 42px; height: 42px; border-radius: 12px; background: #1d4ed8; color: white; }
+    .page-nav { display: flex; flex-wrap: wrap; gap: 16px; }
+    .page-nav a { color: inherit; text-decoration: none; font-size: .95rem; }
+    .page-nav a:hover { text-decoration: underline; }
+    .page-footer { border-top: 1px solid var(--border-color, #e5e7eb); padding: 24px 20px; text-align: center; line-height: 1.8; }
+    .page-footer a { color: inherit; margin: 0 8px; }
+    @media (max-width: 720px) {
+      .contact-layout { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .contact-page { padding: 24px 16px 44px; }
+      .contact-card { padding: 20px; }
+      .page-header-inner { align-items: flex-start; }
+      .page-nav { gap: 12px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="page-header">
+    <div class="page-header-inner">
+      <a class="page-brand" href="/" aria-label="Online Tools and Converters home">
+        <span class="page-logo">OT</span>
+        <span>Online Tools &amp; Converters</span>
+      </a>
+
+      <nav class="page-nav" aria-label="Main navigation">
+        <a href="/">Home</a>
+        <a href="/#tool-directory">All tools</a>
+        <a href="/#categories">Categories</a>
+        <a href="/about.html">About</a>
+        <a href="/contact.html" aria-current="page">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="contact-page">
+    <section class="contact-hero">
+      <span class="contact-label">Contact us</span>
+      <h1>Questions, feedback, or a tool issue?</h1>
+      <p>
+        Use this page to prepare a message about Online Tools &amp; Converters.
+        You can report a problem with a tool, suggest an improvement, or share
+        feedback about your experience.
+      </p>
+    </section>
+
+    <div class="contact-layout">
+      <section class="contact-card">
+        <h2>Send a message</h2>
+
+        <form id="contact-form">
+          <div class="contact-field">
+            <label for="contact-name">Your name</label>
+            <input
+              type="text"
+              id="contact-name"
+              name="name"
+              autocomplete="name"
+              maxlength="100"
+              placeholder="Enter your name"
+              required
+            >
+          </div>
+
+          <div class="contact-field">
+            <label for="contact-email">Your email address</label>
+            <input
+              type="email"
+              id="contact-email"
+              name="email"
+              autocomplete="email"
+              maxlength="254"
+              placeholder="you@example.com"
+              required
+            >
+          </div>
+
+          <div class="contact-field">
+            <label for="contact-topic">What is your message about?</label>
+            <select id="contact-topic" name="topic" required>
+              <option value="">Choose a topic</option>
+              <option value="Tool problem">Report a tool problem</option>
+              <option value="Suggestion">Suggest an improvement</option>
+              <option value="Question">General question</option>
+              <option value="Other feedback">Other feedback</option>
+            </select>
+          </div>
+
+          <div class="contact-field">
+            <label for="contact-message">Message</label>
+            <textarea
+              id="contact-message"
+              name="message"
+              maxlength="5000"
+              placeholder="Describe your question or feedback..."
+              required
+            ></textarea>
+          </div>
+
+          <button class="contact-submit" type="submit">Prepare email</button>
+
+          <p
+            id="contact-status"
+            class="contact-status"
+            role="status"
+            aria-live="polite"
+          ></p>
+        </form>
+      </section>
+
+      <aside class="contact-card">
+        <h2>How can we help?</h2>
+        <p>
+          To help us understand a technical issue, include the name of the
+          tool, what you were trying to do, and what happened.
+        </p>
+        <p>
+          Please do not include passwords, payment details, or other
+          confidential information in your message.
+        </p>
+        <p class="contact-note">
+          <strong>Important:</strong> The form prepares a message in your
+          device's email application. It does not send messages directly
+          from this website.
+        </p>
+        <p><a href="/#tool-directory">Browse the available tools →</a></p>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="page-footer">
+    <strong>OT · Online Tools &amp; Converters</strong>
+    <p>Practical online utilities, converters, and calculators for everyday digital work.</p>
+    <nav aria-label="Footer navigation">
+      <a href="/">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+    <p>© <span id="copyright-year">2026</span> Online Tools &amp; Converters.</p>
+  </footer>
+
+  <script>
+    document.getElementById("copyright-year").textContent =
+      new Date().getFullYear();
+
+    document.getElementById("contact-form").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      // Replace this value with the actual contact email for the .cc website.
+      const CONTACT_EMAIL = "REPLACE_WITH_YOUR_CONTACT_EMAIL";
+      const status = document.getElementById("contact-status");
+
+      if (CONTACT_EMAIL === "REPLACE_WITH_YOUR_CONTACT_EMAIL") {
+        status.textContent =
+          "The contact email has not been configured yet. Set CONTACT_EMAIL in contact.html before using this form.";
+        return;
+      }
+
+      const name = document.getElementById("contact-name").value.trim();
+      const senderEmail = document.getElementById("contact-email").value.trim();
+      const topic = document.getElementById("contact-topic").value;
+      const message = document.getElementById("contact-message").value.trim();
+
+      const subject = "Website feedback: " + topic;
+      const body =
+        "Name: " + name + "\n" +
+        "Reply email: " + senderEmail + "\n" +
+        "Topic: " + topic + "\n\n" +
+        "Message:\n" + message + "\n\n" +
+        "Page: " + window.location.href;
+
+      const mailto =
+        "mailto:" + CONTACT_EMAIL +
+        "?subject=" + encodeURIComponent(subject) +
+        "&body=" + encodeURIComponent(body);
+
+      status.textContent =
+        "Opening your email application. Review the message and press Send to submit it.";
+
+      window.location.href = mailto;
+    });
+  </script>
+</body>
+</html>
