@@ -1,24 +1,100 @@
-# As a condition of accessing this website, you agree to abide by the following
-# content signals:
+# =====================================================================
+# robots.txt for https://onlinetoolsandconverters.cc/
+# Online Tools & Converters
+#
+# Purpose: allow crawling of all public tools and content for Google,
+# Bing, and other search engines. Explicitly allows CSS and JavaScript
+# so Google can render pages correctly. Includes the Sitemap directive
+# so crawlers discover the sitemap without relying on external links.
+#
+# Last updated: 2026-10-23
+# =====================================================================
 
-# (a)  If a content-signal = yes, you may collect content for the corresponding
-#      use.
-# (b)  If a content-signal = no, you may not collect content for the
-#      corresponding use.
-# (c)  If the website operator does not include a content signal for a
-#      corresponding use, the website operator neither grants nor restricts
-#      permission via content signal with respect to the corresponding use.
+# ---------------------------------------------------------------------
+# Default: allow everything for every crawler.
+# A crawler that matches no specific group below uses this group.
+# Do not use "Disallow: /" here — that would block the entire site.
+# ---------------------------------------------------------------------
+User-agent: *
+Allow: /
 
-# The content signals and their meanings are:
+# ---------------------------------------------------------------------
+# Google Search Console / Googlebot
+# Explicitly allowed so Search Console URL Inspection, Rich Results
+# Test, and the robots.txt report can fetch and render pages.
+# Google ignores Crawl-delay, so it is not used.
+# ---------------------------------------------------------------------
+User-agent: Googlebot
+Allow: /
 
-# search:   building a search index and providing search results (e.g., returning
-#           hyperlinks and short excerpts from your website's contents). Search does not
-#           include providing AI-generated search summaries.
-# ai-input: inputting content into one or more AI models (e.g., retrieval
-#           augmented generation, grounding, or other real-time taking of content for
-#           generative AI search answers).
-# ai-train: training or fine-tuning AI models.
+User-agent: Googlebot-Image
+Allow: /
 
-# ANY RESTRICTIONS EXPRESSED VIA CONTENT SIGNALS ARE EXPRESS RESERVATIONS OF
-# RIGHTS UNDER ARTICLE 4 OF THE EUROPEAN UNION DIRECTIVE 2019/790 ON COPYRIGHT
-# AND RELATED RIGHTS IN THE DIGITAL SINGLE MARKET.
+User-agent: Googlebot-News
+Allow: /
+
+# Google's AI training crawler. Allowing it does not affect
+# Googlebot indexing. Remove or Disallow if you do not want
+# your content used for AI training.
+User-agent: Google-Extended
+Allow: /
+
+# ---------------------------------------------------------------------
+# Bing Webmaster Tools / Bingbot
+# Explicitly allowed for Bing URL Submission, IndexNow, and
+# Bing's robots.txt testing. Bing respects Crawl-delay, but a value
+# is omitted here because this is a static site with no server load
+# concern; remove the comment and set a value only if needed.
+# ---------------------------------------------------------------------
+User-agent: Bingbot
+Allow: /
+
+User-agent: msnbot
+Allow: /
+
+User-agent: BingPreview
+Allow: /
+
+# ---------------------------------------------------------------------
+# AI search crawlers and answer engines.
+# These fetch pages to cite them in AI-generated answers.
+# Allowing them can increase visibility in AI search results.
+# Block them by changing Allow to Disallow if you prefer.
+# ---------------------------------------------------------------------
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# ---------------------------------------------------------------------
+# Block nothing by default. If you later add private or low-value
+# sections, add them here with explicit Disallow rules. Examples:
+#
+# Disallow: /admin/
+# Disallow: /api/
+# Disallow: /internal-search
+#
+# Do NOT block /style.css, /script.js, /assets/, or any directory
+# containing CSS, JavaScript, images, or fonts. Blocking these
+# prevents Google from rendering pages and can hurt indexing.
+# ---------------------------------------------------------------------
+
+# ---------------------------------------------------------------------
+# Sitemap location.
+# Replace sitemap.xml with sitemap_index.xml if you use an index file.
+# The URL must be absolute and is not tied to any User-agent group.
+# ---------------------------------------------------------------------
+Sitemap: https://onlinetoolsandconverters.cc/sitemap.xml
