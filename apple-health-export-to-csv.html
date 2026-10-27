@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apple Health Export to CSV by Metric and Date Range</title>
+<meta name="description" content="Load an Apple Health export.xml and download a CSV for one metric, such as sleep, heart rate, steps, or HRV. Choose a date range and raw or daily rows. Runs in your browser, nothing uploaded.">
+<link rel="canonical" href="https://onlinetoolsandconverters.cc/apple-health-export-to-csv">
+<style>
+  :root{
+    --blue:#245bcc;--ink:#172033;--muted:#5b6b82;--line:#dfe6ef;--bg:#f7f9fc;
+    --card:#fff;--radius:12px;--shadow:0 1px 2px rgba(23,32,51,.06),0 6px 18px rgba(23,32,51,.05);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55}
+  .ah-wrap{max-width:900px;margin:0 auto;padding:28px 18px 64px}
+  .ah-header h1{font-size:clamp(1.6rem,4vw,2.1rem);line-height:1.2;margin:0 0 8px;letter-spacing:-.01em}
+  .ah-header p{margin:0 0 22px;color:var(--muted);font-size:1rem;max-width:68ch}
+  .ah-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin:18px 0}
+  .ah-drop{display:block;border:2px dashed #c3d0e2;border-radius:10px;padding:24px 18px;text-align:center;cursor:pointer;background:#fbfcfe;transition:border-color .15s,background .15s}
+  .ah-drop:hover,.ah-drop.is-over{border-color:var(--blue);background:#f4f8ff}
+  .ah-drop input{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+  .ah-drop-title{font-weight:700;font-size:1rem;margin:0 0 4px}
+  .ah-drop-sub{font-size:.86rem;color:var(--muted);margin:0}
+  .ah-fileinfo{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin-top:12px;font-size:.82rem;color:var(--muted)}
+  .ah-fileinfo b{color:var(--ink);font-weight:700}
+  .ah-error{margin:14px 0 0;padding:10px 12px;border-radius:8px;background:#fff4f2;border:1px solid #f3cfc8;color:#8a2f1c;font-size:.86rem}
+  .ah-error[hidden]{display:none}
+  .ah-warn{margin:14px 0 0;padding:10px 12px;border-radius:8px;background:#fffbe8;border:1px solid #f0e0a8;color:#6b551a;font-size:.86rem}
+  .ah-warn[hidden]{display:none}
+  .ah-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:9px;margin:16px 0}
+  .ah-stat{border:1px solid var(--line);border-radius:9px;padding:10px 12px;background:#fbfcfe}
+  .ah-stat dt{font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin:0 0 3px;font-weight:700}
+  .ah-stat dd{margin:0;font-size:1.05rem;font-weight:700;font-variant-numeric:tabular-nums;word-break:break-word}
+  .ah-label{display:block;font-size:.86rem;font-weight:600;margin:14px 0 5px;color:var(--ink)}
+  .ah-select,.ah-date{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:8px;font:inherit;font-size:.88rem;color:var(--ink);background:#fbfcfe;outline:none}
+  .ah-select:focus,.ah-date:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(36,91,204,.12)}
+  .ah-daterow{display:flex;flex-wrap:wrap;gap:10px}
+  .ah-daterow>div{flex:1 1 150px}
+  .ah-actions{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 0}
+  .ah-btn{appearance:none;border:1px solid transparent;border-radius:8px;padding:10px 16px;font:inherit;font-size:.9rem;font-weight:600;cursor:pointer}
+  .ah-btn:disabled{opacity:.45;cursor:not-allowed}
+  .ah-btn-primary{background:var(--blue);color:#fff}
+  .ah-btn-primary:hover:not(:disabled){background:#1e4fae}
+  .ah-btn-secondary{background:#fff;color:var(--ink);border-color:var(--line)}
+  .ah-btn-secondary:hover:not(:disabled){border-color:#c7d3e2}
+  .ah-results{border-top:1px solid var(--line);margin-top:20px;padding-top:18px}
+  .ah-results[hidden]{display:none}
+  .ah-sub{font-size:.94rem;font-weight:700;margin:0 0 8px;letter-spacing:-.01em}
+  .ah-tablewrap{overflow:auto;max-height:320px;border:1px solid var(--line);border-radius:9px;background:#fbfcfe}
+  table.ah-table{border-collapse:collapse;width:100%;font-size:.78rem}
+  table.ah-table th,table.ah-table td{text-align:left;padding:6px 9px;border-bottom:1px solid var(--line);border-right:1px solid #f1f5fb;white-space:nowrap}
+  table.ah-table th{background:#f1f5fb;font-weight:700;position:sticky;top:0;z-index:1;font-size:.72rem}
+  table.ah-table tr:last-child td{border-bottom:none}
+  .ah-note{font-size:.84rem;color:var(--muted);margin:12px 0 0}
+  .ah-section{margin-top:34px}
+  .ah-section h2{font-size:1.25rem;margin:0 0 10px;letter-spacing:-.01em}
+  .ah-section h3{font-size:1.02rem;margin:20px 0 8px}
+  .ah-section p{margin:0 0 12px;max-width:70ch}
+  .ah-section ul,.ah-section ol{max-width:70ch;padding-left:22px;margin:0 0 14px}
+  .ah-section li{margin-bottom:6px}
+  .ah-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow);margin-bottom:8px}
+  table.ah-static{width:100%;border-collapse:collapse;font-size:.86rem}
+  table.ah-static th,table.ah-static td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.ah-static th{font-weight:600;background:#f1f5fb;color:var(--ink);font-size:.8rem;letter-spacing:.01em}
+  table.ah-static tr:last-child td{border-bottom:none}
+  table.ah-static td.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.8rem;word-break:break-word}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.86em;background:#eef3fa;padding:1px 5px;border-radius:4px;word-break:break-word}
+  .ah-faq details{border-bottom:1px solid var(--line);padding:12px 0}
+  .ah-faq details:first-of-type{border-top:1px solid var(--line)}
+  .ah-faq summary{font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+  .ah-faq summary::-webkit-details-marker{display:none}
+  .ah-faq summary::after{content:"+";font-weight:400;color:var(--muted);font-size:1.1rem;line-height:1;flex:0 0 auto}
+  .ah-faq details[open] summary::after{content:"–"}
+  .ah-faq details p{margin:8px 0 0;color:var(--muted);font-size:.93rem;max-width:68ch}
+  .ah-footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);font-size:.82rem;color:var(--muted)}
+  .ah-footer p{margin:0 0 6px}
+  @media(max-width:600px){
+    .ah-card{padding:16px}
+    .ah-stats{grid-template-columns:repeat(2,1fr)}
+    .ah-actions .ah-btn{flex:1 1 auto}
+  }
+</style>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {"@type":"Question","name":"How do I convert Apple Health export.xml to CSV for one metric?","acceptedAnswer":{"@type":"Answer","text":"Load export.xml, pick a metric from the list the tool discovers, choose a date range, and click Build CSV. The download contains only that metric, not the entire export. The file is read in your browser and never uploaded."}},
+    {"@type":"Question","name":"How do I get my sleep data out of Apple Health as a CSV?","acceptedAnswer":{"@type":"Answer","text":"Export all health data from the Health app, then load export.xml here and choose Sleep analysis. The CSV has one row per sleep sample with the start and end time, the stage value such as AsleepCore or InBed, the source device, and a duration in seconds. Daily aggregation is turned off for sleep because the stages are already intervals."}},
+    {"@type":"Question","name":"How do I export heart rate from Apple Health to CSV?","acceptedAnswer":{"@type":"Answer","text":"Choose Heart rate in the metric list. The CSV has one row per reading with startDate, endDate, value in counts per minute, and the source device. If you want one row per day instead, choose Daily average, which averages all readings for that day."}},
+    {"@type":"Question","name":"How do I export steps per day as a CSV?","acceptedAnswer":{"@type":"Answer","text":"Choose Steps and set aggregation to Daily total. Apple records step count as many small samples through the day, so raw rows are noisy. Daily total sums each day into one row with a date and a step count, which is the shape a spreadsheet or chart expects."}},
+    {"@type":"Question","name":"Can I filter by date range before exporting?","acceptedAnswer":{"@type":"Answer","text":"Yes. After the file is scanned, the earliest and latest dates are filled in automatically. Change either date to narrow the range. Only records whose start date falls inside the range are written to the CSV, which keeps the download small and avoids loading years of data you do not need."}},
+    {"@type":"Question","name":"Does it handle the 2 GB export.xml file?","acceptedAnswer":{"@type":"Answer","text":"It streams the file line by line instead of parsing it into a DOM, so memory use stays low. A multi-gigabyte export can still take a minute to scan on a slow device, but it does not fail the way a DOM parser does. The first pass counts records and dates. The second pass extracts only the metric you chose."}},
+    {"@type":"Question","name":"What metrics does it recognise?","acceptedAnswer":{"@type":"Answer","text":"It discovers whatever types are in your file and labels the common ones, including steps, heart rate, resting heart rate, HRV, distance, active and resting energy, weight, oxygen saturation, respiratory rate, VO2 max, exercise minutes, flights climbed, and sleep analysis. Unknown types appear with their raw identifier so nothing is hidden."}},
+    {"@type":"Question","name":"What is the difference between raw rows and daily summary?","acceptedAnswer":{"@type":"Answer","text":"Raw rows keep every record exactly as Apple stored it, which is right for sleep stages, workouts, and anything where the time of day matters. Daily total sums numeric values per day, which is right for steps, distance, and energy. Daily average averages numeric values per day, which is right for heart rate and weight."}},
+    {"@type":"Question","name":"Why is my sleep value text instead of a number?","acceptedAnswer":{"@type":"Answer","text":"Apple stores sleep as a category, not a quantity. The value is a label such as HKCategoryValueSleepAnalysisAsleepCore or HKCategoryValueSleepAnalysisInBed. The useful number is the duration, which the CSV calculates from the start and end timestamps in seconds."}},
+    {"@type":"Question","name":"Is my health data uploaded?","acceptedAnswer":{"@type":"Answer","text":"No. The file is read with the browser File API and streamed with TextDecoderStream. There is no network request during scanning, preview, or export. You can confirm this by switching the browser to offline mode after the page loads and running an export."}},
+    {"@type":"Question","name":"Can I export workouts as well as records?","acceptedAnswer":{"@type":"Answer","text":"Yes, if the export contains Workout elements. A Workouts option appears in the metric list with columns for activity type, start and end time, duration, energy burned, and distance. Workout child elements are not expanded, so splits and route points are not included."}},
+    {"@type":"Question","name":"Why are some records missing from the CSV?","acceptedAnswer":{"@type":"Answer","text":"Check the date range first. Then check the metric. A record whose type differs by a suffix is a different metric, for example Apple Exercise Time against Exercise Minutes. The metric list shows every type found with a count, so you can see whether the data is under a name you did not expect."}},
+    {"@type":"Question","name":"What columns are in the CSV?","acceptedAnswer":{"@type":"Answer","text":"Raw export columns are type, sourceName, unit, startDate, endDate, duration_seconds, and value. Daily summary columns are date, type, unit, value, and records, where records is the number of samples that went into that day. The file is UTF-8 with a byte order mark so Excel opens it correctly."}},
+    {"@type":"Question","name":"How is this different from applehealthdata.com?","acceptedAnswer":{"@type":"Answer","text":"applehealthdata.com converts the whole export to CSV, JSON, or Excel and lets you choose the output format. This page is built around one metric at a time and a date range, with raw and daily modes. It is the tool you want when you need a clean sleep or heart rate table, not a copy of every record in the file."}}
+  ]
+}
+</script>
+</head>
+<body>
+<main class="ah-wrap">
+
+  <header class="ah-header">
+    <h1>Apple Health Export to CSV</h1>
+    <p>Load export.xml, choose one metric and a date range, and download a clean CSV. Raw rows or a daily summary. Runs in your browser.</p>
+  </header>
+
+  <section class="ah-card" aria-labelledby="ah-tool-label">
+    <label class="ah-drop" id="ah-drop" for="ah-file" tabindex="0">
+      <input type="file" id="ah-file" accept=".xml,text/xml,application/xml">
+      <p class="ah-drop-title" id="ah-tool-label">Drop export.xml here, or click to choose</p>
+      <p class="ah-drop-sub">The file from Health, profile picture, Export All Health Data. Nothing is uploaded.</p>
+    </label>
+
+    <div class="ah-fileinfo" id="ah-fileinfo" hidden></div>
+
+    <p class="ah-error" id="ah-error" hidden></p>
+    <p class="ah-warn" id="ah-warn" hidden></p>
+
+    <div id="ah-controls" hidden>
+      <dl class="ah-stats" id="ah-stats"></dl>
+
+      <label class="ah-label" for="ah-metric">Metric</label>
+      <select class="ah-select" id="ah-metric"></select>
+
+      <label class="ah-label">Date range</label>
+      <div class="ah-daterow">
+        <div><input class="ah-date" type="date" id="ah-from" aria-label="From date"></div>
+        <div><input class="ah-date" type="date" id="ah-to" aria-label="To date"></div>
+      </div>
+
+      <label class="ah-label" for="ah-agg">Rows</label>
+      <select class="ah-select" id="ah-agg">
+        <option value="raw">Raw records</option>
+        <option value="sum">Daily total</option>
+        <option value="avg">Daily average</option>
+      </select>
+
+      <div class="ah-actions">
+        <button type="button" class="ah-btn ah-btn-primary" id="ah-build">Build CSV</button>
+        <button type="button" class="ah-btn ah-btn-secondary" id="ah-reset">Reset</button>
+      </div>
+    </div>
+
+    <div class="ah-results" id="ah-results" hidden>
+      <p class="ah-sub" id="ah-results-title">Preview</p>
+      <div class="ah-tablewrap" id="ah-tablewrap"></div>
+      <p class="ah-note" id="ah-note"></p>
+      <div class="ah-actions">
+        <button type="button" class="ah-btn ah-btn-primary" id="ah-download">Download CSV</button>
+      </div>
+    </div>
+
+    <p class="ah-note">Runs entirely in your browser. The export is never sent anywhere and is discarded when you close the tab.</p>
+  </section>
+
+  <section class="ah-section">
+    <h2>How this works</h2>
+    <p>Apple Health exports as a single XML file called <code>export.xml</code>. Every measurement is a <code>Record</code> element with a type identifier, a start and end time, a value, a unit, and the device that wrote it. Workouts are separate <code>Workout</code> elements. The file is flat, one element per line, which is why it can be streamed instead of loaded into memory all at once.</p>
+    <p>The page makes two passes. The first pass reads the file line by line, counts records per type, and tracks the earliest and latest start date. That produces the metric list and the default date range. The second pass runs only after you click Build CSV, and it extracts only records whose type matches your choice and whose start date falls inside the range. Nothing is stored between passes.</p>
+    <p>This is the part that general converters skip. A whole-export CSV mixes steps, heart rate, sleep, and hundreds of other types into one table, which is unusable for a chart or a pivot table. Choosing one metric first produces a table with one consistent unit and one value column. The date range keeps the download small enough to open in Excel.</p>
+    <p>Sleep is handled differently from the quantity types. Apple stores it as a category, so the value is a label such as <code>HKCategoryValueSleepAnalysisAsleepCore</code> or <code>HKCategoryValueSleepAnalysisInBed</code>. The useful number is the duration, calculated from the start and end timestamps. Daily aggregation is disabled for sleep because the stages are already intervals, and summing them would double count.</p>
+  </section>
+
+  <section class="ah-section">
+    <h2>Common metrics and what the CSV contains</h2>
+    <div class="ah-table-wrap">
+      <table class="ah-static">
+        <thead><tr><th>Metric</th><th>Type identifier</th><th>Unit</th><th>Best rows setting</th></tr></thead>
+        <tbody>
+          <tr><td>Steps</td><td class="mono">HKQuantityTypeIdentifierStepCount</td><td>count</td><td>Daily total</td></tr>
+          <tr><td>Heart rate</td><td class="mono">HKQuantityTypeIdentifierHeartRate</td><td>count/min</td><td>Raw or daily average</td></tr>
+          <tr><td>Resting heart rate</td><td class="mono">HKQuantityTypeIdentifierRestingHeartRate</td><td>count/min</td><td>Daily average</td></tr>
+          <tr><td>HRV (SDNN)</td><td class="mono">HKQuantityTypeIdentifierHeartRateVariabilitySDNN</td><td>ms</td><td>Daily average</td></tr>
+          <tr><td>Distance walking or running</td><td class="mono">HKQuantityTypeIdentifierDistanceWalkingRunning</td><td>km or mi</td><td>Daily total</td></tr>
+          <tr><td>Active energy</td><td class="mono">HKQuantityTypeIdentifierActiveEnergyBurned</td><td>kcal</td><td>Daily total</td></tr>
+          <tr><td>Resting energy</td><td class="mono">HKQuantityTypeIdentifierBasalEnergyBurned</td><td>kcal</td><td>Daily total</td></tr>
+          <tr><td>Weight</td><td class="mono">HKQuantityTypeIdentifierBodyMass</td><td>kg or lb</td><td>Raw</td></tr>
+          <tr><td>Oxygen saturation</td><td class="mono">HKQuantityTypeIdentifierOxygenSaturation</td><td>%</td><td>Raw</td></tr>
+          <tr><td>Respiratory rate</td><td class="mono">HKQuantityTypeIdentifierRespiratoryRate</td><td>count/min</td><td>Daily average</td></tr>
+          <tr><td>VO2 max</td><td class="mono">HKQuantityTypeIdentifierVO2Max</td><td>mL/kg/min</td><td>Raw</td></tr>
+          <tr><td>Exercise minutes</td><td class="mono">HKQuantityTypeIdentifierAppleExerciseTime</td><td>min</td><td>Daily total</td></tr>
+          <tr><td>Flights climbed</td><td class="mono">HKQuantityTypeIdentifierFlightsClimbed</td><td>count</td><td>Daily total</td></tr>
+          <tr><td>Sleep analysis</td><td class="mono">HKCategoryTypeIdentifierSleepAnalysis</td><td>category</td><td>Raw</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The metric list is built from your file, so a type that is not in the table above still appears with its raw identifier and a count. Units are whatever Apple wrote in each record, usually the unit set in the Health app, so a US phone may write miles and pounds where a UK phone writes kilometres and stone.</p>
+  </section>
+
+  <section class="ah-section">
+    <h2>When you would use this</h2>
+    <p>You want to chart your sleep stages over the last six months and the full export is too large to open. Choosing Sleep analysis and a date range produces one table of intervals that a spreadsheet can chart directly.</p>
+    <p>You are preparing a heart rate or HRV table for a coach or a clinician. They need one metric with consistent dates and units, not a mixed export with every category Apple tracks.</p>
+    <p>You want steps per day for a year. Raw step samples are dozens per day and meaningless in a chart. Daily total collapses them into 365 rows with one number each.</p>
+    <p>You are building a personal dataset for a script and need to know which type identifiers your phone actually writes. The scan shows every type found with a count before you export anything.</p>
+    <p>You switched phones and want to compare a metric across two exports. Run each file separately with the same metric and date range, then join the two CSVs on the date column.</p>
+  </section>
+
+  <section class="ah-section">
+    <h2>What this does and does not handle</h2>
+    <p>It handles:</p>
+    <ul>
+      <li>Streaming a large <code>export.xml</code> without loading the whole DOM.</li>
+      <li>Discovery of every record type in the file, with counts and date bounds.</li>
+      <li>Filtering by metric and by start-date range.</li>
+      <li>Raw rows, daily total, and daily average.</li>
+      <li>Duration in seconds for interval records such as sleep.</li>
+      <li>Workout elements with activity type, duration, energy, and distance.</li>
+      <li>UTF-8 CSV with a byte order mark for Excel.</li>
+    </ul>
+    <p>It does not handle:</p>
+    <ul>
+      <li>Parsing the ZIP that Apple wraps around the XML. Unzip it first, then load <code>export.xml</code>.</li>
+      <li>Workout route points, splits, or child events. Only the attributes on the Workout element are exported.</li>
+      <li>Correlation records such as blood pressure pairs. They appear as their own type but their child records are not merged.</li>
+      <li>Clinical records from Health Records. Those use a different element and are not read.</li>
+      <li>Unit conversion. The value and unit are exported as Apple wrote them.</li>
+      <li>Deduplication across sources. If an iPhone and a watch both recorded steps, both records appear. Daily total sums both, which double counts overlapping sources.</li>
+      <li>Files that are not XML. The page checks the first line and reports a clear error.</li>
+    </ul>
+  </section>
+
+  <section class="ah-section ah-faq">
+    <h2>Questions</h2>
+    <details><summary>How do I convert Apple Health export.xml to CSV for one metric?</summary><p>Load export.xml, pick a metric from the list the tool discovers, choose a date range, and click Build CSV. The download contains only that metric, not the entire export. The file is read in your browser and never uploaded.</p></details>
+    <details><summary>How do I get my sleep data out of Apple Health as a CSV?</summary><p>Export all health data from the Health app, then load export.xml here and choose Sleep analysis. The CSV has one row per sleep sample with the start and end time, the stage value such as AsleepCore or InBed, the source device, and a duration in seconds. Daily aggregation is turned off for sleep because the stages are already intervals.</p></details>
+    <details><summary>How do I export heart rate from Apple Health to CSV?</summary><p>Choose Heart rate in the metric list. The CSV has one row per reading with startDate, endDate, value in counts per minute, and the source device. If you want one row per day instead, choose Daily average, which averages all readings for that day.</p></details>
+    <details><summary>How do I export steps per day as a CSV?</summary><p>Choose Steps and set aggregation to Daily total. Apple records step count as many small samples through the day, so raw rows are noisy. Daily total sums each day into one row with a date and a step count, which is the shape a spreadsheet or chart expects.</p></details>
+    <details><summary>Can I filter by date range before exporting?</summary><p>Yes. After the file is scanned, the earliest and latest dates are filled in automatically. Change either date to narrow the range. Only records whose start date falls inside the range are written to the CSV, which keeps the download small and avoids loading years of data you do not need.</p></details>
+    <details><summary>Does it handle the 2 GB export.xml file?</summary><p>It streams the file line by line instead of parsing it into a DOM, so memory use stays low. A multi-gigabyte export can still take a minute to scan on a slow device, but it does not fail the way a DOM parser does. The first pass counts records and dates. The second pass extracts only the metric you chose.</p></details>
+    <details><summary>What metrics does it recognise?</summary><p>It discovers whatever types are in your file and labels the common ones, including steps, heart rate, resting heart rate, HRV, distance, active and resting energy, weight, oxygen saturation, respiratory rate, VO2 max, exercise minutes, flights climbed, and sleep analysis. Unknown types appear with their raw identifier so nothing is hidden.</p></details>
+    <details><summary>What is the difference between raw rows and daily summary?</summary><p>Raw rows keep every record exactly as Apple stored it, which is right for sleep stages, workouts, and anything where the time of day matters. Daily total sums numeric values per day, which is right for steps, distance, and energy. Daily average averages numeric values per day, which is right for heart rate and weight.</p></details>
+    <details><summary>Why is my sleep value text instead of a number?</summary><p>Apple stores sleep as a category, not a quantity. The value is a label such as HKCategoryValueSleepAnalysisAsleepCore or HKCategoryValueSleepAnalysisInBed. The useful number is the duration, which the CSV calculates from the start and end timestamps in seconds.</p></details>
+    <details><summary>Is my health data uploaded?</summary><p>No. The file is read with the browser File API and streamed with TextDecoderStream. There is no network request during scanning, preview, or export. You can confirm this by switching the browser to offline mode after the page loads and running an export.</p></details>
+    <details><summary>Can I export workouts as well as records?</summary><p>Yes, if the export contains Workout elements. A Workouts option appears in the metric list with columns for activity type, start and end time, duration, energy burned, and distance. Workout child elements are not expanded, so splits and route points are not included.</p></details>
+    <details><summary>Why are some records missing from the CSV?</summary><p>Check the date range first. Then check the metric. A record whose type differs by a suffix is a different metric, for example Apple Exercise Time against Exercise Minutes. The metric list shows every type found with a count, so you can see whether the data is under a name you did not expect.</p></details>
+    <details><summary>What columns are in the CSV?</summary><p>Raw export columns are type, sourceName, unit, startDate, endDate, duration_seconds, and value. Daily summary columns are date, type, unit, value, and records, where records is the number of samples that went into that day. The file is UTF-8 with a byte order mark so Excel opens it correctly.</p></details>
+    <details><summary>How is this different from applehealthdata.com?</summary><p>applehealthdata.com converts the whole export to CSV, JSON, or Excel and lets you choose the output format. This page is built around one metric at a time and a date range, with raw and daily modes. It is the tool you want when you need a clean sleep or heart rate table, not a copy of every record in the file.</p></details>
+  </section>
+
+  <footer class="ah-footer">
+    <p>ConvertToToolsOnline. Built and maintained by one developer. This page runs locally in your browser and does not upload the export you open.</p>
+  </footer>
+</main>
+
+<script>
+(function(){
+  'use strict';
+
+  var dropEl=document.getElementById('ah-drop');
+  var fileInput=document.getElementById('ah-file');
+  var fileInfoEl=document.getElementById('ah-fileinfo');
+  var errorEl=document.getElementById('ah-error');
+  var warnEl=document.getElementById('ah-warn');
+  var controlsEl=document.getElementById('ah-controls');
+  var statsEl=document.getElementById('ah-stats');
+  var metricSel=document.getElementById('ah-metric');
+  var fromEl=document.getElementById('ah-from');
+  var toEl=document.getElementById('ah-to');
+  var aggSel=document.getElementById('ah-agg');
+  var buildBtn=document.getElementById('ah-build');
+  var resetBtn=document.getElementById('ah-reset');
+  var resultsEl=document.getElementById('ah-results');
+  var resultsTitle=document.getElementById('ah-results-title');
+  var tablewrapEl=document.getElementById('ah-tablewrap');
+  var noteEl=document.getElementById('ah-note');
+  var downloadBtn=document.getElementById('ah-download');
+
+  var MAX_BYTES=4096*1024*1024;
+  var currentFile=null;
+  var scan=null;
+  var lastRows=null;
+  var lastCols=null;
+  var lastName='apple-health';
+
+  var LABELS={
+    'HKQuantityTypeIdentifierStepCount':'Steps',
+    'HKQuantityTypeIdentifierHeartRate':'Heart rate',
+    'HKQuantityTypeIdentifierRestingHeartRate':'Resting heart rate',
+    'HKQuantityTypeIdentifierWalkingHeartRateAverage':'Walking heart rate',
+    'HKQuantityTypeIdentifierHeartRateVariabilitySDNN':'HRV (SDNN)',
+    'HKQuantityTypeIdentifierDistanceWalkingRunning':'Distance walking or running',
+    'HKQuantityTypeIdentifierDistanceCycling':'Cycling distance',
+    'HKQuantityTypeIdentifierActiveEnergyBurned':'Active energy',
+    'HKQuantityTypeIdentifierBasalEnergyBurned':'Resting energy',
+    'HKQuantityTypeIdentifierBodyMass':'Weight',
+    'HKQuantityTypeIdentifierBodyFatPercentage':'Body fat percentage',
+    'HKQuantityTypeIdentifierLeanBodyMass':'Lean body mass',
+    'HKQuantityTypeIdentifierHeight':'Height',
+    'HKQuantityTypeIdentifierOxygenSaturation':'Oxygen saturation',
+    'HKQuantityTypeIdentifierRespiratoryRate':'Respiratory rate',
+    'HKQuantityTypeIdentifierVO2Max':'VO2 max',
+    'HKQuantityTypeIdentifierAppleExerciseTime':'Exercise minutes',
+    'HKQuantityTypeIdentifierFlightsClimbed':'Flights climbed',
+    'HKQuantityTypeIdentifierWalkingSpeed':'Walking speed',
+    'HKQuantityTypeIdentifierWalkingStepLength':'Step length',
+    'HKQuantityTypeIdentifierBasalBodyTemperature':'Basal body temperature',
+    'HKQuantityTypeIdentifierBodyTemperature':'Body temperature',
+    'HKQuantityTypeIdentifierBloodPressureSystolic':'Blood pressure systolic',
+    'HKQuantityTypeIdentifierBloodPressureDiastolic':'Blood pressure diastolic',
+    'HKQuantityTypeIdentifierDietaryEnergyConsumed':'Dietary energy',
+    'HKQuantityTypeIdentifierDietaryProtein':'Dietary protein',
+    'HKQuantityTypeIdentifierDietaryCarbohydrates':'Dietary carbohydrates',
+    'HKQuantityTypeIdentifierDietaryFatTotal':'Dietary fat',
+    'HKQuantityTypeIdentifierDietaryWater':'Water',
+    'HKCategoryTypeIdentifierSleepAnalysis':'Sleep analysis',
+    'HKCategoryTypeIdentifierMindfulSession':'Mindful session'
+  };
+
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function showError(m){errorEl.textContent=m;errorEl.hidden=false;}
+  function clearError(){errorEl.hidden=true;errorEl.textContent='';}
+  function showWarn(m){warnEl.textContent=m;warnEl.hidden=false;}
+  function clearWarn(){warnEl.hidden=true;warnEl.textContent='';}
+  function humanSize(b){if(b<1024)return b+' B';if(b<1048576)return (b/1024).toFixed(1)+' KB';if(b<1073741824)return (b/1048576).toFixed(1)+' MB';return (b/1073741824).toFixed(2)+' GB';}
+
+  function decodeXml(s){
+    return String(s)
+      .replace(/&quot;/g,'"').replace(/&apos;/g,"'")
+      .replace(/&lt;/g,'<').replace(/&gt;/g,'>')
+      .replace(/&amp;/g,'&')
+      .replace(/&#(\d+);/g,function(m,n){return String.fromCharCode(parseInt(n,10));})
+      .replace(/&#x([0-9a-f]+);/gi,function(m,n){return String.fromCharCode(parseInt(n,16));});
+  }
+
+  function parseAttrs(s){
+    var o={},re=/([\w:-]+)="([^"]*)"/g,m;
+    while((m=re.exec(s)))o[m[1]]=decodeXml(m[2]);
+    return o;
+  }
+
+  function parseAppleDate(s){
+    if(!s)return null;
+    var m=String(s).match(/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2}) ([+-])(\d{2})(\d{2})$/);
+    if(!m)return null;
+    var utc=Date.UTC(+m[1],+m[2]-1,+m[3],+m[4],+m[5],+m[6]);
+    var off=(+m[8])*3600*1000+(+m[9])*60*1000;
+    if(m[7]==='+')utc-=off;else utc+=off;
+    return utc;
+  }
+
+  function friendly(type){
+    if(type==='__workouts__')return 'Workouts';
+    return LABELS[type]||type;
+  }
+
+  function eachLine(file,onLine){
+    return new Promise(function(resolve,reject){
+      if(typeof file.stream!=='function'||typeof TextDecoderStream==='undefined'){
+        reject(new Error('This browser does not support streaming file reads. Use a current Chrome, Edge, Firefox, or Safari.'));
+        return;
+      }
+      var stream=file.stream().pipeThrough(new TextDecoderStream());
+      var reader=stream.getReader();
+      var partial='';
+      function pump(){
+        reader.read().then(function(res){
+          if(res.done){
+            if(partial.trim())onLine(partial.trim());
+            resolve();
+            return;
+          }
+          partial+=res.value;
+          var lines=partial.split('\n');
+          partial=lines.pop();
+          for(var i=0;i<lines.length;i++){
+            var t=lines[i].trim();
+            if(t)onLine(t);
+          }
+          pump();
+        }).catch(reject);
+      }
+      pump();
+    });
+  }
+
+  function tagFromLine(line){
+    if(line.charAt(0)!=='<')return null;
+    var m=line.match(/^<(\w+)\b([\s\S]*?)\/?>/);
+    if(!m)return null;
+    return {tag:m[1],attrs:parseAttrs(m[2])};
+  }
+
+  function scanFile(file){
+    var counts=Object.create(null);
+    var minDate=null,maxDate=null;
+    var total=0;
+    var workouts=0;
+
+    return eachLine(file,function(line){
+      var t=tagFromLine(line);
+      if(!t)return;
+      if(t.tag==='Record'){
+        var type=t.attrs.type;
+        if(!type)return;
+        counts[type]=(counts[type]||0)+1;
+        total++;
+        var day=(t.attrs.startDate||'').slice(0,10);
+        if(day){
+          if(!minDate||day<minDate)minDate=day;
+          if(!maxDate||day>maxDate)maxDate=day;
+        }
+      }else if(t.tag==='Workout'){
+        workouts++;
+      }
+    }).then(function(){
+      return {counts:counts,total:total,workouts:workouts,minDate:minDate,maxDate:maxDate};
+    });
+  }
+
+  function extract(file,type,from,to){
+    var out=[];
+    return eachLine(file,function(line){
+      var t=tagFromLine(line);
+      if(!t)return;
+      if(type==='__workouts__'){
+        if(t.tag!=='Workout')return;
+      }else{
+        if(t.tag!=='Record')return;
+        if(t.attrs.type!==type)return;
+      }
+      var day=(t.attrs.startDate||'').slice(0,10);
+      if(from&&day&&day<from)return;
+      if(to&&day&&day>to)return;
+      out.push(t);
+    }).then(function(){return out;});
+  }
+
+  function durationSeconds(a){
+    var s=parseAppleDate(a.startDate);
+    var e=parseAppleDate(a.endDate);
+    if(s==null||e==null)return '';
+    var d=(e-s)/1000;
+    return d>=0?d.toFixed(3):'';
+  }
+
+  function csvEscape(s){
+    s=String(s==null?'':s);
+    if(/[",\n\r]/.test(s))return '"'+s.replace(/"/g,'""')+'"';
+    return s;
+  }
+
+  function buildRows(records,type,agg){
+    if(type==='__workouts__'){
+      var cols=['workoutActivityType','sourceName','startDate','endDate','duration_seconds','totalEnergyBurned','totalEnergyBurnedUnit','totalDistance','totalDistanceUnit'];
+      var rows=records.map(function(r){
+        var a=r.attrs;
+        return [
+          a.workoutActivityType||'',
+          a.sourceName||'',
+          a.startDate||'',
+          a.endDate||'',
+          durationSeconds(a),
+          a.totalEnergyBurned||'',
+          a.totalEnergyBurnedUnit||'',
+          a.totalDistance||'',
+          a.totalDistanceUnit||''
+        ];
+      });
+      return {cols:cols,rows:rows};
+    }
+
+    var isCategory=/^HKCategoryTypeIdentifier/.test(type);
+    if(agg!=='raw'&&!isCategory){
+      var groups=Object.create(null);
+      records.forEach(function(r){
+        var day=(r.attrs.startDate||'').slice(0,10);
+        if(!day)return;
+        var v=parseFloat(r.attrs.value);
+        if(!groups[day])groups[day]={sum:0,n:0,unit:r.attrs.unit||''};
+        if(!isNaN(v)){groups[day].sum+=v;groups[day].n++;}
+      });
+      var days=Object.keys(groups).sort();
+      var rows2=days.map(function(day){
+        var g=groups[day];
+        var val=agg==='sum'?g.sum:(g.n?g.sum/g.n:'');
+        return [day,type,g.unit,val,g.n];
+      });
+      return {cols:['date','type','unit','value','records'],rows:rows2};
+    }
+
+    var cols2=['type','sourceName','unit','startDate','endDate','duration_seconds','value'];
+    var rows3=records.map(function(r){
+      var a=r.attrs;
+      return [
+        a.type||type,
+        a.sourceName||'',
+        a.unit||'',
+        a.startDate||'',
+        a.endDate||'',
+        durationSeconds(a),
+        a.value||''
+      ];
+    });
+    return {cols:cols2,rows:rows3};
+  }
+
+  function renderPreview(cols,rows){
+    if(!rows.length){
+      tablewrapEl.innerHTML='<div style="padding:14px;font-size:.86rem;color:#5b6b82;">No records matched this metric and date range.</div>';
+      noteEl.textContent='';
+      return;
+    }
+    var shown=rows.slice(0,20);
+    var head='<tr>'+cols.map(function(c){return '<th>'+esc(c)+'</th>';}).join('')+'</tr>';
+    var body=shown.map(function(r){
+      return '<tr>'+r.map(function(v){return '<td>'+esc(v)+'</td>';}).join('')+'</tr>';
+    }).join('');
+    tablewrapEl.innerHTML='<table class="ah-table"><thead>'+head+'</thead><tbody>'+body+'</tbody></table>';
+    noteEl.textContent=rows.length>20
+      ? 'Showing the first 20 of '+rows.length.toLocaleString('en-US')+' rows. The CSV contains all of them.'
+      : rows.length.toLocaleString('en-US')+' rows.';
+  }
+
+  function download(filename,content,mime){
+    var blob=new Blob([content],{type:mime||'text/csv;charset=utf-8'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url;a.download=filename;
+    document.body.appendChild(a);a.click();
+    setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(url);},120);
+  }
+
+  function fillControls(s){
+    scan=s;
+    statsEl.innerHTML=[
+      ['Records',s.total.toLocaleString('en-US')],
+      ['Types',String(Object.keys(s.counts).length)],
+      ['Earliest',s.minDate||'n/a'],
+      ['Latest',s.maxDate||'n/a']
+    ].map(function(p){return '<div class="ah-stat"><dt>'+p[0]+'</dt><dd>'+esc(p[1])+'</dd></div>';}).join('');
+
+    var types=Object.keys(s.counts).sort(function(a,b){return s.counts[b]-s.counts[a];});
+    var opts=types.map(function(t){
+      return '<option value="'+esc(t)+'">'+esc(friendly(t))+' ('+s.counts[t].toLocaleString('en-US')+')</option>';
+    });
+    if(s.workouts>0)opts.unshift('<option value="__workouts__">Workouts ('+s.workouts.toLocaleString('en-US')+')</option>');
+    metricSel.innerHTML=opts.join('');
+
+    fromEl.value=s.minDate||'';
+    toEl.value=s.maxDate||'';
+
+    controlsEl.hidden=false;
+  }
+
+  function updateAggState(){
+    var isWorkout=metricSel.value==='__workouts__';
+    var isCategory=/^HKCategoryTypeIdentifier/.test(metricSel.value);
+    aggSel.disabled=isWorkout||isCategory;
+    if(isWorkout||isCategory)aggSel.value='raw';
+  }
+
+  function handleFile(file){
+    clearError();clearWarn();resultsEl.hidden=true;controlsEl.hidden=true;
+    currentFile=null;scan=null;lastRows=null;
+    if(!file)return;
+
+    if(!/\.xml$/i.test(file.name)){
+      showWarn('The selected file does not end in .xml. Apple wraps the export in a ZIP. Unzip it first and choose export.xml.');
+    }
+    if(file.size>MAX_BYTES){
+      showError('That file is '+humanSize(file.size)+'. It is larger than the 4 GB browser limit. Split it or use a desktop tool.');
+      return;
+    }
+
+    fileInfoEl.innerHTML='<span><b>'+esc(file.name)+'</b></span><span>'+humanSize(file.size)+'</span><span>scanning…</span>';
+    fileInfoEl.hidden=false;
+    currentFile=file;
+    lastName=file.name.replace(/\.xml$/i,'')||'apple-health';
+
+    scanFile(file).then(function(s){
+      if(!s.total){
+        showError('No Record elements were found. This does not look like an Apple Health export.xml. Check that you unzipped the file and chose export.xml.');
+        fileInfoEl.hidden=true;
+        return;
+      }
+      fileInfoEl.innerHTML='<span><b>'+esc(file.name)+'</b></span><span>'+humanSize(file.size)+'</span><span>'+s.total.toLocaleString('en-US')+' records</span>';
+      fillControls(s);
+      updateAggState();
+    }).catch(function(err){
+      showError('Could not read the file: '+String(err.message||err));
+      fileInfoEl.hidden=true;
+    });
+  }
+
+  function build(){
+    if(!currentFile||!scan)return;
+    clearError();clearWarn();
+    var type=metricSel.value;
+    var from=fromEl.value||'';
+    var to=toEl.value||'';
+    if(from&&to&&from>to){
+      showError('The from date is later than the to date.');
+      return;
+    }
+    var agg=aggSel.value;
+    buildBtn.disabled=true;
+    buildBtn.textContent='Building…';
+
+    extract(currentFile,type,from,to).then(function(records){
+      var built=buildRows(records,type,agg);
+      lastRows=built.rows;lastCols=built.cols;
+      resultsTitle.textContent=friendly(type)+' · '+(agg==='raw'?'raw rows':(agg==='sum'?'daily total':'daily average'));
+      renderPreview(built.cols,built.rows);
+      resultsEl.hidden=false;
+      downloadBtn.disabled=!built.rows.length;
+      buildBtn.disabled=false;
+      buildBtn.textContent='Build CSV';
+    }).catch(function(err){
+      showError('Could not extract records: '+String(err.message||err));
+      buildBtn.disabled=false;
+      buildBtn.textContent='Build CSV';
+    });
+  }
+
+  // Events
+  dropEl.addEventListener('click',function(e){if(e.target===fileInput)return;fileInput.click();});
+  dropEl.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();fileInput.click();}});
+  fileInput.addEventListener('change',function(){if(fileInput.files&&fileInput.files[0])handleFile(fileInput.files[0]);fileInput.value='';});
+  ['dragenter','dragover'].forEach(function(ev){dropEl.addEventListener(ev,function(e){e.preventDefault();dropEl.classList.add('is-over');});});
+  ['dragleave','drop'].forEach(function(ev){dropEl.addEventListener(ev,function(e){e.preventDefault();dropEl.classList.remove('is-over');});});
+  dropEl.addEventListener('drop',function(e){if(e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0])handleFile(e.dataTransfer.files[0]);});
+
+  metricSel.addEventListener('change',updateAggState);
+  buildBtn.addEventListener('click',build);
+
+  downloadBtn.addEventListener('click',function(){
+    if(!lastRows||!lastCols)return;
+    var lines=[lastCols.map(csvEscape).join(',')];
+    lastRows.forEach(function(r){lines.push(r.map(csvEscape).join(','));});
+    var body='\ufeff'+lines.join('\r\n');
+    var metric=(metricSel.value==='__workouts__'?'workouts':metricSel.value.replace(/^HK(Quantity|Category)TypeIdentifier/,''));
+    download(lastName+'-'+metric+'.csv',body,'text/csv;charset=utf-8');
+  });
+
+  resetBtn.addEventListener('click',function(){
+    currentFile=null;scan=null;lastRows=null;lastCols=null;
+    fileInput.value='';
+    fileInfoEl.hidden=true;fileInfoEl.innerHTML='';
+    controlsEl.hidden=true;resultsEl.hidden=true;
+    statsEl.innerHTML='';metricSel.innerHTML='';tablewrapEl.innerHTML='';noteEl.textContent='';
+    downloadBtn.disabled=true;
+    clearError();clearWarn();
+  });
+
+  downloadBtn.disabled=true;
+})();
+</script>
+</body>
+</html>

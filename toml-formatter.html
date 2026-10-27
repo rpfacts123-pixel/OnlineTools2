@@ -1,0 +1,1696 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#2563eb">
+
+  <title>TOML Formatter Online – Format and Validate TOML Free</title>
+  <meta name="description" content="Format TOML online with this free TOML formatter and syntax checker. Beautify Cargo.toml, pyproject.toml, and configuration files with clean spacing, readable arrays, and consistent formatting.">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+  <link rel="canonical" href="https://onlinetoolsandconverters.cc/toml-formatter.html">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Online Tools &amp; Converters">
+  <meta property="og:title" content="TOML Formatter Online – Format and Validate TOML Free">
+  <meta property="og:description" content="Beautify and check TOML configuration files online. Customize indentation, array formatting, key sorting, and line endings in your browser.">
+  <meta property="og:url" content="https://onlinetoolsandconverters.cc/toml-formatter.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="TOML Formatter Online">
+  <meta name="twitter:description" content="Format and check TOML files in your browser with configurable formatting options.">
+
+  <link rel="stylesheet" href="/style.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://onlinetoolsandconverters.cc/toml-formatter.html#webpage",
+        "url": "https://onlinetoolsandconverters.cc/toml-formatter.html",
+        "name": "TOML Formatter Online – Format and Validate TOML",
+        "description": "Free browser-based TOML formatter and syntax checker for project metadata and configuration files.",
+        "isPartOf": {
+          "@id": "https://onlinetoolsandconverters.cc/#website"
+        },
+        "inLanguage": "en",
+        "mainEntity": {
+          "@id": "https://onlinetoolsandconverters.cc/toml-formatter.html#tool"
+        },
+        "breadcrumb": {
+          "@id": "https://onlinetoolsandconverters.cc/toml-formatter.html#breadcrumb"
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://onlinetoolsandconverters.cc/toml-formatter.html#tool",
+        "name": "Online TOML Formatter",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any modern browser",
+        "url": "https://onlinetoolsandconverters.cc/toml-formatter.html",
+        "description": "Format and check TOML configuration text using a browser-based TOML formatting engine.",
+        "isAccessibleForFree": true,
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://onlinetoolsandconverters.cc/toml-formatter.html#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://onlinetoolsandconverters.cc/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "TOML Formatter",
+            "item": "https://onlinetoolsandconverters.cc/toml-formatter.html"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      color-scheme: light;
+      --toml-blue: #2563eb;
+      --toml-blue-dark: #1d4ed8;
+      --toml-ink: #172033;
+      --toml-muted: #64748b;
+      --toml-line: #e2e8f0;
+      --toml-bg: #f5f8ff;
+      --toml-white: #ffffff;
+      --toml-green: #087443;
+      --toml-red: #b42318;
+      --toml-radius: 18px;
+      --toml-shadow: 0 8px 28px rgba(15,23,42,.06);
+    }
+
+    .toml-page,
+    .toml-page * {
+      box-sizing: border-box;
+    }
+
+    .toml-page {
+      margin: 0;
+      background: var(--toml-bg);
+      color: var(--toml-ink);
+      font: 16px/1.65 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .toml-page a {
+      color: var(--toml-blue);
+      text-decoration: none;
+    }
+
+    .toml-page a:hover {
+      text-decoration: underline;
+    }
+
+    .toml-page button,
+    .toml-page textarea,
+    .toml-page input,
+    .toml-page select {
+      font: inherit;
+    }
+
+    .toml-page button {
+      cursor: pointer;
+    }
+
+    .toml-shell {
+      width: min(1160px, calc(100% - 32px));
+      margin-inline: auto;
+    }
+
+    .toml-skip {
+      position: absolute;
+      left: -9999px;
+      top: 8px;
+      z-index: 100;
+      padding: 10px 14px;
+      background: #fff;
+      border: 2px solid var(--toml-blue);
+      color: #111;
+    }
+
+    .toml-skip:focus {
+      left: 12px;
+    }
+
+    .toml-header {
+      background: #fff;
+      border-bottom: 1px solid var(--toml-line);
+    }
+
+    .toml-header-inner {
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .toml-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--toml-ink) !important;
+      font-weight: 850;
+      letter-spacing: -.3px;
+    }
+
+    .toml-brand-mark {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      flex-shrink: 0;
+      background: var(--toml-blue);
+      color: #fff;
+      border-radius: 12px;
+      font-size: .82rem;
+      font-weight: 900;
+    }
+
+    .toml-brand-name span {
+      color: var(--toml-blue);
+    }
+
+    .toml-nav {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .toml-nav a {
+      color: #475569;
+      font-size: .93rem;
+      font-weight: 650;
+    }
+
+    .toml-menu-button {
+      display: none;
+      border: 1px solid var(--toml-line);
+      border-radius: 10px;
+      padding: 8px 12px;
+      background: #fff;
+      color: var(--toml-ink);
+    }
+
+    .toml-main {
+      padding-bottom: 54px;
+      min-height: 60vh;
+    }
+
+    .toml-breadcrumb {
+      padding-top: 16px;
+      color: var(--toml-muted);
+      font-size: .86rem;
+    }
+
+    .toml-breadcrumb a {
+      color: var(--toml-muted);
+    }
+
+    .toml-hero {
+      padding: 27px 0 21px;
+    }
+
+    .toml-eyebrow {
+      margin: 0 0 8px;
+      color: var(--toml-blue);
+      font-size: .76rem;
+      font-weight: 850;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .toml-hero h1 {
+      max-width: 900px;
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 1.1;
+      letter-spacing: -.045em;
+      color: var(--toml-ink);
+    }
+
+    .toml-lead {
+      max-width: 850px;
+      margin: 0;
+      color: #526176;
+      font-size: 1.06rem;
+    }
+
+    .toml-tool {
+      overflow: hidden;
+      background: var(--toml-white);
+      border: 1px solid var(--toml-line);
+      border-radius: var(--toml-radius);
+      box-shadow: var(--toml-shadow);
+    }
+
+    .toml-tool-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding: 19px 22px 15px;
+      border-bottom: 1px solid var(--toml-line);
+    }
+
+    .toml-tool-head h2 {
+      margin: 0 0 4px;
+      font-size: 1.25rem;
+      line-height: 1.35;
+    }
+
+    .toml-tool-head p {
+      margin: 0;
+      color: var(--toml-muted);
+      font-size: .91rem;
+    }
+
+    .toml-local-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 11px;
+      border: 1px solid #bbf7d0;
+      border-radius: 999px;
+      background: #ecfdf3;
+      color: #05603a;
+      white-space: nowrap;
+      font-size: .8rem;
+      font-weight: 750;
+    }
+
+    .toml-tool-body {
+      padding: 21px;
+    }
+
+    .toml-label {
+      display: block;
+      margin-bottom: 7px;
+      color: #344054;
+      font-size: .88rem;
+      font-weight: 750;
+    }
+
+    .toml-textarea {
+      display: block;
+      width: 100%;
+      min-height: 265px;
+      padding: 14px;
+      resize: vertical;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      background: #fff;
+      color: #172033;
+      font: 13.5px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      tab-size: 2;
+      overflow-wrap: anywhere;
+    }
+
+    .toml-textarea:focus,
+    .toml-select:focus,
+    .toml-page button:focus-visible,
+    .toml-page a:focus-visible {
+      outline: 3px solid rgba(37,99,235,.24);
+      outline-offset: 2px;
+    }
+
+    .toml-output {
+      background: #f8fafc;
+    }
+
+    .toml-pane-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 9px;
+      flex-wrap: wrap;
+      margin-bottom: 7px;
+    }
+
+    .toml-pane-heading .toml-label {
+      margin: 0;
+    }
+
+    .toml-pane-heading span {
+      color: var(--toml-muted);
+      font-size: .78rem;
+    }
+
+    .toml-editors {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+      gap: 16px;
+    }
+
+    .toml-pane {
+      min-width: 0;
+    }
+
+    .toml-load-label {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--toml-blue);
+      font-size: .82rem;
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    .toml-load-label input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      overflow: hidden;
+    }
+
+    .toml-load-label:focus-within {
+      outline: 3px solid rgba(37,99,235,.25);
+      outline-offset: 3px;
+    }
+
+    .toml-pane-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 7px;
+      color: var(--toml-muted);
+      font-size: .78rem;
+    }
+
+    .toml-settings {
+      margin-top: 18px;
+      padding: 16px;
+      border: 1px solid var(--toml-line);
+      border-radius: 13px;
+      background: #f8fafc;
+    }
+
+    .toml-settings h3 {
+      margin: 0 0 13px;
+      font-size: 1rem;
+    }
+
+    .toml-setting-grid {
+      display: grid;
+      grid-template-columns: repeat(4,minmax(0,1fr));
+      gap: 13px;
+    }
+
+    .toml-select {
+      display: block;
+      width: 100%;
+      min-height: 42px;
+      padding: 9px 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 9px;
+      background: #fff;
+      color: #172033;
+      font-size: .9rem;
+    }
+
+    .toml-checkboxes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px 22px;
+      margin-top: 15px;
+    }
+
+    .toml-check {
+      display: inline-flex;
+      align-items: flex-start;
+      gap: 8px;
+      color: #475569;
+      font-size: .85rem;
+    }
+
+    .toml-check input {
+      margin-top: 5px;
+      accent-color: var(--toml-blue);
+    }
+
+    .toml-actions {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .toml-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 43px;
+      padding: 9px 15px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      font-size: .91rem;
+      font-weight: 780;
+      transition: background .15s ease, transform .15s ease;
+    }
+
+    .toml-btn:active {
+      transform: translateY(1px);
+    }
+
+    .toml-btn-primary {
+      background: var(--toml-blue);
+      color: #fff;
+    }
+
+    .toml-btn-primary:hover {
+      background: var(--toml-blue-dark);
+    }
+
+    .toml-btn-secondary {
+      background: #fff;
+      border-color: #cbd5e1;
+      color: #1e293b;
+    }
+
+    .toml-btn-secondary:hover {
+      background: #f8fafc;
+    }
+
+    .toml-btn:disabled {
+      opacity: .48;
+      cursor: not-allowed;
+    }
+
+    .toml-status {
+      min-height: 27px;
+      margin: 14px 0 0;
+      color: var(--toml-muted);
+      font-size: .88rem;
+      overflow-wrap: anywhere;
+    }
+
+    .toml-status.is-success {
+      color: var(--toml-green);
+    }
+
+    .toml-status.is-error {
+      color: var(--toml-red);
+    }
+
+    .toml-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 20px;
+      margin-top: 15px;
+      padding-top: 14px;
+      border-top: 1px solid var(--toml-line);
+      color: var(--toml-muted);
+      font-size: .82rem;
+    }
+
+    .toml-stats strong {
+      color: #344054;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .toml-help {
+      margin: 11px 0 0;
+      color: var(--toml-muted);
+      font-size: .84rem;
+    }
+
+    .toml-content {
+      padding-top: 42px;
+    }
+
+    .toml-content section {
+      margin: 0 0 32px;
+    }
+
+    .toml-content h2 {
+      margin: 0 0 12px;
+      font-size: clamp(1.4rem,3vw,1.85rem);
+      line-height: 1.25;
+      letter-spacing: -.025em;
+      color: var(--toml-ink);
+    }
+
+    .toml-content h3 {
+      margin: 22px 0 7px;
+      font-size: 1.08rem;
+    }
+
+    .toml-content p,
+    .toml-content li {
+      color: #475569;
+    }
+
+    .toml-content p {
+      margin: 0 0 14px;
+    }
+
+    .toml-content ul,
+    .toml-content ol {
+      padding-left: 24px;
+    }
+
+    .toml-content li {
+      margin-bottom: 8px;
+    }
+
+    .toml-example {
+      margin: 12px 0;
+      padding: 14px 16px;
+      border: 1px solid var(--toml-line);
+      border-radius: 11px;
+      background: #fff;
+      color: #243047;
+      font: 13px/1.7 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    .toml-cards {
+      display: grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap: 14px;
+    }
+
+    .toml-info-card {
+      padding: 17px;
+      background: #fff;
+      border: 1px solid var(--toml-line);
+      border-radius: 13px;
+    }
+
+    .toml-info-card h3 {
+      margin: 0 0 7px;
+    }
+
+    .toml-info-card p {
+      margin: 0;
+      font-size: .93rem;
+    }
+
+    .toml-faq details {
+      margin-bottom: 10px;
+      padding: 15px 17px;
+      background: #fff;
+      border: 1px solid var(--toml-line);
+      border-radius: 12px;
+    }
+
+    .toml-faq summary {
+      cursor: pointer;
+      color: #243047;
+      font-weight: 800;
+    }
+
+    .toml-faq details p {
+      margin: 12px 0 0;
+    }
+
+    .toml-related {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .toml-related a {
+      padding: 8px 12px;
+      border: 1px solid var(--toml-line);
+      border-radius: 999px;
+      background: #fff;
+      font-size: .89rem;
+      font-weight: 700;
+    }
+
+    .toml-footer {
+      padding: 26px 0;
+      background: #111c32;
+      color: #cbd5e1;
+    }
+
+    .toml-footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .toml-footer p {
+      margin: 0;
+      font-size: .88rem;
+    }
+
+    .toml-footer a {
+      color: #fff;
+    }
+
+    @media(max-width:900px) {
+      .toml-setting-grid {
+        grid-template-columns: repeat(2,minmax(0,1fr));
+      }
+    }
+
+    @media(max-width:760px) {
+      .toml-menu-button {
+        display: inline-flex;
+      }
+
+      .toml-nav {
+        display: none;
+        position: absolute;
+        top: 65px;
+        left: 0;
+        right: 0;
+        z-index: 20;
+        padding: 14px 20px;
+        background: #fff;
+        border-bottom: 1px solid var(--toml-line);
+        box-shadow: var(--toml-shadow);
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .toml-nav.is-open {
+        display: flex;
+      }
+
+      .toml-editors,
+      .toml-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .toml-textarea {
+        min-height: 205px;
+      }
+
+      .toml-tool-body {
+        padding: 15px;
+      }
+
+      .toml-tool-head {
+        padding: 17px 16px;
+      }
+    }
+
+    @media(max-width:480px) {
+      .toml-shell {
+        width: min(100% - 22px,1160px);
+      }
+
+      .toml-brand-name {
+        font-size: .9rem;
+      }
+
+      .toml-setting-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .toml-actions .toml-btn {
+        flex: 1 1 calc(50% - 9px);
+      }
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+      .toml-page *,
+      .toml-page *::before,
+      .toml-page *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="toml-page">
+  <a class="toml-skip" href="#toml-main">Skip to content</a>
+
+  <header class="toml-header">
+    <div class="toml-shell toml-header-inner">
+      <a class="toml-brand" href="index.html" aria-label="Online Tools and Converters home">
+        <span class="toml-brand-mark" aria-hidden="true">OT</span>
+        <span class="toml-brand-name">Online Tools <span>&amp; Converters</span></span>
+      </a>
+
+      <button class="toml-menu-button" id="toml-menu-button" type="button"
+        aria-expanded="false" aria-controls="toml-navigation">
+        Menu
+      </button>
+
+      <nav class="toml-nav" id="toml-navigation" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="index.html#tools">All tools</a>
+        <a href="text-diff-checker.html">Text Diff Checker</a>
+        <a href="json-to-csv.html">JSON to CSV</a>
+        <a href="sitemap.xml">XML Sitemap</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="toml-main toml-shell" id="toml-main">
+    <nav class="toml-breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Home</a>
+      <span aria-hidden="true"> / </span>
+      <span aria-current="page">TOML Formatter</span>
+    </nav>
+
+    <section class="toml-hero">
+      <p class="toml-eyebrow">Free online developer tool</p>
+      <h1>TOML Formatter Online – Format and Validate TOML</h1>
+      <p class="toml-lead">
+        Format TOML configuration files with consistent spacing, readable arrays,
+        aligned comments, and customizable formatting options. Paste TOML text or
+        load a local <code>.toml</code> file, review the result, and copy or
+        download the formatted configuration.
+      </p>
+    </section>
+
+    <section class="toml-tool" aria-labelledby="toml-tool-title">
+      <div class="toml-tool-head">
+        <div>
+          <h2 id="toml-tool-title">Format your TOML</h2>
+          <p>Format valid TOML, inspect syntax errors, and adjust output preferences.</p>
+        </div>
+        <span class="toml-local-badge">✓ Browser-based formatting</span>
+      </div>
+
+      <div class="toml-tool-body">
+        <div class="toml-editors">
+          <section class="toml-pane" aria-labelledby="toml-input-title">
+            <div class="toml-pane-heading">
+              <label class="toml-label" id="toml-input-title" for="toml-input">Input TOML</label>
+              <label class="toml-load-label">
+                + Open .toml file
+                <input type="file" id="toml-file" accept=".toml,.txt,text/plain,application/toml">
+              </label>
+            </div>
+            <textarea class="toml-textarea" id="toml-input"
+              spellcheck="false" autocapitalize="off" autocomplete="off"
+              aria-label="Input TOML text"
+              placeholder="Paste your TOML here..."></textarea>
+            <div class="toml-pane-meta">
+              <span id="toml-input-count">0 lines · 0 characters</span>
+              <span id="toml-file-name">No file selected</span>
+            </div>
+          </section>
+
+          <section class="toml-pane" aria-labelledby="toml-output-title">
+            <div class="toml-pane-heading">
+              <label class="toml-label" id="toml-output-title" for="toml-output">Formatted TOML</label>
+              <span id="toml-output-state">Output</span>
+            </div>
+            <textarea class="toml-textarea toml-output" id="toml-output"
+              spellcheck="false" autocapitalize="off" autocomplete="off"
+              aria-label="Formatted TOML output"
+              placeholder="The formatted TOML will appear here..."
+              readonly></textarea>
+            <div class="toml-pane-meta">
+              <span id="toml-output-count">0 lines · 0 characters</span>
+              <span id="toml-output-bytes">0 bytes</span>
+            </div>
+          </section>
+        </div>
+
+        <section class="toml-settings" aria-labelledby="toml-settings-title">
+          <h3 id="toml-settings-title">Formatting settings</h3>
+
+          <div class="toml-setting-grid">
+            <div>
+              <label class="toml-label" for="toml-indent">Indentation</label>
+              <select class="toml-select" id="toml-indent">
+                <option value="  " selected>2 spaces</option>
+                <option value="    ">4 spaces</option>
+                <option value="	">Tab</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="toml-label" for="toml-width">Array column width</label>
+              <select class="toml-select" id="toml-width">
+                <option value="60">60 characters</option>
+                <option value="80" selected>80 characters</option>
+                <option value="100">100 characters</option>
+                <option value="120">120 characters</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="toml-label" for="toml-newline">Line endings</label>
+              <select class="toml-select" id="toml-newline">
+                <option value="lf" selected>LF (Unix / Linux)</option>
+                <option value="crlf">CRLF (Windows)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="toml-label" for="toml-blank-lines">Maximum blank lines</label>
+              <select class="toml-select" id="toml-blank-lines">
+                <option value="0">None</option>
+                <option value="1">1 blank line</option>
+                <option value="2" selected>2 blank lines</option>
+                <option value="3">3 blank lines</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="toml-checkboxes">
+            <label class="toml-check">
+              <input type="checkbox" id="toml-sort-keys">
+              <span>Sort eligible keys alphabetically</span>
+            </label>
+            <label class="toml-check">
+              <input type="checkbox" id="toml-align-comments" checked>
+              <span>Align consecutive inline comments</span>
+            </label>
+            <label class="toml-check">
+              <input type="checkbox" id="toml-expand-arrays" checked>
+              <span>Expand long arrays</span>
+            </label>
+            <label class="toml-check">
+              <input type="checkbox" id="toml-collapse-arrays" checked>
+              <span>Collapse arrays that fit on one line</span>
+            </label>
+            <label class="toml-check">
+              <input type="checkbox" id="toml-trailing-newline" checked>
+              <span>Add a final newline</span>
+            </label>
+            <label class="toml-check">
+              <input type="checkbox" id="toml-auto-format">
+              <span>Format automatically while typing</span>
+            </label>
+          </div>
+
+          <p class="toml-help">
+            Formatting can change whitespace and layout. Keep key sorting disabled
+            when you want the original key order to remain as stable as possible.
+            This formatter does not validate application-specific configuration rules.
+          </p>
+        </section>
+
+        <div class="toml-actions">
+          <button class="toml-btn toml-btn-primary" type="button" id="toml-format" disabled>
+            Loading formatter…
+          </button>
+          <button class="toml-btn toml-btn-secondary" type="button" id="toml-validate" disabled>
+            Check syntax
+          </button>
+          <button class="toml-btn toml-btn-secondary" type="button" id="toml-copy" disabled>
+            Copy output
+          </button>
+          <button class="toml-btn toml-btn-secondary" type="button" id="toml-download" disabled>
+            Download .toml
+          </button>
+          <button class="toml-btn toml-btn-secondary" type="button" id="toml-sample">
+            Load example
+          </button>
+          <button class="toml-btn toml-btn-secondary" type="button" id="toml-swap" disabled>
+            Use output as input
+          </button>
+          <button class="toml-btn toml-btn-secondary" type="button" id="toml-clear">
+            Clear
+          </button>
+        </div>
+
+        <p class="toml-status" id="toml-status" role="status" aria-live="polite">
+          Loading the TOML formatting engine...
+        </p>
+
+        <div class="toml-stats" aria-label="Formatter statistics">
+          <span>Input lines: <strong id="toml-stat-lines">0</strong></span>
+          <span>Input size: <strong id="toml-stat-input">0 bytes</strong></span>
+          <span>Output size: <strong id="toml-stat-output">0 bytes</strong></span>
+        </div>
+      </div>
+    </section>
+
+    <article class="toml-content">
+      <section id="what-is-toml">
+        <h2>What is TOML?</h2>
+        <p>
+          TOML stands for <em>Tom's Obvious, Minimal Language</em>. It is a
+          configuration-file format designed to make structured settings easy
+          for people to read and write. TOML uses straightforward key-value
+          pairs, table headers, arrays, strings, numbers, Boolean values, and
+          date and time values. Its syntax is defined by a published specification.
+        </p>
+        <p>
+          TOML is commonly encountered in software projects and configuration
+          workflows. Files such as <code>Cargo.toml</code> and
+          <code>pyproject.toml</code> use TOML to describe project metadata,
+          dependencies, build settings, and development-tool configuration.
+          Other applications use TOML for their own settings.
+        </p>
+        <p>
+          A TOML formatter makes an existing document more consistent and easier
+          to review. It can normalize spacing around equals signs, tidy array
+          layout, align comments, and apply consistent newline preferences.
+          The aim is readable TOML—not to invent configuration values or
+          decide whether a setting is correct for a particular application.
+        </p>
+      </section>
+
+      <section id="how-to-format-toml">
+        <h2>How to format TOML online</h2>
+        <ol>
+          <li>
+            <strong>Paste or open a file.</strong>
+            Enter TOML text in the input area, or select a local
+            <code>.toml</code> file using Open .toml file.
+          </li>
+          <li>
+            <strong>Choose formatting preferences.</strong>
+            Select the indentation style, preferred line width, and line-ending
+            convention. Decide whether eligible keys should be alphabetically sorted.
+          </li>
+          <li>
+            <strong>Format the document.</strong>
+            Click Format TOML to run the formatter. Valid TOML is rewritten
+            using the selected formatting settings.
+          </li>
+          <li>
+            <strong>Inspect the result.</strong>
+            Review the formatted text and check the status message. A syntax
+            error is reported instead of silently treating invalid input as formatted output.
+          </li>
+          <li>
+            <strong>Copy or download.</strong>
+            Copy the result to your clipboard or download it as a
+            <code>.toml</code> file for use in your project.
+          </li>
+        </ol>
+        <p>
+          You can also select Check syntax to see whether the formatter can
+          process the current TOML without replacing the current output.
+          Syntax checking is useful before saving a configuration change, but
+          it is not a substitute for an application's own configuration validation.
+        </p>
+      </section>
+
+      <section id="formatter-features">
+        <h2>TOML formatter features</h2>
+        <div class="toml-cards">
+          <div class="toml-info-card">
+            <h3>Consistent spacing and indentation</h3>
+            <p>
+              Normalize spacing around assignments, table definitions, and
+              values so configuration files are easier to scan and review.
+            </p>
+          </div>
+          <div class="toml-info-card">
+            <h3>Readable arrays</h3>
+            <p>
+              Set a preferred column width and choose whether long arrays
+              should expand across lines or short arrays should collapse
+              to a compact layout.
+            </p>
+          </div>
+          <div class="toml-info-card">
+            <h3>Comment alignment</h3>
+            <p>
+              Align consecutive inline comments to make configuration notes
+              easier to compare while reviewing TOML entries.
+            </p>
+          </div>
+          <div class="toml-info-card">
+            <h3>Key ordering option</h3>
+            <p>
+              Choose to alphabetically reorder eligible keys when a consistent
+              order helps you maintain a configuration file. Key sorting is
+              optional rather than automatic.
+            </p>
+          </div>
+          <div class="toml-info-card">
+            <h3>Syntax error feedback</h3>
+            <p>
+              The formatting engine processes TOML syntax and reports errors
+              when it cannot format a document. A successful format does not
+              prove that every application-specific setting is supported.
+            </p>
+          </div>
+          <div class="toml-info-card">
+            <h3>Copy and download</h3>
+            <p>
+              Copy formatted text or download a local TOML file without
+              requiring an account or an upload to an encoding service.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="toml-example">
+        <h2>Example: before and after TOML formatting</h2>
+        <p>
+          The following example has inconsistent spacing around assignments
+          and a compact dependency table. Formatting makes the layout more
+          consistent and easier to read.
+        </p>
+
+        <h3>Before formatting</h3>
+        <pre class="toml-example"># Example project configuration
+[package]
+name="sample-app"
+version =  "1.0.0"
+edition="2021"
+
+[dependencies]
+serde={version="1.0",features=["derive"]}
+tokio={version="1.0", features=["full"]}</pre>
+
+        <h3>After formatting</h3>
+        <pre class="toml-example"># Example project configuration
+[package]
+name = "sample-app"
+version = "1.0.0"
+edition = "2021"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+tokio = { version = "1.0", features = ["full"] }</pre>
+
+        <p>
+          Exact output layout depends on the formatter and selected options.
+          For example, an inline table may be expanded by a formatter setting.
+          Always review the output before committing it to your project.
+        </p>
+      </section>
+
+      <section id="toml-files">
+        <h2>Which TOML files can you format?</h2>
+        <h3>Cargo.toml files</h3>
+        <p>
+          Rust projects use <code>Cargo.toml</code> for package metadata,
+          dependency declarations, features, and other Cargo settings.
+          Consistent formatting makes dependency changes and project metadata
+          easier to read during code review.
+        </p>
+
+        <h3>pyproject.toml files</h3>
+        <p>
+          Python tools use <code>pyproject.toml</code> for project metadata,
+          build-system requirements, tool configuration, and other supported
+          settings. A formatter helps keep the document readable, but it
+          cannot determine whether a selected backend or tool accepts every setting.
+        </p>
+
+        <h3>Application and developer configuration</h3>
+        <p>
+          You can also format TOML used by static-site tools, command-line
+          applications, package managers, and other software. The formatter
+          handles syntax-level layout; the application that reads the file
+          remains responsible for interpreting and validating its settings.
+        </p>
+      </section>
+
+      <section id="toml-formatting-tips">
+        <h2>Best practices when formatting TOML</h2>
+        <ul>
+          <li>
+            <strong>Review changes before committing.</strong>
+            Use a version-control diff after formatting, especially if a file
+            contains important configuration or is shared by a team.
+          </li>
+          <li>
+            <strong>Be cautious with key sorting.</strong>
+            Alphabetical ordering can make some files more consistent, but
+            preserving existing order may make changes easier to review.
+            Sorting should be an intentional choice.
+          </li>
+          <li>
+            <strong>Use the expected newline style.</strong>
+            Choose LF for most Unix-like workflows or CRLF when the project
+            explicitly requires Windows-style line endings.
+          </li>
+          <li>
+            <strong>Do not confuse formatting with validation.</strong>
+            A formatter checks whether the input can be formatted according
+            to its syntax rules. It does not check dependency availability,
+            accepted option names, application versions, or security policy.
+          </li>
+          <li>
+            <strong>Protect sensitive configuration.</strong>
+            Formatting runs in the browser on this page. Avoid using a
+            browser or device you do not trust for confidential configuration.
+          </li>
+        </ul>
+      </section>
+
+      <section class="toml-faq" id="toml-faq">
+        <h2>Frequently asked questions</h2>
+
+        <details>
+          <summary>What does a TOML formatter do?</summary>
+          <p>
+            A TOML formatter rewrites valid TOML using consistent formatting
+            rules. Depending on its options, it can normalize spacing, adjust
+            array layout, align comments, apply line endings, and make
+            configuration files easier to read.
+          </p>
+        </details>
+
+        <details>
+          <summary>How do I format TOML online for free?</summary>
+          <p>
+            Paste TOML into the input box or open a local TOML file. Choose
+            indentation and other formatting preferences, select Format TOML,
+            then copy or download the result. No account is required.
+          </p>
+        </details>
+
+        <details>
+          <summary>Can this tool format Cargo.toml and pyproject.toml?</summary>
+          <p>
+            It can format TOML content from these files when the syntax is
+            supported by the formatter. It does not validate that dependency
+            versions, build backends, package names, or tool-specific settings
+            are correct for Cargo, Python, or any other application.
+          </p>
+        </details>
+
+        <details>
+          <summary>Does formatting change my TOML values?</summary>
+          <p>
+            A proper formatter aims to alter presentation rather than the
+            intended configuration values. Even so, review the output and
+            compare it with the original before using it in production.
+            Formatting does not test an application’s interpretation of the file.
+          </p>
+        </details>
+
+        <details>
+          <summary>Are TOML comments preserved?</summary>
+          <p>
+            The page uses the Taplo formatter, which formats TOML source rather
+            than rebuilding the document from a plain JavaScript object.
+            Comment formatting can be adjusted with the comment-alignment
+            option. Review the output if comments or unusual formatting are
+            important to your project.
+          </p>
+        </details>
+
+        <details>
+          <summary>Can I validate TOML syntax with this tool?</summary>
+          <p>
+            Yes. Check syntax asks the formatter to process the input and
+            reports whether it can parse and format it. This is a syntax-level
+            check, not validation against an application-specific schema.
+          </p>
+        </details>
+
+        <details>
+          <summary>Is TOML the same as JSON, YAML, or INI?</summary>
+          <p>
+            No. TOML has its own grammar, value types, arrays, tables, and
+            date-time syntax. JSON, YAML, and INI have different rules.
+            Do not format TOML with a JSON or YAML formatter; use a TOML-aware
+            formatter such as this one.
+          </p>
+        </details>
+
+        <details>
+          <summary>Is my TOML uploaded to a server?</summary>
+          <p>
+            The page runs the formatting operation in your browser and does
+            not send the TOML text to our server for formatting. The first
+            visit loads the formatting engine from a third-party CDN.
+            Avoid entering confidential settings on a device or browser you
+            do not trust.
+          </p>
+        </details>
+
+        <details>
+          <summary>Why does the TOML formatter show an error?</summary>
+          <p>
+            Errors may be caused by a missing value, an invalid string escape,
+            an incorrectly written table header, duplicate keys, or malformed
+            arrays. Check the diagnostic, correct the original input, and
+            format it again. A formatter does not fix every syntax error automatically.
+          </p>
+        </details>
+      </section>
+
+      <section id="related-tools">
+        <h2>Explore related free developer tools</h2>
+        <p>
+          Use these related utilities to inspect text, compare data, and
+          maintain websites and developer projects.
+        </p>
+        <div class="toml-related">
+          <a href="text-diff-checker.html">Text Diff Checker</a>
+          <a href="json-to-csv.html">JSON to CSV Converter</a>
+          <a href="regex-tester.html">Regex Tester</a>
+          <a href="sitemap-xml-validator.html">Sitemap XML Validator</a>
+          <a href="unix-timestamp-converter.html">Unix Timestamp Converter</a>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="toml-footer">
+    <div class="toml-shell toml-footer-inner">
+      <p>© <span id="toml-year">2026</span> Online Tools &amp; Converters.</p>
+      <p><a href="index.html">Home</a> · <a href="sitemap.xml">XML Sitemap</a></p>
+    </div>
+  </footer>
+
+  <script type="module">
+    const $ = (id) => document.getElementById(id);
+
+    const input = $("toml-input");
+    const output = $("toml-output");
+    const formatButton = $("toml-format");
+    const validateButton = $("toml-validate");
+    const copyButton = $("toml-copy");
+    const downloadButton = $("toml-download");
+    const swapButton = $("toml-swap");
+    const status = $("toml-status");
+
+    const MAX_CHARS = 500000;
+
+    let formatToml = null;
+    let autoTimer = null;
+    let lastFormatted = "";
+
+    function setStatus(message, type = "") {
+      status.textContent = message;
+      status.className = "toml-status" + (type ? " is-" + type : "");
+    }
+
+    function lineCount(text) {
+      return text.length ? text.split(/\r\n|\r|\n/).length : 0;
+    }
+
+    function byteCount(text) {
+      return new TextEncoder().encode(text).length;
+    }
+
+    function humanBytes(bytes) {
+      if (bytes < 1024) return bytes + " bytes";
+      return (bytes / 1024).toFixed(1) + " KB";
+    }
+
+    function updateCounts() {
+      $("toml-input-count").textContent =
+        lineCount(input.value) + " lines · " +
+        input.value.length.toLocaleString() + " characters";
+
+      $("toml-output-count").textContent =
+        lineCount(output.value) + " lines · " +
+        output.value.length.toLocaleString() + " characters";
+
+      $("toml-output-bytes").textContent =
+        humanBytes(byteCount(output.value));
+
+      $("toml-stat-lines").textContent =
+        lineCount(input.value).toLocaleString();
+
+      $("toml-stat-input").textContent =
+        humanBytes(byteCount(input.value));
+
+      $("toml-stat-output").textContent =
+        humanBytes(byteCount(output.value));
+
+      copyButton.disabled = !output.value;
+      downloadButton.disabled = !output.value;
+      swapButton.disabled = !output.value;
+    }
+
+    function getFormatOptions() {
+      return {
+        indent_string: $("toml-indent").value,
+        column_width: Number($("toml-width").value),
+        crlf: $("toml-newline").value === "crlf",
+        allowed_blank_lines: Number($("toml-blank-lines").value),
+        reorder_keys: $("toml-sort-keys").checked,
+        align_comments: $("toml-align-comments").checked,
+        array_auto_expand: $("toml-expand-arrays").checked,
+        array_auto_collapse: $("toml-collapse-arrays").checked,
+        trailing_newline: $("toml-trailing-newline").checked
+      };
+    }
+
+    function clearOutput() {
+      output.value = "";
+      lastFormatted = "";
+      $("toml-output-state").textContent = "Output";
+      updateCounts();
+    }
+
+    function formatCurrent() {
+      if (!formatToml) {
+        setStatus(
+          "The formatter engine is not ready. Check your connection and reload the page to try again.",
+          "error"
+        );
+        return false;
+      }
+
+      const source = input.value;
+
+      if (!source.trim()) {
+        clearOutput();
+        setStatus("Enter TOML text or load a file before formatting.");
+        return false;
+      }
+
+      if (source.length > MAX_CHARS) {
+        setStatus(
+          "This page accepts up to 500,000 characters per document. Try a smaller section of the file.",
+          "error"
+        );
+        clearOutput();
+        return false;
+      }
+
+      const start = performance.now();
+      formatButton.disabled = true;
+      formatButton.textContent = "Formatting…";
+
+      try {
+        const result = formatToml(source, getFormatOptions());
+
+        if (typeof result !== "string") {
+          throw new Error("The formatter returned an unexpected result.");
+        }
+
+        output.value = result;
+        lastFormatted = result;
+        $("toml-output-state").textContent = "Formatted output";
+        updateCounts();
+
+        const elapsed = ((performance.now() - start) / 1000).toFixed(2);
+        setStatus(
+          "Formatted successfully in " + elapsed +
+          " seconds. Review the result before using it in your project.",
+          "success"
+        );
+
+        return true;
+      } catch (error) {
+        clearOutput();
+
+        const detail = error && error.message
+          ? error.message
+          : "The TOML formatter could not process this input.";
+
+        setStatus(
+          "Formatting failed. Check the TOML syntax. " + detail,
+          "error"
+        );
+
+        return false;
+      } finally {
+        formatButton.disabled = !formatToml;
+        formatButton.textContent = "Format TOML";
+      }
+    }
+
+    function checkSyntax() {
+      if (!formatToml) {
+        setStatus("The formatter engine is not ready yet.", "error");
+        return;
+      }
+
+      const source = input.value;
+
+      if (!source.trim()) {
+        setStatus("Enter TOML text before checking syntax.");
+        return;
+      }
+
+      if (source.length > MAX_CHARS) {
+        setStatus("The input exceeds the 500,000-character limit.", "error");
+        return;
+      }
+
+      try {
+        // Run the parser/formatter but do not replace the current output.
+        formatToml(source, getFormatOptions());
+        setStatus(
+          "The formatter accepted this TOML syntax. Application-specific settings and schema rules are not checked.",
+          "success"
+        );
+      } catch (error) {
+        const detail = error && error.message
+          ? error.message
+          : "Unknown TOML syntax error.";
+
+        setStatus("TOML syntax check failed. " + detail, "error");
+      }
+    }
+
+    async function copyResult() {
+      if (!output.value) {
+        setStatus("There is no formatted output to copy.");
+        return;
+      }
+
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(output.value);
+          setStatus("Formatted TOML copied to the clipboard.", "success");
+          return;
+        }
+      } catch {
+        // Fall back to a manual copy selection.
+      }
+
+      output.focus();
+      output.select();
+
+      let copied = false;
+      try {
+        copied = document.execCommand("copy");
+      } catch {
+        copied = false;
+      }
+
+      setStatus(
+        copied
+          ? "Formatted TOML copied to the clipboard."
+          : "Clipboard access was blocked. The output is selected for manual copying.",
+        copied ? "success" : ""
+      );
+    }
+
+    function downloadResult() {
+      if (!output.value) {
+        setStatus("Format TOML before downloading the output.");
+        return;
+      }
+
+      const blob = new Blob([output.value], {
+        type: "application/toml;charset=utf-8"
+      });
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+
+      link.href = url;
+      link.download = "formatted.toml";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      setStatus("Downloaded formatted.toml.", "success");
+    }
+
+    function scheduleAutoFormat() {
+      updateCounts();
+
+      if (!$("toml-auto-format").checked || !formatToml) return;
+
+      clearTimeout(autoTimer);
+      autoTimer = setTimeout(() => {
+        formatCurrent();
+      }, 650);
+    }
+
+    function loadExample() {
+      input.value =
+`# Example project configuration
+[package]
+name="sample-app"
+version =  "1.0.0"
+edition="2021"
+
+[dependencies]
+serde={version="1.0",features=["derive"]}
+tokio={version="1.0", features=["full"]}
+
+[features]
+default=["logging","serde"]
+logging = ["dep:tracing"]
+
+[profile.release]
+lto=true
+codegen-units=1
+strip = true`;
+
+      $("toml-file-name").textContent = "Example configuration";
+      updateCounts();
+
+      if (formatToml) {
+        formatCurrent();
+      } else {
+        setStatus("Example loaded. The formatter is still initializing.");
+      }
+    }
+
+    $("toml-file").addEventListener("change", async (event) => {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      if (file.size > MAX_CHARS) {
+        setStatus("This page accepts files up to 500 KB. Select a smaller TOML file.", "error");
+        event.target.value = "";
+        return;
+      }
+
+      try {
+        input.value = await file.text();
+        $("toml-file-name").textContent = file.name;
+        updateCounts();
+
+        if (formatToml) {
+          formatCurrent();
+        } else {
+          setStatus("File loaded. The formatter is still initializing.");
+        }
+      } catch {
+        setStatus("Could not read that file. Please select another .toml file.", "error");
+      }
+
+      event.target.value = "";
+    });
+
+    $("toml-menu-button").addEventListener("click", () => {
+      const nav = $("toml-navigation");
+      const isOpen = nav.classList.toggle("is-open");
+
+      $("toml-menu-button").setAttribute(
+        "aria-expanded",
+        String(isOpen)
+      );
+    });
+
+    formatButton.addEventListener("click", formatCurrent);
+    validateButton.addEventListener("click", checkSyntax);
+    copyButton.addEventListener("click", copyResult);
+    downloadButton.addEventListener("click", downloadResult);
+
+    swapButton.addEventListener("click", () => {
+      if (!output.value) return;
+
+      input.value = output.value;
+      $("toml-file-name").textContent = "Previously formatted output";
+      clearOutput();
+      updateCounts();
+      setStatus("Formatted output moved to input. Format it again to apply any new settings.");
+      input.focus();
+    });
+
+    $("toml-sample").addEventListener("click", loadExample);
+
+    $("toml-clear").addEventListener("click", () => {
+      input.value = "";
+      clearOutput();
+      $("toml-file-name").textContent = "No file selected";
+      setStatus("Input and output cleared.");
+      updateCounts();
+      input.focus();
+    });
+
+    input.addEventListener("input", scheduleAutoFormat);
+
+    [
+      "toml-indent",
+      "toml-width",
+      "toml-newline",
+      "toml-blank-lines",
+      "toml-sort-keys",
+      "toml-align-comments",
+      "toml-expand-arrays",
+      "toml-collapse-arrays",
+      "toml-trailing-newline"
+    ].forEach((id) => {
+      $(id).addEventListener("change", () => {
+        if ($("toml-auto-format").checked && input.value.trim()) {
+          scheduleAutoFormat();
+        }
+      });
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+        event.preventDefault();
+        formatCurrent();
+      }
+    });
+
+    $("toml-year").textContent = new Date().getFullYear();
+    updateCounts();
+
+    try {
+      setStatus("Loading the TOML formatting engine…");
+
+      const module = await import(
+        "https://esm.sh/@wasm-fmt/taplo_fmt@0.2.5/web"
+      );
+
+      if (typeof module.default !== "function" ||
+          typeof module.format !== "function") {
+        throw new Error("The formatting engine did not expose the expected functions.");
+      }
+
+      await module.default();
+      formatToml = module.format;
+
+      formatButton.disabled = false;
+      formatButton.textContent = "Format TOML";
+      validateButton.disabled = false;
+
+      setStatus(
+        "Formatter ready. Paste TOML or load an example to get started.",
+        "success"
+      );
+
+      if (input.value.trim()) {
+        formatCurrent();
+      }
+    } catch (error) {
+      formatButton.disabled = true;
+      validateButton.disabled = true;
+      formatButton.textContent = "Formatter unavailable";
+
+      setStatus(
+        "The formatting engine could not load. Check your internet connection or CDN access, then reload this page. " +
+        (error && error.message ? error.message : ""),
+        "error"
+      );
+    }
+  </script>
+
+  <script src="/script.js" defer></script>
+</body>
+</html>

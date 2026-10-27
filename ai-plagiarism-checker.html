@@ -1,0 +1,1875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>AI Content Detector &amp; Plagiarism Checker – Free, Private</title>
+  <meta name="description" content="Estimate whether text was AI-generated and compare two texts for copied passages. Runs in your browser. Honest limitations: this is a statistical signal, not proof, and it does not crawl the live web.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#123c36">
+
+  <link rel="canonical" href="https://onlinetoolsandconverters.cc/ai-plagiarism-checker.html">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/script.js" defer></script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Online Tools &amp; Converters">
+  <meta property="og:title" content="AI Content Detector &amp; Plagiarism Checker – Free, Private">
+  <meta property="og:description" content="Two independent checks: AI-pattern analysis and reference-text comparison. Runs entirely in your browser, with honest limits stated up front.">
+  <meta property="og:url" content="https://onlinetoolsandconverters.cc/ai-plagiarism-checker.html">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="AI Content Detector &amp; Plagiarism Checker – Free, Private">
+  <meta name="twitter:description" content="Estimate AI likelihood and find copied passages against a reference text. Browser-based, with clear limitations.">
+
+  <style>
+    /* Page-specific styles only. Shared tokens come from /style.css. */
+
+    .visually-hidden {
+      position: absolute !important;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .ap-disclaimer {
+      margin: 0 0 18px;
+      padding: 13px 15px;
+      border: 1px solid #f0c36d;
+      border-left-width: 4px;
+      border-radius: 10px;
+      background: #fff8e6;
+      color: #6b3d00;
+      font-size: .87rem;
+      line-height: 1.65;
+    }
+
+    .ap-disclaimer strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .ap-modes {
+      margin: 0 0 18px;
+      padding: 0;
+      border: 0;
+    }
+
+    .ap-modes legend {
+      margin-bottom: 8px;
+      font-size: .8rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--muted, #5b6b62);
+    }
+
+    .ap-segmented {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .ap-radio {
+      position: relative;
+      display: inline-flex;
+      flex: 1 1 auto;
+      min-width: 180px;
+    }
+
+    .ap-radio input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+    }
+
+    .ap-radio span {
+      display: flex;
+      flex: 1 1 auto;
+      min-height: 46px;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8px 16px;
+      border: 1px solid var(--line, #dde3dd);
+      border-radius: 11px;
+      background: #fff;
+      color: var(--ink, #182722);
+      font-size: .9rem;
+      font-weight: 700;
+      line-height: 1.35;
+      cursor: pointer;
+      transition: border-color .16s ease, background .16s ease;
+    }
+
+    .ap-radio span small {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted, #5b6b62);
+      font-size: .74rem;
+      font-weight: 500;
+    }
+
+    .ap-radio input:checked + span {
+      border-color: var(--forest, #123c36);
+      background: #f3f8f1;
+      box-shadow: inset 0 0 0 2px var(--forest, #123c36);
+    }
+
+    .ap-radio input:checked + span small {
+      color: var(--green, #176b57);
+    }
+
+    .ap-radio input:focus-visible + span {
+      outline: 3px solid rgba(23, 107, 87, .35);
+      outline-offset: 2px;
+    }
+
+    .ap-field {
+      margin-bottom: 14px;
+    }
+
+    .ap-field > label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: .9rem;
+      font-weight: 800;
+      color: var(--ink, #182722);
+    }
+
+    .ap-textarea {
+      width: 100%;
+      min-height: 170px;
+      padding: 12px;
+      border: 1px solid var(--line, #dde3dd);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--ink, #182722);
+      font-family: var(--mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+      font-size: .88rem;
+      line-height: 1.65;
+      resize: vertical;
+    }
+
+    .ap-textarea:focus-visible {
+      outline: 3px solid rgba(23, 107, 87, .35);
+      outline-offset: 2px;
+      border-color: var(--green, #176b57);
+    }
+
+    .ap-hint {
+      margin: 6px 0 0;
+      color: var(--muted, #5b6b62);
+      font-size: .79rem;
+      line-height: 1.55;
+    }
+
+    .ap-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      align-items: center;
+      margin: 14px 0 4px;
+    }
+
+    .ap-status {
+      min-height: 1.4em;
+      margin: 12px 0 0;
+      color: var(--muted, #5b6b62);
+      font-size: .84rem;
+    }
+
+    .ap-status.is-ok { color: var(--ok, #176b57); font-weight: 600; }
+    .ap-status.is-error { color: var(--err, #a4321f); font-weight: 600; }
+
+    .ap-results {
+      margin-top: 20px;
+    }
+
+    .ap-score-card {
+      display: grid;
+      grid-template-columns: minmax(0, 200px) minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+      padding: 18px;
+      border: 1px solid var(--line, #dde3dd);
+      border-radius: 14px;
+      background: var(--paper, #f7f8f3);
+    }
+
+    .ap-gauge {
+      position: relative;
+      display: flex;
+      width: 160px;
+      height: 160px;
+      margin: 0 auto;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: conic-gradient(
+        #176b57 0deg,
+        #7fa26b 90deg,
+        #d6b04a 180deg,
+        #c06a3a 260deg,
+        #a4321f 360deg
+      );
+      padding: 12px;
+    }
+
+    .ap-gauge-inner {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #fff;
+      text-align: center;
+    }
+
+    .ap-gauge-value {
+      color: var(--forest, #123c36);
+      font-size: 2.1rem;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+
+    .ap-gauge-unit {
+      color: var(--muted, #5b6b62);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .ap-gauge-label {
+      margin-top: 3px;
+      color: var(--ink, #182722);
+      font-size: .82rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .ap-score-body h3 {
+      margin: 0 0 6px;
+      color: var(--forest, #123c36);
+      font-size: 1.05rem;
+    }
+
+    .ap-score-body p {
+      margin: 0 0 8px;
+      color: var(--muted, #5b6b62);
+      font-size: .86rem;
+      line-height: 1.6;
+    }
+
+    .ap-confidence {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px 10px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--line, #dde3dd);
+      font-size: .76rem;
+      font-weight: 700;
+      color: var(--ink, #182722);
+    }
+
+    .ap-confidence[data-level="very-low"],
+    .ap-confidence[data-level="low"] {
+      border-color: #f0c2b8;
+      background: #fdf0ee;
+      color: #7f1d1d;
+    }
+
+    .ap-confidence[data-level="moderate"] {
+      border-color: #f0c36d;
+      background: #fff8e6;
+      color: #6b3d00;
+    }
+
+    .ap-confidence[data-level="high"] {
+      border-color: #b9dfc0;
+      background: #edf7ee;
+      color: #14532d;
+    }
+
+    .ap-signals {
+      margin-top: 18px;
+    }
+
+    .ap-signals h3 {
+      margin: 0 0 10px;
+      color: var(--forest, #123c36);
+      font-size: 1rem;
+    }
+
+    .ap-signal-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .86rem;
+    }
+
+    .ap-signal-table th,
+    .ap-signal-table td {
+      padding: 9px 10px;
+      border-bottom: 1px solid var(--line, #dde3dd);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .ap-signal-table th {
+      background: var(--paper, #f7f8f3);
+      color: var(--muted, #5b6b62);
+      font-size: .72rem;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .ap-signal-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .ap-signal-name {
+      font-weight: 700;
+      color: var(--ink, #182722);
+    }
+
+    .ap-signal-value {
+      color: var(--muted, #5b6b62);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .ap-signal-bar-cell {
+      min-width: 130px;
+    }
+
+    .ap-signal-bar {
+      height: 8px;
+      border-radius: 999px;
+      background: #e4ebe4;
+      overflow: hidden;
+    }
+
+    .ap-signal-bar > span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--green, #176b57);
+      transition: width .2s ease;
+    }
+
+    .ap-signal-score {
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .ap-signal-help {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted, #5b6b62);
+      font-size: .74rem;
+      line-height: 1.4;
+    }
+
+    .ap-note {
+      margin: 14px 0 0;
+      padding: 11px 13px;
+      border-radius: 9px;
+      background: var(--paper, #f7f8f3);
+      color: var(--muted, #5b6b62);
+      font-size: .8rem;
+      line-height: 1.6;
+    }
+
+    .ap-ref-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      align-items: start;
+    }
+
+    .ap-ref-grid .ap-field {
+      min-width: 0;
+    }
+
+    .ap-similarity-card {
+      display: grid;
+      grid-template-columns: minmax(0, 190px) minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+      margin-top: 18px;
+      padding: 18px;
+      border: 1px solid var(--line, #dde3dd);
+      border-radius: 14px;
+      background: #fff;
+    }
+
+    .ap-similarity-value {
+      color: var(--forest, #123c36);
+      font-size: 2.4rem;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+      text-align: center;
+    }
+
+    .ap-similarity-value small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted, #5b6b62);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .ap-similarity-body h3 {
+      margin: 0 0 5px;
+      color: var(--forest, #123c36);
+      font-size: 1rem;
+    }
+
+    .ap-similarity-body p {
+      margin: 0;
+      color: var(--muted, #5b6b62);
+      font-size: .85rem;
+      line-height: 1.6;
+    }
+
+    .ap-highlight {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border: 1px solid var(--line, #dde3dd);
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .ap-highlight h3 {
+      margin: 0 0 8px;
+      color: var(--forest, #123c36);
+      font-size: .95rem;
+    }
+
+    .ap-highlight-text {
+      max-height: 340px;
+      overflow: auto;
+      color: var(--ink, #182722);
+      font-size: .88rem;
+      line-height: 1.75;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .ap-highlight-text mark {
+      padding: 1px 2px;
+      border-radius: 3px;
+      background: #fbe38e;
+      color: #3d2c00;
+      font-weight: 600;
+    }
+
+    .ap-match-list {
+      margin: 12px 0 0;
+      padding-left: 1.2em;
+      color: var(--muted, #5b6b62);
+      font-size: .82rem;
+      line-height: 1.6;
+    }
+
+    .ap-match-list li {
+      margin-bottom: 6px;
+      overflow-wrap: anywhere;
+    }
+
+    .ap-content {
+      max-width: 900px;
+    }
+
+    .ap-content h2 {
+      margin-top: 2.2rem;
+    }
+
+    .ap-content h3 {
+      margin-top: 1.4rem;
+    }
+
+    .ap-content code {
+      padding: 1px 5px;
+      border: 1px solid var(--line, #dde3dd);
+      border-radius: 5px;
+      background: #fff;
+      font-size: .88em;
+    }
+
+    .ap-table-wrap {
+      margin: 14px 0;
+      overflow-x: auto;
+      border: 1px solid var(--line, #dde3dd);
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .ap-table {
+      width: 100%;
+      min-width: 620px;
+      border-collapse: collapse;
+      font-size: .87rem;
+    }
+
+    .ap-table th,
+    .ap-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line, #dde3dd);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .ap-table th {
+      background: var(--paper, #f7f8f3);
+      color: var(--muted, #5b6b62);
+      font-size: .73rem;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .ap-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .ap-faq details {
+      padding: 13px 0;
+      border-bottom: 1px solid var(--line, #dde3dd);
+    }
+
+    .ap-faq summary {
+      cursor: pointer;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .ap-faq summary:hover {
+      color: var(--green, #176b57);
+    }
+
+    .ap-faq p {
+      margin: 9px 0 0;
+      color: var(--muted, #5b6b62);
+    }
+
+    @media (max-width: 760px) {
+      .ap-ref-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .ap-score-card,
+      .ap-similarity-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .ap-gauge {
+        width: 130px;
+        height: 130px;
+      }
+
+      .ap-gauge-value {
+        font-size: 1.7rem;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .ap-actions {
+        width: 100%;
+      }
+
+      .ap-actions .btn {
+        flex: 1 1 auto;
+      }
+
+      .ap-signal-table {
+        font-size: .8rem;
+      }
+
+      .ap-signal-table th:nth-child(2),
+      .ap-signal-table td:nth-child(2) {
+        display: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ap-radio span,
+      .ap-signal-bar > span {
+        transition: none;
+      }
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://onlinetoolsandconverters.cc/ai-plagiarism-checker.html#webpage",
+        "url": "https://onlinetoolsandconverters.cc/ai-plagiarism-checker.html",
+        "name": "AI Content Detector & Plagiarism Checker – Free, Private",
+        "description": "Estimate AI likelihood from statistical writing patterns and compare two texts for copied passages. Browser-based, with honest limitations.",
+        "inLanguage": "en",
+        "breadcrumb": {
+          "@id": "https://onlinetoolsandconverters.cc/ai-plagiarism-checker.html#breadcrumb"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://onlinetoolsandconverters.cc/ai-plagiarism-checker.html#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://onlinetoolsandconverters.cc/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "AI Content Detector & Plagiarism Checker",
+            "item": "https://onlinetoolsandconverters.cc/ai-plagiarism-checker.html"
+          }
+        ]
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "AI Content Detector & Plagiarism Checker",
+        "url": "https://onlinetoolsandconverters.cc/ai-plagiarism-checker.html",
+        "applicationCategory": "UtilitiesApplication",
+        "applicationSubCategory": "Writing analysis",
+        "operatingSystem": "Any",
+        "browserRequirements": "Requires JavaScript",
+        "isAccessibleForFree": true,
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "A browser-based writing analysis tool that estimates AI-generated text likelihood from multiple linguistic signals and finds copied passages by comparing against a reference text the user supplies. It does not crawl the live web.",
+        "featureList": [
+          "AI-pattern analysis using seven independent linguistic signals",
+          "Vocabulary diversity, sentence-length variance and contraction rate",
+          "N-gram repetition and sentence-opener diversity",
+          "Confidence rating based on text length and signal agreement",
+          "Reference-text comparison using five-word shingle matching",
+          "Highlighted matched passages",
+          "Copyable report and download",
+          "Runs entirely in the browser; nothing is uploaded"
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/" aria-label="Online Tools &amp; Converters home">
+        <span class="brand-mark" aria-hidden="true">OT</span>
+        <span class="brand-text">Online Tools <span>&amp; Converters</span></span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primaryNav">
+        <span aria-hidden="true">☰</span>
+      </button>
+
+      <nav class="primary-nav" id="primaryNav" aria-label="Main navigation">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/index.html#tools">All tools</a></li>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" id="main">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li><span aria-current="page">AI Content Detector &amp; Plagiarism Checker</span></li>
+      </ol>
+    </nav>
+
+    <div class="page-head">
+      <h1>AI Content Detector &amp; Plagiarism Checker</h1>
+      <p class="lead">Two independent checks. <strong>AI detection</strong> estimates how closely text matches statistical patterns typical of machine-generated writing. <strong>Reference comparison</strong> finds passages copied from a source text you paste in. Neither check is proof of misconduct, and this tool does not crawl the live web.</p>
+    </div>
+
+    <section class="panel" aria-labelledby="apToolHeading">
+      <h2 id="apToolHeading" class="visually-hidden">AI content detector and plagiarism checker</h2>
+
+      <div class="ap-disclaimer">
+        <strong>Read this before relying on a result</strong>
+        AI detectors are statistical estimates, not evidence. Independent testing puts top detectors at roughly 80–90% accuracy on raw text, with higher error rates on paraphrased or mixed human-AI writing and a documented bias toward false positives for non-native English writers. This tool is a first-pass signal. For graded academic work, use your institution's licensed system. For a paid web-wide scan, use a service that indexes the live web.
+      </div>
+
+      <fieldset class="ap-modes">
+        <legend>Check type</legend>
+        <div class="ap-segmented">
+          <label class="ap-radio">
+            <input id="apModeAi" type="radio" name="apMode" value="ai" checked>
+            <span>AI content detection<small>Statistical pattern analysis</small></span>
+          </label>
+          <label class="ap-radio">
+            <input id="apModeRef" type="radio" name="apMode" value="ref">
+            <span>Reference comparison<small>Find copied passages</small></span>
+          </label>
+        </div>
+      </fieldset>
+
+      <div id="apAiPanel">
+        <div class="ap-field">
+          <label for="apAiText">Text to analyse</label>
+          <textarea id="apAiText" class="ap-textarea" rows="9" maxlength="100000" spellcheck="false" autocomplete="off" placeholder="Paste at least 40 words. Shorter text produces unreliable results, so the tool will not score it." aria-describedby="apAiHint"></textarea>
+          <p id="apAiHint" class="ap-hint">Minimum 40 words. Best results with 150 words or more of continuous prose. Lists, code, poetry and text that is mostly non-Latin script are not scored.</p>
+        </div>
+
+        <div class="ap-actions">
+          <button id="apAnalyze" class="btn btn-primary" type="button">Analyse text</button>
+          <button id="apSampleAi" class="btn btn-secondary" type="button">Load sample</button>
+          <button id="apClearAi" class="btn btn-ghost" type="button">Clear</button>
+        </div>
+
+        <p id="apAiStatus" class="ap-status" role="status" aria-live="polite">Ready. Paste at least 40 words to begin.</p>
+
+        <div id="apAiResults" class="ap-results" hidden>
+          <div class="ap-score-card">
+            <div>
+              <div id="apGauge" class="ap-gauge" role="img" aria-label="AI likelihood score">
+                <div class="ap-gauge-inner">
+                  <span id="apGaugeValue" class="ap-gauge-value">—</span>
+                  <span class="ap-gauge-unit">AI likelihood</span>
+                  <span id="apGaugeLabel" class="ap-gauge-label"></span>
+                </div>
+              </div>
+            </div>
+            <div class="ap-score-body">
+              <h3 id="apScoreTitle">Analysis</h3>
+              <p id="apScoreText"></p>
+              <span id="apConfidence" class="ap-confidence" data-level="very-low">
+                <span id="apConfidenceLabel">Confidence: very low</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="ap-signals">
+            <h3>Signal breakdown</h3>
+            <div class="ap-table-wrap">
+              <table class="ap-signal-table">
+                <caption class="visually-hidden">Individual linguistic signals and their AI-likelihood contribution</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Signal</th>
+                    <th scope="col">Measured value</th>
+                    <th scope="col">AI signal</th>
+                    <th scope="col">Score</th>
+                  </tr>
+                </thead>
+                <tbody id="apSignalBody"></tbody>
+              </table>
+            </div>
+            <p class="ap-note" id="apSignalNote">Each signal is scored from 0 (human-typical) to 100 (AI-typical). The overall estimate is a weighted average, pulled toward 50 when the signals disagree.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="apRefPanel" hidden>
+        <div class="ap-ref-grid">
+          <div class="ap-field">
+            <label for="apRefA">Text A — the text you are checking</label>
+            <textarea id="apRefA" class="ap-textarea" rows="9" maxlength="100000" spellcheck="false" autocomplete="off" placeholder="Paste the text you want to check for copied passages."></textarea>
+          </div>
+          <div class="ap-field">
+            <label for="apRefB">Text B — the reference or source</label>
+            <textarea id="apRefB" class="ap-textarea" rows="9" maxlength="100000" spellcheck="false" autocomplete="off" placeholder="Paste the source you want to compare against. This can be an earlier draft, a published article, or any text you have."></textarea>
+          </div>
+        </div>
+
+        <div class="ap-actions">
+          <button id="apCompare" class="btn btn-primary" type="button">Compare texts</button>
+          <button id="apSampleRef" class="btn btn-secondary" type="button">Load sample pair</button>
+          <button id="apClearRef" class="btn btn-ghost" type="button">Clear</button>
+        </div>
+
+        <p id="apRefStatus" class="ap-status" role="status" aria-live="polite">Ready. Paste both texts to compare.</p>
+
+        <div id="apRefResults" class="ap-results" hidden>
+          <div class="ap-similarity-card">
+            <div class="ap-similarity-value">
+              <span id="apSimilarityValue">—</span>
+              <small>word overlap</small>
+            </div>
+            <div class="ap-similarity-body">
+              <h3 id="apSimilarityTitle">Similarity</h3>
+              <p id="apSimilarityText"></p>
+            </div>
+          </div>
+
+          <div class="ap-highlight">
+            <h3>Matched passages in Text A</h3>
+            <div id="apHighlightText" class="ap-highlight-text"></div>
+            <p class="ap-note" id="apHighlightNote"></p>
+          </div>
+
+          <div class="ap-highlight">
+            <h3>Common phrases</h3>
+            <ul id="apMatchList" class="ap-match-list"></ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="ap-actions" style="margin-top:20px; border-top:1px solid var(--line,#dde3dd); padding-top:16px;">
+        <button id="apCopyReport" class="btn btn-secondary" type="button" disabled>Copy report</button>
+        <button id="apDownload" class="btn btn-secondary" type="button" disabled>Download .txt</button>
+      </div>
+    </section>
+
+    <section class="content ap-content" aria-labelledby="apHowToHeading">
+      <h2 id="apHowToHeading">How to use this tool</h2>
+      <ol>
+        <li><strong>Choose a check type.</strong> AI detection analyses a single text for machine-like statistical patterns. Reference comparison checks one text against another.</li>
+        <li><strong>AI detection:</strong> paste at least 40 words and click <em>Analyse text</em>. The tool scores seven independent signals and combines them into one estimate. It refuses to score very short text because the result would be meaningless.</li>
+        <li><strong>Reference comparison:</strong> paste the text you are checking in Text A and the source in Text B. The tool finds five-word sequences that appear in both, highlights them, and reports the share of Text A that overlaps.</li>
+        <li><strong>Read the confidence rating.</strong> A score is only as useful as the confidence attached to it. Short text, mixed scripts, lists and code reduce confidence.</li>
+      </ol>
+      <p>Both checks run entirely in the browser. Nothing is uploaded, and nothing is stored after you close the tab.</p>
+
+      <h2>AI detection and plagiarism checking are different tools</h2>
+      <p>The phrase "AI plagiarism checker" combines two unrelated checks. Plagiarism detection asks whether text already exists elsewhere: it compares a document against databases, academic journals and the open web, and reports matching passages[reference:5]. AI detection asks whether text was drafted by a model: it looks at internal writing patterns and gives a probability score based on how closely the text matches AI-like behaviour[reference:6].</p>
+      <p>They fail in opposite directions. A plagiarism checker will not flag AI text that is original wording. An AI detector will not flag human-written text copied from another source. A tool that claims to do both in one click is usually strong at one and weak at the other[reference:7].</p>
+      <p>This page keeps them separate. AI detection is a client-side statistical estimate. Reference comparison is a client-side text-matching check. Neither one crawls the web, and the page says so instead of implying otherwise.</p>
+
+      <h2>What the AI detection signals measure</h2>
+      <p>No client-side tool can reproduce a large detector's training data. What it can do is measure linguistic properties that correlate with machine-generated text in independent studies. This tool uses seven signals, each scored independently so you can see which one drove the result.</p>
+      <div class="ap-table-wrap">
+        <table class="ap-table">
+          <caption class="visually-hidden">Linguistic signals used in AI detection</caption>
+          <thead>
+            <tr>
+              <th scope="col">Signal</th>
+              <th scope="col">What it measures</th>
+              <th scope="col">Why it correlates with AI text</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Vocabulary diversity</td><td>Unique words divided by total words</td><td>Language models tend to reuse a narrower vocabulary and repeat phrases more than human writers.</td></tr>
+            <tr><td>Sentence-length variation</td><td>Coefficient of variation of sentence lengths</td><td>Human prose mixes short and long sentences; machine output is often more uniform.</td></tr>
+            <tr><td>Contraction rate</td><td>Contractions per 100 words</td><td>Models default to a formal register and use fewer contractions such as <em>don't</em> or <em>it's</em>.</td></tr>
+            <tr><td>Punctuation variety</td><td>Distinct punctuation types used</td><td>Human writing uses dashes, parentheses and semicolons more erratically; model output clusters around commas and periods.</td></tr>
+            <tr><td>Three-word repetition</td><td>Repeated three-word sequences</td><td>Models loop on stock phrases more than people do.</td></tr>
+            <tr><td>Sentence-opener diversity</td><td>Unique first words divided by sentence count</td><td>Models reuse openers such as <em>Additionally</em>, <em>Moreover</em> and <em>Furthermore</em>.</td></tr>
+            <tr><td>Rare-word rate</td><td>Words appearing exactly once</td><td>Human writing introduces more one-off vocabulary than model output.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Each signal is converted to a 0–100 score using published ranges for human and machine text. The overall estimate is a weighted average. When the signals disagree strongly, the result is pulled toward 50 rather than presented as a confident verdict — a technique used by open-source detectors to avoid the overconfidence that causes false accusations[reference:8].</p>
+
+      <h2>How reference comparison works</h2>
+      <p>Reference comparison splits both texts into overlapping five-word sequences, called shingles, and finds sequences that appear in both. This is the same fingerprinting approach used in plagiarism-detection research, simplified for client-side execution.</p>
+      <p>The output is a word-overlap percentage and a highlighted view of Text A, with every matched passage marked. The percentage is not a plagiarism verdict: quoting a source with attribution produces overlap, and so does a common technical phrase. The highlighted passages are the useful output, because they show exactly what matched so you can judge whether the overlap is legitimate.</p>
+      <p>Reference comparison is also the honest way to check <strong>self-plagiarism</strong>: paste your earlier draft as Text B and the current draft as Text A. The tool has no database and no persistence, so it can only compare what you give it in this session.</p>
+
+      <h2>Why this tool does not scan the live web</h2>
+      <p>A web-wide plagiarism scan requires a crawler that has indexed billions of pages, a comparison engine, and a paid API or server to run it. Services that offer this — Turnitin, Copyscape, Quetext — charge for it because the database and infrastructure are the product. A static page served from Cloudflare cannot crawl the web, and a free browser tool that claims to do so is either proxying to a paid service without saying so or fabricating a result.</p>
+      <p>Rewind.ai, a competitor with a similar client-side model, discloses the same limitation directly: "we do not crawl the live web" and recommends Turnitin for graded academic work and Copyscape or Quetext for paid web-wide scans[reference:9]. This page takes the same position because it is the accurate one.</p>
+
+      <h2>Accuracy, false positives and responsible use</h2>
+      <p>Independent comparisons of commercial detectors report a wide accuracy range: Turnitin 95–98%, Originality.ai 97%, GPTZero 87%, Copyleaks 80–100%, QuillBot 78–84%[reference:10]. Every one of those tools produces false positives, and the risk is not evenly distributed. Multilingual and neurodivergent writers face higher false-positive rates, which is why several universities warn against using detector output as disciplinary evidence on its own[reference:11].</p>
+      <p>This tool inherits those limits and adds its own, because a seven-signal heuristic is less accurate than a trained classifier. Treat a high score as a reason to review the text more carefully, not as a finding. Never use the output to accuse someone. Never submit it as evidence. If a result matters, verify it with a system that has a documented accuracy record and a human review process.</p>
+
+      <h2>Limitations to know</h2>
+      <ul>
+        <li><strong>Minimum 40 words.</strong> Below that, the tool refuses to score. A confident result on a single sentence would be misleading.</li>
+        <li><strong>English prose only.</strong> Signals are calibrated for English. Text that is mostly non-Latin script, code, lists or poetry is not scored reliably.</li>
+        <li><strong>Paraphrased AI text defeats the signals.</strong> Heavily edited or humanised model output often looks human on every signal. This is a known failure mode of statistical detectors, not a bug.</li>
+        <li><strong>Formal human writing scores higher.</strong> Academic prose, legal writing and technical documentation use fewer contractions and more uniform sentences, which raises the AI estimate even when a person wrote every word.</li>
+        <li><strong>No web database.</strong> Reference comparison only sees Text A and Text B. It cannot tell you whether a passage came from a third source neither text contains.</li>
+        <li><strong>Five-word matching is literal.</strong> Synonym substitution, reordering and translation evade it. That is a property of shingle matching, not a defect that can be fixed client-side.</li>
+        <li><strong>No persistence.</strong> Nothing is saved. Closing the tab clears everything.</li>
+      </ul>
+
+      <h2>Frequently asked questions</h2>
+      <div class="ap-faq">
+        <details>
+          <summary>Is this an AI plagiarism checker?</summary>
+          <p>It is two separate checks in one page: an AI content detector and a reference-text comparator. It does not combine them into a single verdict, because they answer different questions and fail in different ways.</p>
+        </details>
+
+        <details>
+          <summary>Does it scan the internet for plagiarism?</summary>
+          <p>No. It has no web database and cannot crawl the live web. It compares the text you provide against a reference text you also provide. For a web-wide scan, use a service that indexes the web, such as Copyscape, Quetext or Turnitin.</p>
+        </details>
+
+        <details>
+          <summary>How accurate is the AI detection?</summary>
+          <p>It is a statistical estimate, not a measurement. Commercial detectors reach roughly 80–90% on raw text and degrade on paraphrased or mixed writing. A seven-signal client-side heuristic is less accurate than a trained classifier. Use it as a first-pass signal and read the confidence rating before drawing any conclusion.</p>
+        </details>
+
+        <details>
+          <summary>Why does the tool refuse to score short text?</summary>
+          <p>Linguistic signals need enough text to be meaningful. Below 40 words, the estimate would be noise presented as a result. Open-source detectors impose the same floor for the same reason.</p>
+        </details>
+
+        <details>
+          <summary>Can it detect ChatGPT, Claude or Gemini output?</summary>
+          <p>It can detect patterns that are common in model output, but it cannot attribute text to a specific model. No client-side tool can. Claims of model-specific attribution require a trained classifier and a large labelled dataset.</p>
+        </details>
+
+        <details>
+          <summary>What if my human-written text scores as AI?</summary>
+          <p>Formal, technical or academic writing often does. Fewer contractions, uniform sentence lengths and a narrow vocabulary all raise the estimate. If you wrote the text yourself, the score is wrong — that is a known limitation of statistical detection, not evidence against you.</p>
+        </details>
+
+        <details>
+          <summary>Can I use this to check my own earlier draft for self-plagiarism?</summary>
+          <p>Yes. Paste the earlier draft as Text B and the current draft as Text A. The comparison will show any passages you reused. The tool does not store either text, so you need to paste them again each session.</p>
+        </details>
+
+        <details>
+          <summary>Is my text uploaded or stored?</summary>
+          <p>No. Both checks run in the browser. No request carries your text anywhere. Closing or reloading the tab clears everything.</p>
+        </details>
+
+        <details>
+          <summary>Can I use the result in an academic or workplace dispute?</summary>
+          <p>No. The output is a statistical estimate with a known false-positive rate. It is not evidence. Academic and workplace processes require a documented system with human review; a browser heuristic does not meet that standard.</p>
+        </details>
+
+        <details>
+          <summary>Does it support languages other than English?</summary>
+          <p>The AI signals are calibrated for English. Reference comparison works on any language that uses spaces between words, but the AI score should be ignored for non-English text.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="related" aria-labelledby="apRelatedHeading">
+      <h2 id="apRelatedHeading">Related tools</h2>
+      <ul>
+        <li><a href="/word-counter.html">Word Counter &amp; Text Analyzer</a> — check word count, readability and keyword density before or after a detection run.</li>
+        <li><a href="/text-diff-checker.html">Text Diff Checker</a> — see exactly what changed between two drafts line by line.</li>
+        <li><a href="/case-converter.html">Case Converter</a> — normalise headings and identifiers before comparing documents.</li>
+        <li><a href="/regex-tester.html">Regex Tester</a> — build patterns to strip formatting or extract quoted passages.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p><a href="/">Online Tools &amp; Converters</a> · Free browser-based utility tools.</p>
+      <p class="copyright">© <span data-current-year>2026</span> Online Tools &amp; Converters</p>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const $ = (id) => document.getElementById(id);
+
+      const MIN_WORDS = 40;
+      const MAX_CHARS = 100000;
+      const SHINGLE_SIZE = 5;
+
+      const WORD_RE = /[\p{L}\p{N}]+(?:['\u2019\-][\p{L}\p{N}]+)*/gu;
+      const LATIN_RE = /[A-Za-z]/g;
+      const LETTER_RE = /\p{L}/gu;
+      const CJK_RE = /[\u3040-\u30FF\u3400-\u4DBF\u4E00-\u9FFF\uAC00-\uD7AF]/;
+
+      const CONTRACTIONS = /\b(?:can't|cannot|won't|wouldn't|shouldn't|couldn't|isn't|aren't|wasn't|weren't|hasn't|haven't|hadn't|doesn't|don't|didn't|it's|that's|there's|what's|who's|here's|where's|when's|why's|how's|i'm|i've|i'd|i'll|you're|you've|you'd|you'll|he's|he'd|he'll|she's|she'd|she'll|we're|we've|we'd|we'll|they're|they've|they'd|they'll|let's)\b/gi;
+
+      const els = {
+        modeAi: $("apModeAi"),
+        modeRef: $("apModeRef"),
+        aiPanel: $("apAiPanel"),
+        refPanel: $("apRefPanel"),
+        aiText: $("apAiText"),
+        aiStatus: $("apAiStatus"),
+        analyze: $("apAnalyze"),
+        sampleAi: $("apSampleAi"),
+        clearAi: $("apClearAi"),
+        aiResults: $("apAiResults"),
+        gauge: $("apGauge"),
+        gaugeValue: $("apGaugeValue"),
+        gaugeLabel: $("apGaugeLabel"),
+        scoreTitle: $("apScoreTitle"),
+        scoreText: $("apScoreText"),
+        confidence: $("apConfidence"),
+        confidenceLabel: $("apConfidenceLabel"),
+        signalBody: $("apSignalBody"),
+        signalNote: $("apSignalNote"),
+        refA: $("apRefA"),
+        refB: $("apRefB"),
+        refStatus: $("apRefStatus"),
+        compare: $("apCompare"),
+        sampleRef: $("apSampleRef"),
+        clearRef: $("apClearRef"),
+        refResults: $("apRefResults"),
+        similarityValue: $("apSimilarityValue"),
+        similarityTitle: $("apSimilarityTitle"),
+        similarityText: $("apSimilarityText"),
+        highlightText: $("apHighlightText"),
+        highlightNote: $("apHighlightNote"),
+        matchList: $("apMatchList"),
+        copyReport: $("apCopyReport"),
+        download: $("apDownload")
+      };
+
+      const state = {
+        mode: "ai",
+        aiResult: null,
+        refResult: null,
+        lastReport: ""
+      };
+
+      const SAMPLE_AI =
+        "In today's rapidly evolving digital landscape, businesses must leverage innovative solutions to remain competitive. " +
+        "It is important to note that artificial intelligence has transformed the way organizations approach content creation. " +
+        "Furthermore, companies that adopt these technologies can improve efficiency and reduce operational costs. " +
+        "Moreover, the integration of AI tools into existing workflows requires careful planning and consideration. " +
+        "Additionally, stakeholders should evaluate the long-term implications of these investments. " +
+        "Ultimately, organizations that embrace these changes will be better positioned for future success. " +
+        "It is essential to understand that the implementation process involves multiple stages. " +
+        "In conclusion, the adoption of AI represents a significant opportunity for growth.";
+
+      const SAMPLE_A =
+        "Remote work has changed how teams communicate. Many companies now rely on asynchronous updates instead of meetings. " +
+        "This shift gives people more control over their schedules, but it also makes informal coordination harder. " +
+        "Managers have to write things down more carefully, because a hallway conversation is no longer available.";
+
+      const SAMPLE_B =
+        "Remote work has changed how teams communicate. Many companies now rely on asynchronous updates instead of meetings. " +
+        "Some teams still struggle with the transition, especially when decisions used to happen in person. " +
+        "Managers have to write things down more carefully, because a hallway conversation is no longer available.";
+
+      /* ---------- Text helpers ---------- */
+
+      function tokenizeWords(text) {
+        return String(text).match(WORD_RE) || [];
+      }
+
+      function tokenizeSentences(text) {
+        if (!text.trim()) {
+          return [];
+        }
+
+        const prepared = text
+          .replace(/(\d)\.(\d)/g, "$1\u0000$2")
+          .replace(/\b(Mr|Mrs|Ms|Dr|Prof|Sr|Jr|St|vs|etc|e\.g|i\.e|a\.m|p\.m|No|Fig|approx)\./gi, "$1\u0000")
+          .replace(/\b([A-Z])\./g, "$1\u0000");
+
+        return prepared
+          .split(/[.!?\u2026]+(?:\s+|$)/)
+          .map((sentence) => sentence.replace(/\u0000/g, ".").trim())
+          .filter((sentence) => /[\p{L}\p{N}]/u.test(sentence));
+      }
+
+      function setStatus(node, message, type) {
+        node.textContent = message;
+        node.classList.toggle("is-ok", type === "ok");
+        node.classList.toggle("is-error", type === "error");
+      }
+
+      function countLatinRatio(text) {
+        const letters = (text.match(LETTER_RE) || []).length;
+        if (!letters) {
+          return 0;
+        }
+        const latin = (text.match(LATIN_RE) || []).length;
+        return latin / letters;
+      }
+
+      /* ---------- Scoring helpers ---------- */
+
+      function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+      }
+
+      function scoreFromThresholds(value, thresholds) {
+        // thresholds: array of { max, score }, ascending by max
+        for (const entry of thresholds) {
+          if (value <= entry.max) {
+            return entry.score;
+          }
+        }
+        return thresholds[thresholds.length - 1].score;
+      }
+
+      function scoreFromThresholdsDesc(value, thresholds) {
+        // higher value is more human-typical
+        for (const entry of thresholds) {
+          if (value >= entry.min) {
+            return entry.score;
+          }
+        }
+        return thresholds[thresholds.length - 1].score;
+      }
+
+      /* ---------- AI analysis ---------- */
+
+      function analyzeAI(text) {
+        const words = tokenizeWords(text);
+        const sentences = tokenizeSentences(text);
+
+        if (words.length < MIN_WORDS) {
+          return { error: "Too short. Enter at least " + MIN_WORDS + " words." };
+        }
+
+        const latinRatio = countLatinRatio(text);
+        if (latinRatio < 0.6) {
+          return { error: "This text is mostly non-Latin script. The signals are calibrated for English and would not be meaningful here." };
+        }
+
+        if (CJK_RE.test(text)) {
+          return { error: "CJK text is detected. This tool scores English prose only." };
+        }
+
+        if (sentences.length < 3) {
+          return { error: "At least three sentences are needed for sentence-level signals." };
+        }
+
+        const lowerWords = words.map((word) => word.toLowerCase());
+        const totalWords = lowerWords.length;
+
+        /* 1. Vocabulary diversity */
+        const uniqueWords = new Set(lowerWords).size;
+        const ttr = uniqueWords / totalWords;
+        const ttrScore = scoreFromThresholdsDesc(ttr, [
+          { min: 0.6, score: 15 },
+          { min: 0.5, score: 30 },
+          { min: 0.4, score: 50 },
+          { min: 0.3, score: 70 },
+          { min: 0, score: 90 }
+        ]);
+
+        /* 2. Sentence length variation */
+        const sentenceLengths = sentences.map((sentence) => tokenizeWords(sentence).length);
+        const meanLength = sentenceLengths.reduce((sum, value) => sum + value, 0) / sentenceLengths.length;
+        const variance = sentenceLengths.reduce((sum, value) => sum + Math.pow(value - meanLength, 2), 0) / sentenceLengths.length;
+        const stdDev = Math.sqrt(variance);
+        const cv = meanLength > 0 ? stdDev / meanLength : 0;
+        const cvScore = scoreFromThresholdsDesc(cv, [
+          { min: 0.8, score: 15 },
+          { min: 0.6, score: 30 },
+          { min: 0.45, score: 50 },
+          { min: 0.3, score: 70 },
+          { min: 0, score: 90 }
+        ]);
+
+        /* 3. Contraction rate per 100 words */
+        const contractionMatches = text.match(CONTRACTIONS) || [];
+        const contractionRate = (contractionMatches.length / totalWords) * 100;
+        const contractionScore = scoreFromThresholdsDesc(contractionRate, [
+          { min: 3, score: 15 },
+          { min: 2, score: 30 },
+          { min: 1, score: 50 },
+          { min: 0.5, score: 70 },
+          { min: 0, score: 90 }
+        ]);
+
+        /* 4. Punctuation variety */
+        const punctuationSet = new Set(text.match(/[.,;:!?—–()\[\]{}"']/g) || []);
+        const punctuationCount = punctuationSet.size;
+        const punctuationScore = scoreFromThresholdsDesc(punctuationCount, [
+          { min: 7, score: 15 },
+          { min: 5, score: 35 },
+          { min: 3, score: 60 },
+          { min: 0, score: 85 }
+        ]);
+
+        /* 5. Three-word repetition */
+        const trigrams = new Map();
+        for (let index = 0; index + 3 <= lowerWords.length; index += 1) {
+          const key = lowerWords.slice(index, index + 3).join(" ");
+          trigrams.set(key, (trigrams.get(key) || 0) + 1);
+        }
+        let repeatedTrigrams = 0;
+        let totalRepeats = 0;
+        trigrams.forEach((count) => {
+          if (count > 1) {
+            repeatedTrigrams += 1;
+            totalRepeats += count - 1;
+          }
+        });
+        const repeatRatio = totalWords > 0 ? totalRepeats / totalWords : 0;
+        const repeatScore = scoreFromThresholds(repeatRatio, [
+          { max: 0.005, score: 15 },
+          { max: 0.01, score: 35 },
+          { max: 0.02, score: 55 },
+          { max: 0.04, score: 75 },
+          { max: 1, score: 90 }
+        ]);
+
+        /* 6. Sentence opener diversity */
+        const openers = sentences.map((sentence) => {
+          const first = tokenizeWords(sentence)[0];
+          return first ? first.toLowerCase() : "";
+        }).filter(Boolean);
+        const uniqueOpeners = new Set(openers).size;
+        const openerDiversity = openers.length ? uniqueOpeners / openers.length : 0;
+        const openerScore = scoreFromThresholdsDesc(openerDiversity, [
+          { min: 0.85, score: 15 },
+          { min: 0.7, score: 35 },
+          { min: 0.55, score: 55 },
+          { min: 0.4, score: 75 },
+          { min: 0, score: 90 }
+        ]);
+
+        /* 7. Rare-word rate (hapax legomena) */
+        const frequency = new Map();
+        lowerWords.forEach((word) => {
+          frequency.set(word, (frequency.get(word) || 0) + 1);
+        });
+        let hapax = 0;
+        frequency.forEach((count) => {
+          if (count === 1) {
+            hapax += 1;
+          }
+        });
+        const hapaxRatio = uniqueWords > 0 ? hapax / uniqueWords : 0;
+        const hapaxScore = scoreFromThresholdsDesc(hapaxRatio, [
+          { min: 0.75, score: 15 },
+          { min: 0.6, score: 35 },
+          { min: 0.45, score: 55 },
+          { min: 0.3, score: 75 },
+          { min: 0, score: 90 }
+        ]);
+
+        const signals = [
+          {
+            id: "vocabulary",
+            name: "Vocabulary diversity",
+            value: ttr.toFixed(3) + " TTR",
+            score: ttrScore,
+            help: "Unique words divided by total words. Higher is more human-typical."
+          },
+          {
+            id: "variation",
+            name: "Sentence-length variation",
+            value: cv.toFixed(2) + " CV",
+            score: cvScore,
+            help: "Standard deviation divided by mean sentence length. Higher means more varied, human-like rhythm."
+          },
+          {
+            id: "contractions",
+            name: "Contraction rate",
+            value: contractionRate.toFixed(2) + " per 100 words",
+            score: contractionScore,
+            help: "Contractions such as don't and it's. Machine output uses fewer."
+          },
+          {
+            id: "punctuation",
+            name: "Punctuation variety",
+            value: punctuationCount + " distinct types",
+            score: punctuationScore,
+            help: "Number of distinct punctuation characters used."
+          },
+          {
+            id: "repetition",
+            name: "Three-word repetition",
+            value: (repeatRatio * 100).toFixed(2) + "%",
+            score: repeatScore,
+            help: "Share of words that are part of a repeated three-word sequence."
+          },
+          {
+            id: "openers",
+            name: "Sentence-opener diversity",
+            value: openerDiversity.toFixed(2),
+            score: openerScore,
+            help: "Unique first words divided by sentence count. Models reuse openers."
+          },
+          {
+            id: "hapax",
+            name: "Rare-word rate",
+            value: hapaxRatio.toFixed(2),
+            score: hapaxScore,
+            help: "Words used exactly once divided by unique words. Human writing introduces more one-off vocabulary."
+          }
+        ];
+
+        /* Weighted average with disagreement penalty */
+        const weights = {
+          vocabulary: 0.18,
+          variation: 0.20,
+          contractions: 0.14,
+          punctuation: 0.10,
+          repetition: 0.14,
+          openers: 0.12,
+          hapax: 0.12
+        };
+
+        let weightedSum = 0;
+        let weightTotal = 0;
+        signals.forEach((signal) => {
+          const weight = weights[signal.id] || 0;
+          weightedSum += signal.score * weight;
+          weightTotal += weight;
+        });
+
+        const rawAverage = weightTotal > 0 ? weightedSum / weightTotal : 50;
+
+        const scores = signals.map((signal) => signal.score);
+        const minScore = Math.min(...scores);
+        const maxScore = Math.max(...scores);
+        const spread = maxScore - minScore;
+
+        // Disagreement pulls toward 50
+        const disagreementPenalty = Math.min(0.45, spread / 200);
+        const adjusted = rawAverage + (50 - rawAverage) * disagreementPenalty;
+        const overall = clamp(adjusted, 1, 99);
+
+        /* Confidence */
+        let confidence = "very-low";
+        let confidenceNote = "";
+
+        if (totalWords >= 300 && spread < 30) {
+          confidence = "high";
+          confidenceNote = "Long text with strong signal agreement.";
+        } else if (totalWords >= 150 && spread < 45) {
+          confidence = "moderate";
+          confidenceNote = "Enough text for a moderate estimate, but the signals disagree somewhat.";
+        } else if (totalWords >= 80) {
+          confidence = "low";
+          confidenceNote = "Short text or mixed signals. Treat this as a weak signal only.";
+        } else {
+          confidence = "very-low";
+          confidenceNote = "Text is near the minimum length. The estimate is unstable.";
+        }
+
+        if (spread >= 50) {
+          confidence = confidence === "high" ? "moderate" : "low";
+          confidenceNote += " Signals disagree strongly, so the result is pulled toward 50.";
+        }
+
+        return {
+          overall: Math.round(overall),
+          signals,
+          totalWords,
+          sentenceCount: sentences.length,
+          confidence,
+          confidenceNote,
+          spread: Math.round(spread)
+        };
+      }
+
+      function classifyScore(score) {
+        if (score >= 75) {
+          return { label: "Strong AI signal", tone: "high" };
+        }
+        if (score >= 60) {
+          return { label: "Leaning AI", tone: "moderate" };
+        }
+        if (score >= 40) {
+          return { label: "Inconclusive", tone: "moderate" };
+        }
+        if (score >= 25) {
+          return { label: "Leaning human", tone: "low" };
+        }
+        return { label: "Strong human signal", tone: "low" };
+      }
+
+      /* ---------- Reference comparison ---------- */
+
+      function normalizeForShingles(text) {
+        const words = tokenizeWords(text).map((word) => word.toLowerCase().replace(/['\u2019]/g, ""));
+        return words;
+      }
+
+      function compareReference(textA, textB) {
+        const wordsA = normalizeForShingles(textA);
+        const wordsB = normalizeForShingles(textB);
+
+        if (wordsA.length < SHINGLE_SIZE || wordsB.length < SHINGLE_SIZE) {
+          return { error: "Both texts need at least " + SHINGLE_SIZE + " words." };
+        }
+
+        const shinglesB = new Set();
+        for (let index = 0; index + SHINGLE_SIZE <= wordsB.length; index += 1) {
+          shinglesB.add(wordsB.slice(index, index + SHINGLE_SIZE).join(" "));
+        }
+
+        const matchedIndices = new Set();
+        const matchedPhrases = [];
+        const seenPhrases = new Set();
+
+        for (let index = 0; index + SHINGLE_SIZE <= wordsA.length; index += 1) {
+          const slice = wordsA.slice(index, index + SHINGLE_SIZE);
+          const key = slice.join(" ");
+
+          if (shinglesB.has(key)) {
+            for (let offset = 0; offset < SHINGLE_SIZE; offset += 1) {
+              matchedIndices.add(index + offset);
+            }
+
+            if (!seenPhrases.has(key)) {
+              seenPhrases.add(key);
+              matchedPhrases.push(slice.join(" "));
+            }
+          }
+        }
+
+        const matchedWords = matchedIndices.size;
+        const totalWordsA = wordsA.length;
+        const similarity = totalWordsA > 0 ? (matchedWords / totalWordsA) * 100 : 0;
+
+        // Build highlighted output using original word positions
+        const originalWords = tokenizeWords(textA);
+        const parts = [];
+        let cursor = 0;
+        const lowerOriginal = originalWords.map((word) => word.toLowerCase().replace(/['\u2019]/g, ""));
+
+        // Re-tokenise with positions to preserve whitespace
+        const tokenRegex = /[\p{L}\p{N}]+(?:['\u2019\-][\p{L}\p{N}]+)*/gu;
+        let match;
+        let wordIndex = 0;
+        let lastEnd = 0;
+
+        while ((match = tokenRegex.exec(textA)) !== null) {
+          const isMatched = matchedIndices.has(wordIndex);
+
+          if (match.index > lastEnd) {
+            parts.push({ text: textA.slice(lastEnd, match.index), matched: false });
+          }
+
+          parts.push({ text: match[0], matched: isMatched });
+          lastEnd = match.index + match[0].length;
+          wordIndex += 1;
+        }
+
+        if (lastEnd < textA.length) {
+          parts.push({ text: textA.slice(lastEnd), matched: false });
+        }
+
+        return {
+          similarity,
+          matchedWords,
+          totalWordsA,
+          matchedPhrases: matchedPhrases.slice(0, 25),
+          parts
+        };
+      }
+
+      /* ---------- Rendering ---------- */
+
+      function renderSignalTable(signals) {
+        const fragment = document.createDocumentFragment();
+
+        signals.forEach((signal) => {
+          const tr = document.createElement("tr");
+
+          const nameCell = document.createElement("td");
+          const name = document.createElement("span");
+          name.className = "ap-signal-name";
+          name.textContent = signal.name;
+          const help = document.createElement("span");
+          help.className = "ap-signal-help";
+          help.textContent = signal.help;
+          nameCell.append(name, help);
+
+          const valueCell = document.createElement("td");
+          valueCell.className = "ap-signal-value";
+          valueCell.textContent = signal.value;
+
+          const barCell = document.createElement("td");
+          barCell.className = "ap-signal-bar-cell";
+          const bar = document.createElement("div");
+          bar.className = "ap-signal-bar";
+          const fill = document.createElement("span");
+          fill.style.width = signal.score + "%";
+          bar.appendChild(fill);
+          barCell.appendChild(bar);
+
+          const scoreCell = document.createElement("td");
+          scoreCell.className = "ap-signal-score";
+          scoreCell.textContent = String(signal.score);
+
+          tr.append(nameCell, valueCell, barCell, scoreCell);
+          fragment.appendChild(tr);
+        });
+
+        els.signalBody.replaceChildren(fragment);
+      }
+
+      function renderAiResult(result) {
+        if (result.error) {
+          els.aiResults.hidden = true;
+          setStatus(els.aiStatus, result.error, "error");
+          state.aiResult = null;
+          updateActionState();
+          return;
+        }
+
+        state.aiResult = result;
+        els.aiResults.hidden = false;
+
+        const classification = classifyScore(result.overall);
+
+        els.gaugeValue.textContent = String(result.overall);
+        els.gaugeLabel.textContent = classification.label;
+        els.gauge.setAttribute(
+          "aria-label",
+          "AI likelihood score: " + result.overall + " out of 100, " + classification.label
+        );
+
+        els.scoreTitle.textContent = classification.label;
+
+        if (result.overall >= 75) {
+          els.scoreText.textContent =
+            "Multiple independent signals point toward machine-generated writing. This is a reason to review the text, not a finding. Formal human writing can produce the same pattern.";
+        } else if (result.overall >= 60) {
+          els.scoreText.textContent =
+            "Some signals lean toward machine-generated text, but the evidence is mixed. Paraphrased AI output and formal human prose both land in this range.";
+        } else if (result.overall >= 40) {
+          els.scoreText.textContent =
+            "The signals are inconclusive. The text does not strongly resemble either machine-generated or typical human prose on the measures used here.";
+        } else if (result.overall >= 25) {
+          els.scoreText.textContent =
+            "The signals lean toward human-written text. This does not prove authorship; a human editor can also produce machine-like prose.";
+        } else {
+          els.scoreText.textContent =
+            "The signals strongly resemble human-written text on the measures used here. No statistical detector can prove human authorship.";
+        }
+
+        els.confidence.dataset.level = result.confidence;
+        els.confidenceLabel.textContent =
+          "Confidence: " + result.confidence.replace("-", " ") +
+          " · " + result.totalWords + " words · " + result.sentenceCount + " sentences";
+
+        els.signalNote.textContent = result.confidenceNote +
+          " Signal spread: " + result.spread + " points.";
+
+        renderSignalTable(result.signals);
+        setStatus(els.aiStatus, "Analysis complete. Read the confidence rating before drawing conclusions.", "ok");
+        updateActionState();
+      }
+
+      function renderRefResult(result) {
+        if (result.error) {
+          els.refResults.hidden = true;
+          setStatus(els.refStatus, result.error, "error");
+          state.refResult = null;
+          updateActionState();
+          return;
+        }
+
+        state.refResult = result;
+        els.refResults.hidden = false;
+
+        const percent = result.similarity;
+        els.similarityValue.textContent = percent.toFixed(1) + "%";
+
+        if (percent >= 60) {
+          els.similarityTitle.textContent = "Heavy overlap";
+          els.similarityText.textContent =
+            "More than half of Text A overlaps with Text B. This may be legitimate quoting, a shared source, or copied text. Check the highlighted passages and whether attribution is present.";
+        } else if (percent >= 25) {
+          els.similarityTitle.textContent = "Substantial overlap";
+          els.similarityText.textContent =
+            "A quarter or more of Text A matches Text B. Some overlap is normal in technical writing and shared terminology. Review the highlights before drawing a conclusion.";
+        } else if (percent > 0) {
+          els.similarityTitle.textContent = "Minor overlap";
+          els.similarityText.textContent =
+            "A small share of Text A matches Text B. This is often common phrasing rather than copying, but the highlighted passages show exactly what matched.";
+        } else {
+          els.similarityTitle.textContent = "No overlap detected";
+          els.similarityText.textContent =
+            "No five-word sequence from Text A appears in Text B. Paraphrased copying and synonym substitution will not be detected by this method.";
+        }
+
+        // Highlighted output
+        const fragment = document.createDocumentFragment();
+
+        result.parts.forEach((part) => {
+          if (part.matched) {
+            const mark = document.createElement("mark");
+            mark.textContent = part.text;
+            fragment.appendChild(mark);
+          } else {
+            fragment.appendChild(document.createTextNode(part.text));
+          }
+        });
+
+        els.highlightText.replaceChildren(fragment);
+        els.highlightNote.textContent =
+          result.matchedWords + " of " + result.totalWordsA +
+          " words in Text A appear in a five-word sequence also found in Text B.";
+
+        // Common phrases
+        const listFragment = document.createDocumentFragment();
+
+        if (result.matchedPhrases.length === 0) {
+          const item = document.createElement("li");
+          item.textContent = "No five-word sequences matched.";
+          listFragment.appendChild(item);
+        } else {
+          result.matchedPhrases.forEach((phrase) => {
+            const item = document.createElement("li");
+            item.textContent = "\u201c" + phrase + "\u201d";
+            listFragment.appendChild(item);
+          });
+        }
+
+        els.matchList.replaceChildren(listFragment);
+
+        setStatus(els.refStatus, "Comparison complete. Review the highlighted passages in context.", "ok");
+        updateActionState();
+      }
+
+      function updateActionState() {
+        const hasAi = Boolean(state.aiResult && !state.aiResult.error);
+        const hasRef = Boolean(state.refResult && !state.refResult.error);
+        const hasAny = hasAi || hasRef;
+
+        els.copyReport.disabled = !hasAny;
+        els.download.disabled = !hasAny;
+      }
+
+      /* ---------- Report ---------- */
+
+      function buildReport() {
+        const lines = [
+          "AI CONTENT & REFERENCE CHECK REPORT",
+          "===================================",
+          "Generated: " + new Date().toISOString(),
+          ""
+        ];
+
+        if (state.aiResult && !state.aiResult.error) {
+          const result = state.aiResult;
+          const classification = classifyScore(result.overall);
+
+          lines.push(
+            "CHECK: AI CONTENT DETECTION",
+            "Overall AI likelihood: " + result.overall + " / 100 (" + classification.label + ")",
+            "Confidence: " + result.confidence,
+            "Words: " + result.totalWords + " · Sentences: " + result.sentenceCount,
+            "Signal spread: " + result.spread + " points",
+            "",
+            "Signal breakdown:"
+          );
+
+          result.signals.forEach((signal) => {
+            lines.push("  " + signal.name + ": " + signal.value + " → score " + signal.score);
+          });
+
+          lines.push("");
+        }
+
+        if (state.refResult && !state.refResult.error) {
+          const result = state.refResult;
+
+          lines.push(
+            "CHECK: REFERENCE COMPARISON",
+            "Word overlap: " + result.similarity.toFixed(1) + "%",
+            "Matched words: " + result.matchedWords + " of " + result.totalWordsA,
+            "",
+            "Matched five-word sequences:"
+          );
+
+          if (result.matchedPhrases.length === 0) {
+            lines.push("  None.");
+          } else {
+            result.matchedPhrases.forEach((phrase) => {
+              lines.push("  " + phrase);
+            });
+          }
+
+          lines.push("");
+        }
+
+        lines.push(
+          "IMPORTANT: This report is a statistical estimate, not evidence of misconduct.",
+          "It does not scan the live web. Do not use it as proof in any formal process.",
+          "Analysis ran in the browser. No text was uploaded."
+        );
+
+        return lines.join("\n");
+      }
+
+      function fallbackCopy(text) {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.readOnly = true;
+        textarea.setAttribute("aria-hidden", "true");
+        Object.assign(textarea.style, {
+          position: "fixed", left: "-9999px", top: "0", opacity: "0"
+        });
+
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+
+        let copied = false;
+        try {
+          copied = document.execCommand("copy");
+        } catch (error) {
+          copied = false;
+        } finally {
+          textarea.remove();
+        }
+
+        if (!copied) {
+          throw new Error("Copy was blocked by the browser.");
+        }
+      }
+
+      async function copyText(text, label) {
+        if (!text) {
+          return;
+        }
+
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(text);
+          } else {
+            fallbackCopy(text);
+          }
+          setStatus(els.modeAi.checked ? els.aiStatus : els.refStatus, label + " copied.", "ok");
+        } catch (error) {
+          try {
+            fallbackCopy(text);
+            setStatus(els.modeAi.checked ? els.aiStatus : els.refStatus, label + " copied.", "ok");
+          } catch (innerError) {
+            setStatus(els.modeAi.checked ? els.aiStatus : els.refStatus, "Copy was blocked. Select the text and copy it manually.", "error");
+          }
+        }
+      }
+
+      function downloadReport() {
+        const content = buildReport();
+        const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = "ai-content-check-report.txt";
+        link.hidden = true;
+        document.body.appendChild(link);
+
+        try {
+          link.click();
+        } finally {
+          link.remove();
+          window.setTimeout(() => URL.revokeObjectURL(url), 2000);
+        }
+
+        setStatus(els.modeAi.checked ? els.aiStatus : els.refStatus, "Report downloaded.", "ok");
+      }
+
+      /* ---------- Mode ---------- */
+
+      function setMode(mode) {
+        state.mode = mode;
+        const isAi = mode === "ai";
+
+        els.aiPanel.hidden = !isAi;
+        els.refPanel.hidden = isAi;
+        els.modeAi.checked = isAi;
+        els.modeRef.checked = !isAi;
+      }
+
+      /* ---------- Events ---------- */
+
+      els.modeAi.addEventListener("change", () => { if (els.modeAi.checked) setMode("ai"); });
+      els.modeRef.addEventListener("change", () => { if (els.modeRef.checked) setMode("ref"); });
+
+      els.analyze.addEventListener("click", () => {
+        const text = els.aiText.value.slice(0, MAX_CHARS);
+
+        if (!text.trim()) {
+          setStatus(els.aiStatus, "Paste text to analyse first.", "error");
+          return;
+        }
+
+        try {
+          renderAiResult(analyzeAI(text));
+        } catch (error) {
+          setStatus(els.aiStatus, "The text could not be analysed: " + (error.message || "unknown error"), "error");
+        }
+      });
+
+      els.sampleAi.addEventListener("click", () => {
+        els.aiText.value = SAMPLE_AI;
+        els.aiText.focus();
+        setStatus(els.aiStatus, "Sample loaded. This sample is deliberately full of common AI phrasing so you can see how the signals respond.", "ok");
+      });
+
+      els.clearAi.addEventListener("click", () => {
+        els.aiText.value = "";
+        state.aiResult = null;
+        els.aiResults.hidden = true;
+        updateActionState();
+        setStatus(els.aiStatus, "Cleared. Paste at least 40 words to begin.", "");
+        els.aiText.focus();
+      });
+
+      els.compare.addEventListener("click", () => {
+        const a = els.refA.value.slice(0, MAX_CHARS);
+        const b = els.refB.value.slice(0, MAX_CHARS);
+
+        if (!a.trim() || !b.trim()) {
+          setStatus(els.refStatus, "Both texts are required.", "error");
+          return;
+        }
+
+        try {
+          renderRefResult(compareReference(a, b));
+        } catch (error) {
+          setStatus(els.refStatus, "The comparison failed: " + (error.message || "unknown error"), "error");
+        }
+      });
+
+      els.sampleRef.addEventListener("click", () => {
+        els.refA.value = SAMPLE_A;
+        els.refB.value = SAMPLE_B;
+        els.refA.focus();
+        setStatus(els.refStatus, "Sample loaded. The second and fourth sentences of Text A overlap with Text B.", "ok");
+      });
+
+      els.clearRef.addEventListener("click", () => {
+        els.refA.value = "";
+        els.refB.value = "";
+        state.refResult = null;
+        els.refResults.hidden = true;
+        updateActionState();
+        setStatus(els.refStatus, "Cleared. Paste both texts to compare.", "");
+        els.refA.focus();
+      });
+
+      els.copyReport.addEventListener("click", () => copyText(buildReport(), "Report"));
+      els.download.addEventListener("click", downloadReport);
+
+      /* ---------- Init ---------- */
+
+      setMode("ai");
+      updateActionState();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>SHA-512 Hash Generator – Text &amp; File Checksums</title>
+  <meta name="description" content="Generate SHA-512 hashes from text or files in your browser. Get hex or Base64 output, verify checksums, and hash up to 10 files at once. Nothing is uploaded.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#123c36">
+
+  <link rel="canonical" href="https://onlinetoolsandconverters.cc/sha512-hash-generator.html">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/script.js" defer></script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Online Tools &amp; Converters">
+  <meta property="og:title" content="SHA-512 Hash Generator – Text &amp; File Checksums">
+  <meta property="og:description" content="Generate SHA-512 hashes from text or files, compare checksums, and hash multiple files at once — entirely in your browser.">
+  <meta property="og:url" content="https://onlinetoolsandconverters.cc/sha512-hash-generator.html">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="SHA-512 Hash Generator – Text &amp; File Checksums">
+  <meta name="twitter:description" content="SHA-512 hashes for text and files, with checksum verification and multi-file support. Runs locally; nothing is uploaded.">
+
+  <style>
+    /* Page-specific styles only. Shared tokens and components come from /style.css. */
+
+    .visually-hidden {
+      position: absolute !important;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .hash-crypto-banner {
+      margin: 0 0 16px;
+      padding: 12px 14px;
+      border: 1px solid #f0c36d;
+      border-left-width: 4px;
+      border-radius: 10px;
+      background: #fff8e6;
+      color: #6b3d00;
+      font-size: .88rem;
+      line-height: 1.6;
+    }
+
+    .hash-modes {
+      margin: 0 0 16px;
+      padding: 0;
+      border: 0;
+    }
+
+    .hash-modes legend {
+      margin-bottom: 8px;
+      font-size: .82rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--muted, #5b6b62);
+    }
+
+    .hash-segmented {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .hash-radio {
+      position: relative;
+      display: inline-flex;
+    }
+
+    .hash-radio input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+    }
+
+    .hash-radio span {
+      display: inline-flex;
+      min-height: 42px;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 18px;
+      border: 1px solid var(--line, #dde3dd);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--ink, #182722);
+      font-size: .9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .16s ease, border-color .16s ease, color .16s ease;
+    }
+
+    .hash-radio input:checked + span {
+      border-color: var(--forest, #123c36);
+      background: var(--forest, #123c36);
+      color: #fff;
+    }
+
+    .hash-radio input:focus-visible + span {
+      outline: 3px solid rgba(23, 107, 87, .35);
+      outline-offset: 2px;
+    }
+
+    .hash-field {
+      margin-bottom: 14px;
+    }
+
+    .hash-field > label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: .9rem;
+      font-weight: 800;
+      color: var(--ink, #182722);
+    }
+
+    .hash-textarea {
+      width: 100%;
+      min-height: 150px;
+      padding: 12px;
+      border: 1px solid var(--line, #dde3dd);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--ink, #182722);
+      font-family: var(--mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+      font-size: .9rem;
+      line-height: 1.6;
+      resize: vertical;
+    }
+
+    .hash-textarea:focus-visible {
+      outline: 3px solid rgba(23, 107, 87, .35);
+      outline-offset: 2px;
+      border-color: var(--green, #176b57);
+    }
+
+    .hash-hint {
+      margin: 6px 0 0;
+      color: var(--muted, #5b6b62);
+      font-size: .8rem;
+      line-height: 1.55;
+    }
+
+    .hash-drop {
+      display: flex;
+      width: 100%;
+      min-height: 120px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 20px;
+      border: 2px dashed #b9c9bd;
+      border-radius: 14px;
+      background: #fbfdf9;
+      color: var(--ink, #182722);
+      font-size: .92rem;
+      line-height: 1.5;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .16s ease, background .16s ease;
+    }
+
+    .hash-drop:hover,
+    .hash-drop:focus-visible {
+      border-color: var(--green, #176b57);
+      background: #f3f8f1;
+    }
+
+    .hash-drop:focus-visible {
+      outline: 3px solid rgba(23, 107, 87, .35);
+      outline-offset: 2px;
+    }
+
+    .hash-drop.is-dragover {
+      border-color: var(--green, #176b57);
+      background: #eaf3e8;
+    }
+
+    .hash-drop strong {
+      color: var(--forest, #123c36);
+    }
+
+    .hash-drop small {
+      color: var(--muted, #5b6b62);
+      font-size: .78rem;
+    }
+
+    .hash-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      align-items: center;
+      margin: 14px 0 6px;
+    }
+
+    .hash-options {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: 14px 22px;
+      padding: 13px 15px;
+      margin: 16px 0;
+      border: 1px solid var(--line, #dde3dd);
+      border-radius: 12px;
+      background: var(--paper, #f7f8f3);
+    }
+
+    .hash-option {
+      min-width: 170px;
+      flex: 0 1 auto;
+    }
+
+    .hash-option label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--muted, #5b6b62);
+    }
+
+    .hash-option select {
+      width: 100%;
+      min-height: 42px;
+    }
+
+    .hash-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      flex: 1 1 240px;
+      padding-bottom: 6px;
+      font-size: .86rem;
+      line-height: 1.5;
+      cursor: pointer;
+    }
+
+    .hash-check input {
+      width: 18px;
+      height: 18px;
+      margin: 2px 0 0;
+      accent-color: var(--green, #176b57);
+      flex: 0 0 auto;
+    }
+
+    .hash-results {
+      margin-top: 18px;
+    }
+
+    .hash-card {
+      min-width: 0;
+      padding: 16px;
+      border: 1px solid var(--line, #dde3dd);
+      border-radius: 14px;
+      background: #fff;
+    }
+
+    .hash-card + .hash-card {
+      margin-top: 14px;
+    }
+
+    .hash-card-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 6px 14px;
+      margin-bottom: 10px;
+    }
+
+    .hash-card-head h3 {
+      margin: 0;
+      font-size: 1rem;
+      color: var(--forest, #123c36);
+    }
+
+    .hash-card-meta {
+      color: var(--muted, #5b6b62);
+      font-size: .8rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .hash-digest-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .hash-digest-row {
+      display: grid;
+      grid-template-columns: 82px minmax(0, 1fr) auto;
+      gap: 8px 10px;
+      align-items: start;
+      padding: 10px 11px;
+      border: 1px solid var(--line, #dde3dd);
+      border-radius: 10px;
+      background: var(--paper, #f7f8f3);
+    }
+
+    .hash-digest-row--primary {
+      border-color: var(--green, #176b57);
+      background: #f3f8f1;
+    }
+
+    .hash-digest-label {
+      padding-top: 2px;
+      color: var(--muted, #5b6b62);
+      font-size: .74rem;
+      font-weight: 800;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .hash-digest-row--primary .hash-digest-label {
+      color: var(--forest, #123c36);
+    }
+
+    .hash-digest-value {
+      min-width: 0;
+      color: var(--ink, #182722);
+      font-family: var(--mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+      font-size: .82rem;
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+      word-break: break-all;
+    }
+
+    .hash-copy {
+      flex: 0 0 auto;
+    }
+
+    .hash-file-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 14px;
+    }
+
+    .hash-file-card {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      gap: 8px;
+      padding: 14px;
+      border: 1px solid var(--line, #dde3dd);
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .hash-file-card.is-match {
+      border-color: var(--green, #176b57);
+      box-shadow: 0 0 0 2px rgba(23, 107, 87, .18);
+    }
+
+    .hash-file-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 4px 10px;
+    }
+
+    .hash-file-name {
+      margin: 0;
+      color: var(--ink, #182722);
+      font-size: .9rem;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
+    .hash-file-size {
+      color: var(--muted, #5b6b62);
+      font-size: .78rem;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hash-file-status {
+      margin: 0;
+      color: var(--muted, #5b6b62);
+      font-size: .8rem;
+      font-weight: 700;
+    }
+
+    .hash-file-status[data-status="done"] {
+      color: var(--ok, #176b57);
+    }
+
+    .hash-file-status[data-status="error"] {
+      color: var(--err, #a4321f);
+    }
+
+    .hash-file-card progress {
+      width: 100%;
+      height: 8px;
+      accent-color: var(--green, #176b57);
+    }
+
+    .hash-file-progress-text {
+      color: var(--muted, #5b6b62);
+      font-size: .76rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .hash-file-error {
+      margin: 0;
+      color: #7f1d1d;
+      font-size: .82rem;
+      line-height: 1.5;
+    }
+
+    .hash-file-card .hash-digest-rows {
+      gap: 7px;
+      margin-top: 2px;
+    }
+
+    .hash-file-card .hash-digest-row {
+      grid-template-columns: 70px minmax(0, 1fr);
+      padding: 8px 9px;
+      background: #fff;
+    }
+
+    .hash-file-card .hash-digest-row .hash-copy {
+      grid-column: 2;
+      justify-self: start;
+      margin-top: 2px;
+    }
+
+    .hash-verify-block {
+      margin-top: 18px;
+      padding: 14px 15px;
+      border: 1px solid var(--line, #dde3dd);
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .hash-verify-block label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: .9rem;
+      font-weight: 800;
+      color: var(--ink, #182722);
+    }
+
+    .hash-verify-input {
+      width: 100%;
+      min-height: 44px;
+      padding: 9px 11px;
+      border: 1px solid var(--line, #dde3dd);
+      border-radius: 9px;
+      background: #fff;
+      color: var(--ink, #182722);
+      font-family: var(--mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+      font-size: .84rem;
+    }
+
+    .hash-verify-input:focus-visible {
+      outline: 3px solid rgba(23, 107, 87, .35);
+      outline-offset: 2px;
+      border-color: var(--green, #176b57);
+    }
+
+    .hash-verify-result {
+      margin-top: 10px;
+      padding: 11px 13px;
+      border-radius: 9px;
+      font-size: .86rem;
+      line-height: 1.55;
+    }
+
+    .hash-verify-result.is-match {
+      border: 1px solid #b9dfc0;
+      background: #edf7ee;
+      color: #14532d;
+    }
+
+    .hash-verify-result.is-mismatch {
+      border: 1px solid #f0c2b8;
+      background: #fdf0ee;
+      color: #7f1d1d;
+    }
+
+    .hash-status {
+      min-height: 1.4em;
+      margin: 14px 0 0;
+      color: var(--muted, #5b6b62);
+      font-size: .84rem;
+    }
+
+    .hash-status.is-ok {
+      color: var(--ok, #176b57);
+      font-weight: 600;
+    }
+
+    .hash-status.is-error {
+      color: var(--err, #a4321f);
+      font-weight: 600;
+    }
+
+    .hash-content {
+      max-width: 900px;
+    }
+
+    .hash-content h2 {
+      margin-top: 2.2rem;
+    }
+
+    .hash-content h3 {
+      margin-top: 1.4rem;
+    }
+
+    .hash-content code {
+      padding: 1px 5px;
+      border: 1px solid var(--line, #dde3dd);
+      border-radius: 5px;
+      background: #fff;
+      font-size: .88em;
+    }
+
+    .hash-content-table-wrap {
+      margin: 14px 0;
+      overflow-x: auto;
+      border: 1px solid var(--line, #dde3dd);
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .hash-content-table {
+      width: 100%;
+      min-width: 600px;
+      border-collapse: collapse;
+      font-size: .87rem;
+    }
+
+    .hash-content-table th,
+    .hash-content-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line, #dde3dd);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .hash-content-table th {
+      background: var(--paper, #f7f8f3);
+      color: var(--muted, #5b6b62);
+      font-size: .74rem;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .hash-content-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .hash-faq details {
+      padding: 13px 0;
+      border-bottom: 1px solid var(--line, #dde3dd);
+    }
+
+    .hash-faq summary {
+      cursor: pointer;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .hash-faq summary:hover {
+      color: var(--green, #176b57);
+    }
+
+    .hash-faq p {
+      margin: 9px 0 0;
+      color: var(--muted, #5b6b62);
+    }
+
+    @media (max-width: 720px) {
+      .hash-digest-row {
+        grid-template-columns: 1fr;
+        gap: 5px;
+      }
+
+      .hash-digest-row .hash-copy {
+        justify-self: start;
+      }
+
+      .hash-file-card .hash-digest-row {
+        grid-template-columns: 1fr;
+      }
+
+      .hash-file-card .hash-digest-row .hash-copy {
+        grid-column: auto;
+      }
+
+      .hash-file-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .hash-actions {
+        width: 100%;
+      }
+
+      .hash-actions .btn {
+        flex: 1 1 auto;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hash-radio span,
+      .hash-drop {
+        transition: none;
+      }
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://onlinetoolsandconverters.cc/sha512-hash-generator.html#webpage",
+        "url": "https://onlinetoolsandconverters.cc/sha512-hash-generator.html",
+        "name": "SHA-512 Hash Generator – Text & File Checksums",
+        "description": "Generate SHA-512 hashes from text or files in the browser, with hex and Base64 output, checksum verification and multi-file support.",
+        "inLanguage": "en",
+        "breadcrumb": {
+          "@id": "https://onlinetoolsandconverters.cc/sha512-hash-generator.html#breadcrumb"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://onlinetoolsandconverters.cc/sha512-hash-generator.html#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://onlinetoolsandconverters.cc/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "SHA-512 Hash Generator",
+            "item": "https://onlinetoolsandconverters.cc/sha512-hash-generator.html"
+          }
+        ]
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "SHA-512 Hash Generator",
+        "url": "https://onlinetoolsandconverters.cc/sha512-hash-generator.html",
+        "applicationCategory": "DeveloperApplication",
+        "applicationSubCategory": "Cryptography",
+        "operatingSystem": "Any",
+        "browserRequirements": "Requires JavaScript and a secure context (HTTPS)",
+        "isAccessibleForFree": true,
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "A browser-based SHA-512 hash generator for text and files, with SHA-384, SHA-256 and optional SHA-1 output, hex or Base64 encoding, checksum verification and multi-file hashing.",
+        "featureList": [
+          "SHA-512 hashing from text or files",
+          "SHA-384 and SHA-256 computed alongside SHA-512",
+          "Optional SHA-1 for legacy checksum comparison",
+          "Hexadecimal or Base64 output",
+          "Checksum verification with algorithm detection",
+          "Hash up to 10 files in one batch",
+          "Per-file digests and copy buttons",
+          "Downloadable text report",
+          "Runs entirely in the browser via Web Crypto"
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/" aria-label="Online Tools &amp; Converters home">
+        <span class="brand-mark" aria-hidden="true">OT</span>
+        <span class="brand-text">Online Tools <span>&amp; Converters</span></span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primaryNav">
+        <span aria-hidden="true">☰</span>
+      </button>
+
+      <nav class="primary-nav" id="primaryNav" aria-label="Main navigation">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/index.html#tools">All tools</a></li>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" id="main">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li><span aria-current="page">SHA-512 Hash Generator</span></li>
+      </ol>
+    </nav>
+
+    <div class="page-head">
+      <h1>SHA-512 Hash Generator</h1>
+      <p class="lead">Generate a SHA-512 hash from text or files in your browser. Get the 128-character hex digest or Base64, verify a published checksum, and hash up to 10 files in one batch. Nothing is uploaded.</p>
+    </div>
+
+    <section class="panel" aria-labelledby="hashToolHeading">
+      <h2 id="hashToolHeading" class="visually-hidden">SHA-512 hashing tool</h2>
+
+      <div id="hashCryptoBanner" class="hash-crypto-banner" hidden>
+        <strong>Web Crypto is not available.</strong>
+        This tool needs a modern browser and an HTTPS connection. Open the page over <code>https://</code> or in a current version of Chrome, Firefox, Edge or Safari.
+      </div>
+
+      <fieldset class="hash-modes">
+        <legend>Input type</legend>
+        <div class="hash-segmented">
+          <label class="hash-radio">
+            <input id="hashModeText" type="radio" name="hashMode" value="text" checked>
+            <span>Text</span>
+          </label>
+          <label class="hash-radio">
+            <input id="hashModeFiles" type="radio" name="hashMode" value="files">
+            <span>Files</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <div id="hashTextPanel">
+        <div class="hash-field">
+          <label for="hashText">Text to hash</label>
+          <textarea id="hashText" class="hash-textarea" rows="6" maxlength="1000000" spellcheck="false" autocomplete="off" placeholder="Type or paste text. The SHA-512 digest updates as you type." aria-describedby="hashTextHint"></textarea>
+          <p id="hashTextHint" class="hash-hint">Up to 1,000,000 characters, encoded as UTF-8 before hashing. Line endings and trailing spaces change the hash, exactly as they would on the command line.</p>
+          <p id="hashTextMeta" class="hash-hint">No text yet.</p>
+        </div>
+      </div>
+
+      <div id="hashFilesPanel" hidden>
+        <button id="hashDrop" class="hash-drop" type="button" aria-describedby="hashDropHint">
+          <strong>Choose files or drag them here</strong>
+          <small id="hashDropHint">Up to 10 files, 512 MB each. Files are read and hashed locally; nothing is uploaded.</small>
+        </button>
+        <input id="hashFileInput" type="file" multiple hidden>
+
+        <div class="hash-actions">
+          <button id="hashHashFiles" class="btn btn-primary" type="button" disabled>Hash files</button>
+          <button id="hashClearFiles" class="btn btn-ghost" type="button">Clear files</button>
+          <span id="hashFileSummary" class="hash-card-meta"></span>
+        </div>
+      </div>
+
+      <div class="hash-options">
+        <div class="hash-option">
+          <label for="hashOutputFormat">Output format</label>
+          <select id="hashOutputFormat">
+            <option value="hex" selected>Hexadecimal (128 characters)</option>
+            <option value="base64">Base64 (88 characters)</option>
+          </select>
+        </div>
+
+        <label class="hash-check">
+          <input id="hashUppercase" type="checkbox">
+          <span>Uppercase hexadecimal output</span>
+        </label>
+
+        <label class="hash-check">
+          <input id="hashIncludeSha1" type="checkbox">
+          <span>Also show SHA-1 for legacy checksum comparison (insecure for new work)</span>
+        </label>
+      </div>
+
+      <div id="hashTextResults" class="hash-results" hidden>
+        <div class="hash-card">
+          <div class="hash-card-head">
+            <h3>Text result</h3>
+            <span id="hashTextMetaLine" class="hash-card-meta"></span>
+          </div>
+          <div id="hashTextDigestRows" class="hash-digest-rows"></div>
+        </div>
+      </div>
+
+      <div id="hashFileResults" class="hash-results" hidden>
+        <div class="hash-card">
+          <div class="hash-card-head">
+            <h3>File results</h3>
+            <span class="hash-card-meta">Per-file SHA-512 digest, with optional SHA-384, SHA-256 and SHA-1</span>
+          </div>
+          <div id="hashFileCards" class="hash-file-grid"></div>
+        </div>
+      </div>
+
+      <div class="hash-verify-block">
+        <label for="hashVerify">Verify a checksum</label>
+        <input id="hashVerify" class="hash-verify-input" type="text" inputmode="text" autocomplete="off" spellcheck="false" placeholder="Paste a hex checksum to compare against the text and every hashed file">
+        <p class="hash-hint">Hexadecimal only. The algorithm is detected from the checksum length: 128 characters for SHA-512, 96 for SHA-384, 64 for SHA-256 and 40 for SHA-1.</p>
+        <div id="hashVerifyResult" class="hash-verify-result" role="status" aria-live="polite" hidden></div>
+      </div>
+
+      <div class="hash-actions">
+        <button id="hashCopyAll" class="btn btn-secondary" type="button" disabled>Copy all results</button>
+        <button id="hashDownload" class="btn btn-secondary" type="button" disabled>Download report</button>
+        <button id="hashReset" class="btn btn-ghost" type="button">Clear everything</button>
+      </div>
+
+      <p id="hashStatus" class="hash-status" role="status" aria-live="polite">Ready. Enter text or choose files to begin.</p>
+      <p id="hashLive" class="visually-hidden" aria-live="polite"></p>
+    </section>
+
+    <section class="content hash-content" aria-labelledby="hashHowToHeading">
+      <h2 id="hashHowToHeading">How to use the SHA-512 hash generator</h2>
+      <ol>
+        <li><strong>Choose Text or Files.</strong> Text hashes update as you type. Files are queued and hashed when you click <em>Hash files</em>.</li>
+        <li><strong>Enter your input.</strong> Paste text into the textarea, or drop files onto the drop area (up to 10 files, 512 MB each).</li>
+        <li><strong>Pick an output format.</strong> Hexadecimal is the usual checksum format. Base64 is shorter and common in JSON APIs.</li>
+        <li><strong>Copy the digest.</strong> Each algorithm has its own copy button. <em>Copy all results</em> copies the whole report.</li>
+        <li><strong>Verify a checksum.</strong> Paste the published checksum into the verify field. The tool detects the algorithm from its length and tells you whether it matches the text or any hashed file.</li>
+        <li><strong>Download the report</strong> if you need a record outside the page.</li>
+      </ol>
+      <p>All hashing uses the browser's native Web Crypto API. No text or file content is sent to a server.</p>
+
+      <h2>What is SHA-512?</h2>
+      <p>SHA-512 is a member of the SHA-2 family, published by NIST in FIPS 180-4. It takes an input of any length and produces a fixed <strong>512-bit digest</strong>, which is 64 bytes or <strong>128 hexadecimal characters</strong>. The output is deterministic: the same bytes always produce the same digest, and a single changed bit produces a completely different one. That property is called the avalanche effect.</p>
+      <p>SHA-512 is one-way. You can compute a digest from data, but you cannot recover the data from the digest. It is used for file integrity checks, digital signatures, content addressing, and anywhere a longer digest is preferred over SHA-256. It is <strong>not</strong> a password hash: it is deliberately fast, which makes brute-force attacks against stolen password databases cheaper.</p>
+
+      <h2>SHA-512 compared with SHA-256, SHA-384 and SHA-1</h2>
+      <div class="hash-content-table-wrap">
+        <table class="hash-content-table">
+          <caption class="visually-hidden">Digest sizes and security status of common hash algorithms</caption>
+          <thead>
+            <tr><th scope="col">Algorithm</th><th scope="col">Digest size</th><th scope="col">Hex length</th><th scope="col">Status</th><th scope="col">Typical use</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>SHA-512</td><td>512-bit</td><td>128</td><td>Secure</td><td>File integrity, signatures, long digests</td></tr>
+            <tr><td>SHA-384</td><td>384-bit</td><td>96</td><td>Secure</td><td>Truncated SHA-512 variant</td></tr>
+            <tr><td>SHA-256</td><td>256-bit</td><td>64</td><td>Secure</td><td>Default web and TLS integrity checks</td></tr>
+            <tr><td>SHA-1</td><td>160-bit</td><td>40</td><td>Broken for collision resistance</td><td>Legacy checksum comparison only</td></tr>
+            <tr><td>MD5</td><td>128-bit</td><td>32</td><td>Broken</td><td>Not offered by this tool</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>SHA-512 and SHA-256 are both considered secure. SHA-512 produces a longer digest and often runs faster on 64-bit CPUs because it uses 64-bit words internally. For most web integrity checks SHA-256 is sufficient; choose SHA-512 when a system specifies it or when a longer digest is required. SHA-1 and MD5 should not be used for new security work.</p>
+
+      <h2>How to verify a downloaded file's checksum</h2>
+      <p>Vendors often publish a SHA-512 checksum next to a download. Verifying it confirms that the file you received matches the file they published.</p>
+      <ol>
+        <li>Download the file and copy the published SHA-512 checksum.</li>
+        <li>Switch this tool to <strong>Files</strong>, add the downloaded file, and click <strong>Hash files</strong>.</li>
+        <li>Paste the published checksum into the verify field.</li>
+        <li>If the result says <em>Match</em>, the file is intact. If it says <em>No match</em>, re-download the file before using it.</li>
+      </ol>
+      <p>The command-line equivalents are <code>sha512sum file</code> on Linux, <code>shasum -a 512 file</code> on macOS, and <code>Get-FileHash -Algorithm SHA512 file</code> in PowerShell. All three should produce the same 128-character digest as this tool.</p>
+
+      <h2>Why a checksum might not match</h2>
+      <ul>
+        <li><strong>The download is incomplete or corrupted.</strong> This is the most common cause. Re-download and compare again.</li>
+        <li><strong>The checksum belongs to a different file.</strong> Release pages often publish checksums for several builds in one list.</li>
+        <li><strong>The text was hashed with a different encoding.</strong> This tool uses UTF-8. A tool that uses UTF-16 or Latin-1 will produce a different digest for the same visible text.</li>
+        <li><strong>Line endings differ.</strong> <code>\n</code> and <code>\r\n</code> are different bytes and produce different hashes.</li>
+        <li><strong>A trailing newline was included.</strong> A file saved with a final line break hashes differently from the same content without it.</li>
+        <li><strong>The text is visually identical but uses different Unicode code points.</strong> This tool does not normalise Unicode, because normalising would change the digest from what standard tools produce for the same bytes.</li>
+      </ul>
+
+      <h2>Hexadecimal and Base64 output</h2>
+      <p>A SHA-512 digest is 64 bytes. In hexadecimal each byte becomes two characters, giving 128 characters. In Base64 the same 64 bytes become 88 characters, including padding. Hexadecimal is case-insensitive and is the usual format in checksum files and documentation. Base64 is more compact and appears in JSON APIs and some signature headers. The uppercase option applies to hexadecimal only; Base64 is case-sensitive and is never altered.</p>
+
+      <h2>SHA-512 is not a password hash</h2>
+      <p>Because SHA-512 is fast, an attacker with a stolen database can test billions of candidate passwords per second on commodity hardware. Password storage needs a deliberately slow, memory-hard function with a tunable cost, such as Argon2id, scrypt, bcrypt or PBKDF2. SHA-512 is also vulnerable to length-extension attacks when used naively as <code>SHA-512(secret + message)</code>; when a keyed integrity check is needed, use HMAC-SHA-512 rather than a plain hash.</p>
+      <p>A checksum also proves integrity, not authenticity. If the checksum and the file come from the same untrusted source, a match only shows that the two agree. Confirm checksums through a trusted channel when authenticity matters.</p>
+
+      <h2>Limitations to know</h2>
+      <ul>
+        <li><strong>Requires HTTPS.</strong> The Web Crypto API is only exposed in a secure context. On plain HTTP the tool shows a banner instead of failing silently.</li>
+        <li><strong>Files are read fully into memory.</strong> Web Crypto's <code>digest()</code> needs the complete buffer, so this tool caps each file at 512 MB. Larger files may exceed browser memory; use the command line for those.</li>
+        <li><strong>No incremental hashing.</strong> A streaming implementation could hash multi-gigabyte files, but it would need a JavaScript SHA-512 implementation rather than Web Crypto. This tool prioritises native speed and correctness.</li>
+        <li><strong>No MD5.</strong> MD5 is cryptographically broken and is omitted deliberately, matching the approach of tools that refuse to present broken algorithms as safe options.</li>
+        <li><strong>Verification is hex-only.</strong> Base64 checksums are not accepted in the verify field because their length does not reliably identify the algorithm.</li>
+        <li><strong>No HMAC mode.</strong> HMAC-SHA-512 is a keyed construction for authentication; it is a different operation from a plain digest.</li>
+        <li><strong>Nothing is saved.</strong> Reloading or closing the tab clears the text, files and results.</li>
+      </ul>
+
+      <h2>Frequently asked questions</h2>
+      <div class="hash-faq">
+        <details>
+          <summary>Is this SHA-512 generator free and private?</summary>
+          <p>Yes. It is free, needs no account, and hashes text and files inside your browser using the Web Crypto API. No content is uploaded to a server, and nothing is stored after you close the tab.</p>
+        </details>
+
+        <details>
+          <summary>What is a SHA-512 hash?</summary>
+          <p>A 512-bit fingerprint of the input, shown as 128 hexadecimal characters or 88 Base64 characters. The same input always produces the same hash, and a one-bit change produces a completely different one.</p>
+        </details>
+
+        <details>
+          <summary>Can I hash a file instead of text?</summary>
+          <p>Yes. Switch to Files, add up to 10 files of up to 512 MB each, and click Hash files. Each file gets its own SHA-512, SHA-384 and SHA-256 digest, plus SHA-1 if you enable it.</p>
+        </details>
+
+        <details>
+          <summary>How do I verify a downloaded file?</summary>
+          <p>Hash the file here, then paste the vendor's published checksum into the verify field. The tool detects the algorithm from the checksum length and tells you whether it matches. A match means the file is byte-for-byte identical to the published version.</p>
+        </details>
+
+        <details>
+          <summary>Why does my hash not match the vendor's checksum?</summary>
+          <p>The download may be incomplete, the checksum may belong to a different build, or the text may have been hashed with a different encoding or line endings. Re-download first; then confirm you are comparing the right file and the right checksum.</p>
+        </details>
+
+        <details>
+          <summary>SHA-512 vs SHA-256 — which should I use?</summary>
+          <p>Both are secure. SHA-512 produces a longer digest and can be faster on 64-bit hardware; SHA-256 is the default for most web integrity checks. Use whichever the system you are integrating with specifies.</p>
+        </details>
+
+        <details>
+          <summary>Can a SHA-512 hash be reversed?</summary>
+          <p>No. Hash functions are one-way. You can test candidate inputs to see whether they produce a known hash, but you cannot recover the original input from the digest alone.</p>
+        </details>
+
+        <details>
+          <summary>Is SHA-512 suitable for storing passwords?</summary>
+          <p>No. It is deliberately fast, which makes offline brute-force attacks cheap. Use Argon2id, scrypt, bcrypt or PBKDF2 with a high cost factor for password storage.</p>
+        </details>
+
+        <details>
+          <summary>Why is there no MD5 option?</summary>
+          <p>MD5 is cryptographically broken and collisions can be manufactured. The Web Crypto API does not expose it. Offering it beside secure algorithms would imply it is a safe choice, so this tool omits it.</p>
+        </details>
+
+        <details>
+          <summary>Does it work offline?</summary>
+          <p>Yes, after the page has loaded. All hashing happens locally, so text and files can be hashed without a network connection. The initial page load still needs a connection.</p>
+        </details>
+
+        <details>
+          <summary>Why is there a 512 MB file limit?</summary>
+          <p>Web Crypto needs the entire file in memory before it can compute a digest. The limit keeps the tab stable on typical devices. For larger files, use <code>sha512sum</code> or <code>shasum -a 512</code> on the command line.</p>
+        </details>
+
+        <details>
+          <summary>Can I verify a Base64 checksum?</summary>
+          <p>Not in the verify field. Base64 output is supported for copying and downloading, but verification accepts hexadecimal checksums only, because their length reliably identifies the algorithm.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="related" aria-labelledby="hashRelatedHeading">
+      <h2 id="hashRelatedHeading">Related tools</h2>
+      <ul>
+        <li><a href="/text-diff-checker.html">Text Diff Checker</a> — compare two checksums, manifests or configuration files line by line.</li>
+        <li><a href="/regex-tester.html">Regex Tester</a> — build a pattern to validate hexadecimal checksums or extract them from a release page.</li>
+        <li><a href="/word-counter.html">Word Counter</a> — count characters and lines in a checksum manifest before publishing it.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p><a href="/">Online Tools &amp; Converters</a> · Free browser-based utility tools.</p>
+      <p class="copyright">© <span data-current-year>2026</span> Online Tools &amp; Converters</p>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const $ = (id) => document.getElementById(id);
+
+      const MAX_TEXT_CHARS = 1000000;
+      const MAX_FILES = 10;
+      const MAX_FILE_BYTES = 512 * 1024 * 1024;
+
+      const ALGOS = [
+        { id: "sha512", label: "SHA-512", webcrypto: "SHA-512", hexLength: 128 },
+        { id: "sha384", label: "SHA-384", webcrypto: "SHA-384", hexLength: 96 },
+        { id: "sha256", label: "SHA-256", webcrypto: "SHA-256", hexLength: 64 },
+        { id: "sha1", label: "SHA-1", webcrypto: "SHA-1", hexLength: 40, legacy: true }
+      ];
+
+      const ALGO_BY_HEX_LENGTH = new Map(ALGOS.map((algo) => [algo.hexLength, algo]));
+
+      const els = {
+        cryptoBanner: $("hashCryptoBanner"),
+        modeText: $("hashModeText"),
+        modeFiles: $("hashModeFiles"),
+        textPanel: $("hashTextPanel"),
+        filesPanel: $("hashFilesPanel"),
+        text: $("hashText"),
+        textMeta: $("hashTextMeta"),
+        drop: $("hashDrop"),
+        fileInput: $("hashFileInput"),
+        fileSummary: $("hashFileSummary"),
+        hashFiles: $("hashHashFiles"),
+        clearFiles: $("hashClearFiles"),
+        outputFormat: $("hashOutputFormat"),
+        uppercase: $("hashUppercase"),
+        includeSha1: $("hashIncludeSha1"),
+        textResults: $("hashTextResults"),
+        textDigestRows: $("hashTextDigestRows"),
+        textMetaLine: $("hashTextMetaLine"),
+        fileResults: $("hashFileResults"),
+        fileCards: $("hashFileCards"),
+        verify: $("hashVerify"),
+        verifyResult: $("hashVerifyResult"),
+        copyAll: $("hashCopyAll"),
+        download: $("hashDownload"),
+        reset: $("hashReset"),
+        status: $("hashStatus"),
+        live: $("hashLive")
+      };
+
+      const state = {
+        mode: "text",
+        textRaw: null,
+        textBytes: 0,
+        fileResults: [],
+        hashing: false,
+        textTimer: null,
+        verifyTimer: null,
+        liveTimer: null,
+        fileId: 0
+      };
+
+      const cryptoReady = Boolean(
+        window.isSecureContext &&
+        window.crypto &&
+        window.crypto.subtle &&
+        typeof window.crypto.subtle.digest === "function"
+      );
+
+      /* ---------- Helpers ---------- */
+
+      function bytesToHex(bytes) {
+        let out = "";
+
+        for (let index = 0; index < bytes.length; index += 1) {
+          out += bytes[index].toString(16).padStart(2, "0");
+        }
+
+        return out;
+      }
+
+      function bytesToBase64(bytes) {
+        let binary = "";
+        const chunkSize = 0x8000;
+
+        for (let index = 0; index < bytes.length; index += chunkSize) {
+          binary += String.fromCharCode.apply(null, bytes.subarray(index, index + chunkSize));
+        }
+
+        return btoa(binary);
+      }
+
+      function formatBytes(value) {
+        if (!Number.isFinite(value) || value < 0) {
+          return "—";
+        }
+
+        if (value < 1024) {
+          return value + " B";
+        }
+
+        const units = ["KB", "MB", "GB"];
+        let size = value / 1024;
+        let unit = 0;
+
+        while (size >= 1024 && unit < units.length - 1) {
+          size /= 1024;
+          unit += 1;
+        }
+
+        return size.toFixed(size >= 10 ? 0 : 1) + " " + units[unit];
+      }
+
+      function formatDigest(raw, algo) {
+        if (!raw) {
+          return "";
+        }
+
+        if (els.outputFormat.value === "base64") {
+          return bytesToBase64(raw);
+        }
+
+        const hex = bytesToHex(raw);
+        return els.uppercase.checked ? hex.toUpperCase() : hex;
+      }
+
+      function setStatus(message, type) {
+        els.status.textContent = message;
+        els.status.classList.toggle("is-ok", type === "ok");
+        els.status.classList.toggle("is-error", type === "error");
+      }
+
+      function announce(message) {
+        window.clearTimeout(state.liveTimer);
+        state.liveTimer = window.setTimeout(() => {
+          els.live.textContent = message;
+        }, 600);
+      }
+
+      function shouldShowAlgo(algo) {
+        return !algo.legacy || els.includeSha1.checked;
+      }
+
+      function normalizeChecksum(value) {
+        return String(value)
+          .trim()
+          .toLowerCase()
+          .replace(/^0x/, "")
+          .replace(/[\s:]/g, "");
+      }
+
+      function detectAlgorithm(normalized) {
+        if (!/^[0-9a-f]+$/.test(normalized)) {
+          return {
+            error: "The checksum contains characters that are not hexadecimal. Base64 checksums are not supported in the verify field."
+          };
+        }
+
+        if (normalized.length === 32) {
+          return {
+            error: "This looks like an MD5 checksum (32 hex characters). This tool does not compute MD5 because it is cryptographically broken."
+          };
+        }
+
+        const algo = ALGO_BY_HEX_LENGTH.get(normalized.length);
+
+        if (!algo) {
+          return {
+            error: "This checksum is " + normalized.length +
+              " hex characters long, which does not match SHA-512 (128), SHA-384 (96), SHA-256 (64) or SHA-1 (40)."
+          };
+        }
+
+        return { algo };
+      }
+
+      /* ---------- Hashing ---------- */
+
+      async function digestBuffer(buffer) {
+        const settled = await Promise.allSettled(
+          ALGOS.map(async (algo) => {
+            const digest = await crypto.subtle.digest(algo.webcrypto, buffer);
+            return { id: algo.id, bytes: new Uint8Array(digest) };
+          })
+        );
+
+        const raw = {};
+
+        settled.forEach((result) => {
+          if (result.status === "fulfilled") {
+            raw[result.value.id] = result.value.bytes;
+          }
+        });
+
+        return raw;
+      }
+
+      function readFileBuffer(file, onProgress) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+
+          reader.onprogress = (event) => {
+            if (event.lengthComputable && event.total > 0) {
+              onProgress(event.loaded / event.total);
+            }
+          };
+
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = () => reject(reader.error || new Error("The file could not be read."));
+          reader.onabort = () => reject(new Error("Reading the file was cancelled."));
+
+          reader.readAsArrayBuffer(file);
+        });
+      }
+
+      /* ---------- Rendering ---------- */
+
+      function buildDigestRows(container, raw, contextLabel) {
+        const fragment = document.createDocumentFragment();
+
+        ALGOS.forEach((algo) => {
+          if (!shouldShowAlgo(algo)) {
+            return;
+          }
+
+          const bytes = raw[algo.id];
+
+          if (!bytes) {
+            return;
+          }
+
+          const value = formatDigest(bytes, algo);
+
+          const row = document.createElement("div");
+          row.className = "hash-digest-row" + (algo.id === "sha512" ? " hash-digest-row--primary" : "");
+
+          const label = document.createElement("span");
+          label.className = "hash-digest-label";
+          label.textContent = algo.label;
+
+          const code = document.createElement("code");
+          code.className = "hash-digest-value";
+          code.textContent = value;
+
+          const copy = document.createElement("button");
+          copy.type = "button";
+          copy.className = "btn btn-sm btn-secondary hash-copy";
+          copy.textContent = "Copy";
+          copy.setAttribute("aria-label", "Copy " + algo.label + " hash for " + contextLabel);
+          copy.addEventListener("click", () => {
+            copyText(value, algo.label + " hash for " + contextLabel);
+          });
+
+          row.append(label, code, copy);
+          fragment.appendChild(row);
+        });
+
+        container.replaceChildren(fragment);
+      }
+
+      function renderTextResults() {
+        if (!state.textRaw) {
+          els.textResults.hidden = true;
+          els.textDigestRows.replaceChildren();
+          els.textMetaLine.textContent = "";
+          return;
+        }
+
+        els.textResults.hidden = false;
+        els.textMetaLine.textContent = "UTF-8 · " + formatBytes(state.textBytes);
+        buildDigestRows(els.textDigestRows, state.textRaw, "the text input");
+      }
+
+      function fileStatusText(status) {
+        switch (status) {
+          case "queued": return "Queued";
+          case "reading": return "Reading file";
+          case "hashing": return "Computing digests";
+          case "done": return "Hashed";
+          case "error": return "Error";
+          default: return "Queued";
+        }
+      }
+
+      function buildFileCard(record) {
+        const card = document.createElement("article");
+        card.className = "hash-file-card";
+        card.dataset.fileId = String(record.id);
+
+        const head = document.createElement("div");
+        head.className = "hash-file-head";
+
+        const name = document.createElement("h4");
+        name.className = "hash-file-name";
+        name.textContent = record.file.name;
+
+        const size = document.createElement("span");
+        size.className = "hash-file-size";
+        size.textContent = formatBytes(record.size);
+
+        head.append(name, size);
+
+        const status = document.createElement("p");
+        status.className = "hash-file-status";
+        status.dataset.status = record.status;
+        status.textContent = fileStatusText(record.status);
+
+        card.append(head, status);
+
+        if (record.status === "reading" || record.status === "hashing") {
+          const progress = document.createElement("progress");
+          progress.max = 100;
+          progress.value = Math.round((record.progress || 0) * 100);
+          progress.setAttribute("aria-label", "Progress reading " + record.file.name);
+
+          const progressText = document.createElement("span");
+          progressText.className = "hash-file-progress-text";
+          progressText.textContent = Math.round((record.progress || 0) * 100) + "%";
+
+          card.append(progress, progressText);
+        }
+
+        if (record.status === "error" && record.error) {
+          const error = document.createElement("p");
+          error.className = "hash-file-error";
+          error.textContent = record.error;
+          card.appendChild(error);
+        }
+
+        if (record.raw) {
+          const rows = document.createElement("div");
+          rows.className = "hash-digest-rows";
+          buildDigestRows(rows, record.raw, record.file.name);
+          card.appendChild(rows);
+        }
+
+        return card;
+      }
+
+      function renderFileResults() {
+        if (state.fileResults.length === 0) {
+          els.fileResults.hidden = true;
+          els.fileCards.replaceChildren();
+          els.fileSummary.textContent = "";
+          els.hashFiles.disabled = true;
+          return;
+        }
+
+        els.fileResults.hidden = false;
+
+        const fragment = document.createDocumentFragment();
+
+        state.fileResults.forEach((record) => {
+          fragment.appendChild(buildFileCard(record));
+        });
+
+        els.fileCards.replaceChildren(fragment);
+
+        const done = state.fileResults.filter((record) => record.status === "done").length;
+        const failed = state.fileResults.filter((record) => record.status === "error").length;
+        const queued = state.fileResults.filter((record) => record.status === "queued").length;
+
+        els.fileSummary.textContent =
+          done + " of " + state.fileResults.length + " hashed" +
+          (failed ? " · " + failed + " failed" : "") +
+          (queued ? " · " + queued + " queued" : "");
+
+        els.hashFiles.disabled = state.hashing || queued === 0;
+      }
+
+      function updateFileProgress(record) {
+        const card = els.fileCards.querySelector('[data-file-id="' + record.id + '"]');
+
+        if (!card) {
+          return;
+        }
+
+        const bar = card.querySelector("progress");
+        const text = card.querySelector(".hash-file-progress-text");
+        const percent = Math.round((record.progress || 0) * 100);
+
+        if (bar) {
+          bar.value = percent;
+        }
+
+        if (text) {
+          text.textContent = percent + "%";
+        }
+      }
+
+      function clearMatchHighlights() {
+        els.fileCards.querySelectorAll(".hash-file-card.is-match").forEach((card) => {
+          card.classList.remove("is-match");
+        });
+      }
+
+      function runVerify() {
+        const normalized = normalizeChecksum(els.verify.value);
+        const box = els.verifyResult;
+
+        clearMatchHighlights();
+
+        if (!normalized) {
+          box.hidden = true;
+          box.textContent = "";
+          box.classList.remove("is-match", "is-mismatch");
+          return;
+        }
+
+        const detection = detectAlgorithm(normalized);
+        box.hidden = false;
+        box.classList.remove("is-match", "is-mismatch");
+
+        if (detection.error) {
+          box.classList.add("is-mismatch");
+          box.textContent = detection.error;
+          return;
+        }
+
+        const algo = detection.algo;
+        const matches = [];
+
+        if (state.textRaw && state.textRaw[algo.id] &&
+            bytesToHex(state.textRaw[algo.id]) === normalized) {
+          matches.push({ label: "the text input", record: null });
+        }
+
+        state.fileResults.forEach((record) => {
+          if (record.raw && record.raw[algo.id] &&
+              bytesToHex(record.raw[algo.id]) === normalized) {
+            matches.push({ label: record.file.name, record });
+          }
+        });
+
+        if (matches.length > 0) {
+          box.classList.add("is-match");
+          box.textContent =
+            "Match. This " + algo.label + " checksum matches " +
+            matches.map((item) => item.label).join(", ") + ".";
+
+          matches.forEach((item) => {
+            if (item.record) {
+              const card = els.fileCards.querySelector('[data-file-id="' + item.record.id + '"]');
+              if (card) {
+                card.classList.add("is-match");
+              }
+            }
+          });
+
+          announce(algo.label + " checksum matches.");
+        } else {
+          box.classList.add("is-mismatch");
+          box.textContent =
+            "No match. No computed " + algo.label +
+            " digest matches this checksum. Check the file, the encoding, or whether the checksum belongs to a different build.";
+          announce("No match for the " + algo.label + " checksum.");
+        }
+      }
+
+      function renderAll() {
+        renderTextResults();
+        renderFileResults();
+        runVerify();
+        updateActionState();
+      }
+
+      function updateActionState() {
+        const hasText = Boolean(state.textRaw);
+        const hasFiles = state.fileResults.some((record) => Boolean(record.raw));
+        const hasAny = hasText || hasFiles;
+
+        els.copyAll.disabled = !hasAny;
+        els.download.disabled = !hasAny;
+        els.uppercase.disabled = els.outputFormat.value === "base64";
+      }
+
+      /* ---------- Text flow ---------- */
+
+      async function hashText() {
+        const text = els.text.value.slice(0, MAX_TEXT_CHARS);
+
+        if (!text) {
+          state.textRaw = null;
+          state.textBytes = 0;
+          els.textMeta.textContent = "No text yet.";
+          renderAll();
+          setStatus("Enter text to generate a SHA-512 hash.", "");
+          return;
+        }
+
+        const encoded = new TextEncoder().encode(text);
+        state.textBytes = encoded.byteLength;
+
+        els.textMeta.textContent =
+          formatBytes(state.textBytes) + " of UTF-8 · " +
+          text.length.toLocaleString("en") + " characters";
+
+        try {
+          const raw = await digestBuffer(encoded);
+
+          if (!raw.sha512) {
+            state.textRaw = null;
+            renderAll();
+            setStatus("This browser could not compute SHA-512. Try a current browser over HTTPS.", "error");
+            return;
+          }
+
+          state.textRaw = raw;
+          renderAll();
+          setStatus("SHA-512 hash generated for " + formatBytes(state.textBytes) + " of UTF-8 text.", "ok");
+          announce("SHA-512 hash generated.");
+        } catch (error) {
+          state.textRaw = null;
+          renderAll();
+          setStatus("The hash could not be generated: " + (error.message || "unknown error"), "error");
+        }
+      }
+
+      function scheduleTextHash() {
+        window.clearTimeout(state.textTimer);
+        state.textTimer = window.setTimeout(hashText, 220);
+      }
+
+      /* ---------- File flow ---------- */
+
+      function setFiles(fileList) {
+        const files = Array.from(fileList).slice(0, MAX_FILES);
+
+        if (files.length === 0) {
+          return;
+        }
+
+        state.fileResults = files.map((file) => {
+          state.fileId += 1;
+          const tooLarge = file.size > MAX_FILE_BYTES;
+
+          return {
+            id: state.fileId,
+            file,
+            size: file.size,
+            status: tooLarge ? "error" : "queued",
+            error: tooLarge
+              ? "This file is " + formatBytes(file.size) + ", which is over the " +
+                formatBytes(MAX_FILE_BYTES) + " limit. Use the command line for files this large."
+              : null,
+            raw: null,
+            progress: 0
+          };
+        });
+
+        if (fileList.length > MAX_FILES) {
+          setStatus("Only the first " + MAX_FILES + " files were added.", "error");
+        } else {
+          setStatus(files.length + " file" + (files.length === 1 ? "" : "s") + " queued. Click Hash files to begin.", "");
+        }
+
+        renderFileResults();
+        updateActionState();
+      }
+
+      async function hashAllFiles() {
+        if (state.hashing || !cryptoReady) {
+          return;
+        }
+
+        const queue = state.fileResults.filter((record) => record.status === "queued");
+
+        if (queue.length === 0) {
+          setStatus("There are no queued files to hash.", "error");
+          return;
+        }
+
+        state.hashing = true;
+        els.hashFiles.disabled = true;
+        els.clearFiles.disabled = true;
+
+        for (let index = 0; index < queue.length; index += 1) {
+          const record = queue[index];
+          record.status = "reading";
+          record.progress = 0;
+          renderFileResults();
+          setStatus("Reading " + record.file.name + " (" + (index + 1) + " of " + queue.length + ")…", "");
+
+          try {
+            const buffer = await readFileBuffer(record.file, (progress) => {
+              record.progress = progress;
+              updateFileProgress(record);
+            });
+
+            record.status = "hashing";
+            record.progress = 1;
+            renderFileResults();
+            setStatus("Computing SHA-512 for " + record.file.name + "…", "");
+
+            const raw = await digestBuffer(buffer);
+
+            if (!raw.sha512) {
+              throw new Error("This browser could not compute SHA-512.");
+            }
+
+            record.raw = raw;
+            record.status = "done";
+          } catch (error) {
+            record.status = "error";
+            record.error = error.message || "The file could not be hashed.";
+          }
+
+          renderFileResults();
+        }
+
+        state.hashing = false;
+        els.clearFiles.disabled = false;
+        renderFileResults();
+        updateActionState();
+        runVerify();
+
+        const done = state.fileResults.filter((record) => record.status === "done").length;
+        const failed = state.fileResults.filter((record) => record.status === "error").length;
+
+        setStatus(
+          done + " file" + (done === 1 ? "" : "s") + " hashed" +
+          (failed ? ", " + failed + " failed" : "") + ".",
+          failed ? "error" : "ok"
+        );
+        announce(done + " files hashed.");
+      }
+
+      function clearFiles() {
+        state.fileResults = [];
+        els.fileInput.value = "";
+        renderFileResults();
+        updateActionState();
+        runVerify();
+        setStatus("File queue cleared.", "");
+      }
+
+      /* ---------- Copy and download ---------- */
+
+      function fallbackCopy(text) {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.readOnly = true;
+        textarea.setAttribute("aria-hidden", "true");
+        Object.assign(textarea.style, {
+          position: "fixed",
+          left: "-9999px",
+          top: "0",
+          opacity: "0"
+        });
+
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+
+        let copied = false;
+
+        try {
+          copied = document.execCommand("copy");
+        } catch (error) {
+          copied = false;
+        } finally {
+          textarea.remove();
+        }
+
+        if (!copied) {
+          throw new Error("Copy was blocked by the browser.");
+        }
+      }
+
+      async function copyText(text, label) {
+        if (!text) {
+          setStatus("There is nothing to copy yet.", "error");
+          return;
+        }
+
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(text);
+          } else {
+            fallbackCopy(text);
+          }
+
+          setStatus(label + " copied to the clipboard.", "ok");
+        } catch (error) {
+          try {
+            fallbackCopy(text);
+            setStatus(label + " copied to the clipboard.", "ok");
+          } catch (innerError) {
+            setStatus("Copy was blocked. Select the digest and copy it manually.", "error");
+          }
+        }
+      }
+
+      function buildReport() {
+        const lines = [
+          "SHA-512 HASH REPORT",
+          "===================",
+          "Generated: " + new Date().toISOString(),
+          "Output format: " + (els.outputFormat.value === "base64" ? "Base64" : "Hexadecimal"),
+          ""
+        ];
+
+        if (state.textRaw) {
+          lines.push("INPUT: TEXT (" + formatBytes(state.textBytes) + " UTF-8)", "");
+
+          ALGOS.forEach((algo) => {
+            if (shouldShowAlgo(algo) && state.textRaw[algo.id]) {
+              lines.push(algo.label + ": " + formatDigest(state.textRaw[algo.id], algo));
+            }
+          });
+
+          lines.push("");
+        }
+
+        state.fileResults.forEach((record) => {
+          lines.push("FILE: " + record.file.name);
+          lines.push("Size: " + formatBytes(record.size));
+          lines.push("Status: " + record.status);
+
+          if (record.raw) {
+            ALGOS.forEach((algo) => {
+              if (shouldShowAlgo(algo) && record.raw[algo.id]) {
+                lines.push(algo.label + ": " + formatDigest(record.raw[algo.id], algo));
+              }
+            });
+          } else if (record.error) {
+            lines.push("Error: " + record.error);
+          }
+
+          lines.push("");
+        });
+
+        lines.push("Hashing ran in the browser via Web Crypto. No data was uploaded.");
+
+        return lines.join("\n");
+      }
+
+      function downloadReport() {
+        const content = buildReport();
+        const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+        const objectUrl = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = objectUrl;
+        link.download = "sha512-hash-report.txt";
+        link.hidden = true;
+        document.body.appendChild(link);
+
+        try {
+          link.click();
+          setStatus("Download started: sha512-hash-report.txt", "ok");
+        } catch (error) {
+          setStatus("The download could not be started.", "error");
+        } finally {
+          link.remove();
+          window.setTimeout(() => URL.revokeObjectURL(objectUrl), 2000);
+        }
+      }
+
+      /* ---------- Mode and reset ---------- */
+
+      function setMode(mode) {
+        state.mode = mode;
+        const isText = mode === "text";
+
+        els.textPanel.hidden = !isText;
+        els.filesPanel.hidden = isText;
+        els.modeText.checked = isText;
+        els.modeFiles.checked = !isText;
+
+        if (isText) {
+          setStatus("Text mode. Hashes update as you type.", "");
+        } else {
+          setStatus("File mode. Add files, then click Hash files.", "");
+        }
+      }
+
+      function resetAll() {
+        window.clearTimeout(state.textTimer);
+        window.clearTimeout(state.verifyTimer);
+
+        state.textRaw = null;
+        state.textBytes = 0;
+        state.fileResults = [];
+        state.hashing = false;
+
+        els.text.value = "";
+        els.fileInput.value = "";
+        els.verify.value = "";
+        els.textMeta.textContent = "No text yet.";
+        els.verifyResult.hidden = true;
+        els.verifyResult.textContent = "";
+        els.verifyResult.classList.remove("is-match", "is-mismatch");
+        els.clearFiles.disabled = false;
+
+        renderAll();
+        setStatus("Cleared. Enter text or choose files to begin.", "");
+        els.text.focus();
+      }
+
+      /* ---------- Events ---------- */
+
+      els.text.addEventListener("input", scheduleTextHash);
+
+      els.modeText.addEventListener("change", () => {
+        if (els.modeText.checked) {
+          setMode("text");
+        }
+      });
+
+      els.modeFiles.addEventListener("change", () => {
+        if (els.modeFiles.checked) {
+          setMode("files");
+        }
+      });
+
+      els.drop.addEventListener("click", () => {
+        els.fileInput.click();
+      });
+
+      els.fileInput.addEventListener("change", () => {
+        if (els.fileInput.files && els.fileInput.files.length) {
+          setFiles(els.fileInput.files);
+        }
+      });
+
+      ["dragenter", "dragover"].forEach((eventName) => {
+        els.drop.addEventListener(eventName, (event) => {
+          event.preventDefault();
+          els.drop.classList.add("is-dragover");
+        });
+      });
+
+      ["dragleave", "dragend"].forEach((eventName) => {
+        els.drop.addEventListener(eventName, () => {
+          els.drop.classList.remove("is-dragover");
+        });
+      });
+
+      els.drop.addEventListener("drop", (event) => {
+        event.preventDefault();
+        els.drop.classList.remove("is-dragover");
+
+        if (event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files.length) {
+          setFiles(event.dataTransfer.files);
+        }
+      });
+
+      els.hashFiles.addEventListener("click", hashAllFiles);
+      els.clearFiles.addEventListener("click", clearFiles);
+
+      els.outputFormat.addEventListener("change", () => {
+        if (els.outputFormat.value === "base64") {
+          els.uppercase.checked = false;
+        }
+        renderAll();
+      });
+
+      els.uppercase.addEventListener("change", () => {
+        renderAll();
+      });
+
+      els.includeSha1.addEventListener("change", () => {
+        renderAll();
+      });
+
+      els.verify.addEventListener("input", () => {
+        window.clearTimeout(state.verifyTimer);
+        state.verifyTimer = window.setTimeout(runVerify, 180);
+      });
+
+      els.copyAll.addEventListener("click", () => {
+        copyText(buildReport(), "All results");
+      });
+
+      els.download.addEventListener("click", downloadReport);
+      els.reset.addEventListener("click", resetAll);
+
+      /* ---------- Init ---------- */
+
+      if (!cryptoReady) {
+        els.cryptoBanner.hidden = false;
+        els.text.disabled = true;
+        els.drop.disabled = true;
+        els.hashFiles.disabled = true;
+        els.copyAll.disabled = true;
+        els.download.disabled = true;
+        setStatus("Hashing is unavailable because Web Crypto is not exposed in this context.", "error");
+      } else {
+        setStatus("Ready. Enter text or choose files to begin.", "");
+      }
+
+      setMode("text");
+      updateActionState();
+    })();
+  </script>
+</body>
+</html>

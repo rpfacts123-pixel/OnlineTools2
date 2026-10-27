@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Batch PGN Validator: Check Every Game in a PGN File</title>
+<meta name="description" content="Upload a PGN with many games and get a per-game report. Finds illegal and ambiguous moves, missing tags, and empty games. Download only the games that pass, plus an error CSV.">
+<link rel="canonical" href="https://onlinetoolsandconverters.cc/batch-pgn-validator">
+<style>
+  :root{
+    --blue:#245bcc;--ink:#172033;--muted:#5b6b82;--line:#dfe6ef;--bg:#f7f9fc;
+    --card:#fff;--radius:12px;--shadow:0 1px 2px rgba(23,32,51,.06),0 6px 18px rgba(23,32,51,.05);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55}
+  .pg-wrap{max-width:900px;margin:0 auto;padding:28px 18px 64px}
+  .pg-header h1{font-size:clamp(1.6rem,4vw,2.1rem);line-height:1.2;margin:0 0 8px;letter-spacing:-.01em}
+  .pg-header p{margin:0 0 22px;color:var(--muted);font-size:1rem;max-width:68ch}
+  .pg-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin:18px 0}
+  .pg-drop{display:block;border:2px dashed #c3d0e2;border-radius:10px;padding:24px 18px;text-align:center;cursor:pointer;background:#fbfcfe;transition:border-color .15s,background .15s}
+  .pg-drop:hover,.pg-drop.is-over{border-color:var(--blue);background:#f4f8ff}
+  .pg-drop input{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+  .pg-drop-title{font-weight:700;font-size:1rem;margin:0 0 4px}
+  .pg-drop-sub{font-size:.86rem;color:var(--muted);margin:0}
+  .pg-textarea{width:100%;min-height:130px;margin-top:14px;resize:vertical;padding:11px 13px;border:1px solid var(--line);border-radius:8px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.82rem;line-height:1.5;color:var(--ink);background:#fbfcfe;outline:none;white-space:pre;overflow:auto}
+  .pg-textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(36,91,204,.12)}
+  .pg-fileinfo{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin-top:12px;font-size:.82rem;color:var(--muted)}
+  .pg-fileinfo b{color:var(--ink);font-weight:700}
+  .pg-options{display:flex;flex-wrap:wrap;gap:10px 20px;margin:14px 0 0;font-size:.88rem}
+  .pg-options label{display:inline-flex;align-items:center;gap:7px;cursor:pointer;user-select:none}
+  .pg-options input[type=checkbox]{width:16px;height:16px;accent-color:var(--blue);margin:0}
+  .pg-actions{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 0}
+  .pg-btn{appearance:none;border:1px solid transparent;border-radius:8px;padding:10px 16px;font:inherit;font-size:.9rem;font-weight:600;cursor:pointer}
+  .pg-btn:disabled{opacity:.45;cursor:not-allowed}
+  .pg-btn-primary{background:var(--blue);color:#fff}
+  .pg-btn-primary:hover:not(:disabled){background:#1e4fae}
+  .pg-btn-secondary{background:#fff;color:var(--ink);border-color:var(--line)}
+  .pg-btn-secondary:hover:not(:disabled){border-color:#c7d3e2}
+  .pg-error{margin:14px 0 0;padding:10px 12px;border-radius:8px;background:#fff4f2;border:1px solid #f3cfc8;color:#8a2f1c;font-size:.86rem}
+  .pg-error[hidden]{display:none}
+  .pg-warn{margin:14px 0 0;padding:10px 12px;border-radius:8px;background:#fffbe8;border:1px solid #f0e0a8;color:#6b551a;font-size:.86rem}
+  .pg-warn[hidden]{display:none}
+  .pg-results{border-top:1px solid var(--line);margin-top:20px;padding-top:18px}
+  .pg-results[hidden]{display:none}
+  .pg-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:9px;margin:0 0 18px}
+  .pg-stat{border:1px solid var(--line);border-radius:9px;padding:10px 12px;background:#fbfcfe}
+  .pg-stat dt{font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin:0 0 3px;font-weight:700}
+  .pg-stat dd{margin:0;font-size:1.1rem;font-weight:700;font-variant-numeric:tabular-nums}
+  .pg-sub{font-size:.94rem;font-weight:700;margin:20px 0 8px;letter-spacing:-.01em}
+  .pg-sub:first-of-type{margin-top:0}
+  .pg-tablewrap{overflow:auto;max-height:480px;border:1px solid var(--line);border-radius:9px;background:#fbfcfe}
+  table.pg-table{border-collapse:collapse;width:100%;font-size:.8rem}
+  table.pg-table th,table.pg-table td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);border-right:1px solid #f1f5fb;vertical-align:top}
+  table.pg-table th{background:#f1f5fb;font-weight:700;position:sticky;top:0;z-index:1;font-size:.74rem;letter-spacing:.01em}
+  table.pg-table tr:last-child td{border-bottom:none}
+  .pg-chip{display:inline-block;font-size:.72rem;font-weight:700;border-radius:5px;padding:1px 7px;letter-spacing:.02em}
+  .pg-ok{background:#eef8f1;color:#1f5a35;border:1px solid #cde8d5}
+  .pg-err{background:#fff4f2;color:#8a2f1c;border:1px solid #f3cfc8}
+  .pg-empty{background:#f1f5fb;color:#5b6b82;border:1px solid #dfe6ef}
+  .pg-warnchip{background:#fffbe8;color:#6b551a;border:1px solid #f0e0a8}
+  .pg-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.78rem}
+  .pg-note{font-size:.84rem;color:var(--muted);margin:12px 0 0}
+  .pg-section{margin-top:34px}
+  .pg-section h2{font-size:1.25rem;margin:0 0 10px;letter-spacing:-.01em}
+  .pg-section h3{font-size:1.02rem;margin:20px 0 8px}
+  .pg-section p{margin:0 0 12px;max-width:70ch}
+  .pg-section ul,.pg-section ol{max-width:70ch;padding-left:22px;margin:0 0 14px}
+  .pg-section li{margin-bottom:6px}
+  .pg-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow);margin-bottom:8px}
+  table.pg-static{width:100%;border-collapse:collapse;font-size:.86rem}
+  table.pg-static th,table.pg-static td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.pg-static th{font-weight:600;background:#f1f5fb;color:var(--ink);font-size:.8rem;letter-spacing:.01em}
+  table.pg-static tr:last-child td{border-bottom:none}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.86em;background:#eef3fa;padding:1px 5px;border-radius:4px;word-break:break-word}
+  .pg-faq details{border-bottom:1px solid var(--line);padding:12px 0}
+  .pg-faq details:first-of-type{border-top:1px solid var(--line)}
+  .pg-faq summary{font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+  .pg-faq summary::-webkit-details-marker{display:none}
+  .pg-faq summary::after{content:"+";font-weight:400;color:var(--muted);font-size:1.1rem;line-height:1;flex:0 0 auto}
+  .pg-faq details[open] summary::after{content:"–"}
+  .pg-faq details p{margin:8px 0 0;color:var(--muted);font-size:.93rem;max-width:68ch}
+  .pg-footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);font-size:.82rem;color:var(--muted)}
+  .pg-footer p{margin:0 0 6px}
+  @media(max-width:600px){
+    .pg-card{padding:16px}
+    .pg-stats{grid-template-columns:repeat(2,1fr)}
+    .pg-actions .pg-btn{flex:1 1 auto}
+  }
+</style>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {"@type":"Question","name":"How do I validate a PGN file with multiple games?","acceptedAnswer":{"@type":"Answer","text":"Paste the file or drop it into the box and click Validate games. The tool splits the file into individual games, plays every move on a real board, and reports each game separately. A file with 500 games produces 500 rows, each marked valid, error, or empty. Nothing is uploaded."}},
+    {"@type":"Question","name":"What does the batch validator check?","acceptedAnswer":{"@type":"Answer","text":"It checks that each game has parseable tag pairs, that every move in the main line is legal and unambiguous, and that the movetext result agrees with the Result tag. It also flags games with no moves and games missing the seven required tags. It does not run an engine and does not judge move quality."}},
+    {"@type":"Question","name":"Why does my PGN pass in one program but fail here?","acceptedAnswer":{"@type":"Answer","text":"Programs disagree about how strict to be. Some accept an illegal move and truncate the game, some accept a result token that contradicts the Result tag, and some ignore missing tags. This validator is strict on move legality because an illegal move will break most importers later. The report names the exact move number, the side, and the token that failed, so you can see which rule the other program was ignoring."}},
+    {"@type":"Question","name":"What counts as an illegal move?","acceptedAnswer":{"@type":"Answer","text":"Any move that cannot be played in the position, such as moving a piece through another piece, leaving your own king in check, castling through an attacked square, or a pawn capture with no piece on the target square. Ambiguous notation, where two pieces of the same type could reach the destination and the file or rank is missing, is reported separately."}},
+    {"@type":"Question","name":"Does it validate variations and comments?","acceptedAnswer":{"@type":"Answer","text":"It strips comments and variations before validating the main line. Variations are not played out, because a repertoire file with nested branches needs a different data model and a per-branch report. A game whose main line is legal passes even if a variation contains an error. The page says so in the limitations section rather than pretending otherwise."}},
+    {"@type":"Question","name":"Can I download only the games that passed?","acceptedAnswer":{"@type":"Answer","text":"Yes. The Download valid PGN button writes a new file containing only the games with no errors, with the seven tag roster filled in and the movetext re-flowed to 80 columns. The original file is never modified, and you can keep the error CSV alongside it as a list of what needs fixing."}},
+    {"@type":"Question","name":"How do I find which game has the error in a large file?","acceptedAnswer":{"@type":"Answer","text":"The results table lists every game in order with its index, White, Black, Result, ply count, status, and the first error. Sort by status or scan the red rows. Each error row shows the move number, the side to move, the exact token that failed, and the legal alternatives in that position."}},
+    {"@type":"Question","name":"What are the seven tag roster tags?","acceptedAnswer":{"@type":"Answer","text":"Event, Site, Date, Round, White, Black, and Result, in that order. The PGN specification requires them, and Lichess study import and Chessable import both reject files that omit them. Games missing these tags are marked as warnings rather than errors, because the moves may still be valid."}},
+    {"@type":"Question","name":"Does it handle PGN files that start from a FEN position?","acceptedAnswer":{"@type":"Answer","text":"Yes. If a game has a FEN tag, the board starts from that position instead of the initial array, and the SetUp tag is respected. This covers endgame studies, puzzle collections, and games that begin from a custom position."}},
+    {"@type":"Question","name":"Why are some games marked empty?","acceptedAnswer":{"@type":"Answer","text":"A game with tags but no moves, or with only a result token and no moves, is marked empty. These appear in databases exported from tools that write a header for a game that was never finished. They are not errors, but they will clutter an import and are worth removing before you load the file anywhere."}},
+    {"@type":"Question","name":"Is there a file size limit?","acceptedAnswer":{"@type":"Answer","text":"The practical limit is the browser tab's memory. A PGN of tens of megabytes and thousands of games usually validates on a desktop browser. Very large databases of hundreds of megabytes may be slow, because the whole file is read and every game is played out. Splitting the file by date or event first is the workaround."}},
+    {"@type":"Question","name":"Is my PGN uploaded to a server?","acceptedAnswer":{"@type":"Answer","text":"No. The page reads the file with the browser File API and validates the games with JavaScript. There is no network request during validation or export. You can confirm this by switching the browser to offline mode after the page loads and validating a file."}},
+    {"@type":"Question","name":"How is this different from scanchess PGN validator?","acceptedAnswer":{"@type":"Answer","text":"The scanchess validator is built around one pasted game. It plays that game out, shows the first problem, and gives you a cleaned single-game PGN. This page is built around a file of many games. It produces a per-game report, summary counts, a filtered valid-only PGN, and an error CSV, which is what you need when you are checking a database rather than one game."}},
+    {"@type":"Question","name":"Can I export the error list as a spreadsheet?","acceptedAnswer":{"@type":"Answer","text":"Yes. The Download error CSV button writes one row per game with the game index, players, result, ply count, status, and the first error including move number, token, and legal alternatives. It is UTF-8 with a byte order mark, so Excel opens it on a double-click without an import step."}}
+  ]
+}
+</script>
+</head>
+<body>
+<main class="pg-wrap">
+
+  <header class="pg-header">
+    <h1>Batch PGN Validator</h1>
+    <p>Drop a PGN file with many games. Get one row per game, the exact move that failed, and a clean file containing only the games that pass.</p>
+  </header>
+
+  <section class="pg-card" aria-labelledby="pg-tool-label">
+    <label class="pg-drop" id="pg-drop" for="pg-file" tabindex="0">
+      <input type="file" id="pg-file" accept=".pgn,text/plain,application/x-chess-pgn">
+      <p class="pg-drop-title" id="pg-tool-label">Drop a .pgn file here, or click to choose</p>
+      <p class="pg-drop-sub">One game or ten thousand. Validated in your browser. Nothing is uploaded.</p>
+    </label>
+
+    <textarea id="pg-text" class="pg-textarea" spellcheck="false" placeholder="Or paste PGN text here. Multiple games separated by a blank line."></textarea>
+
+    <div class="pg-fileinfo" id="pg-fileinfo" hidden></div>
+
+    <div class="pg-options">
+      <label><input type="checkbox" id="pg-stop-first" checked> Stop at the first error in each game</label>
+      <label><input type="checkbox" id="pg-warn-tags" checked> Flag games missing the seven tag roster</label>
+    </div>
+
+    <div class="pg-actions">
+      <button type="button" class="pg-btn pg-btn-primary" id="pg-run">Validate games</button>
+      <button type="button" class="pg-btn pg-btn-secondary" id="pg-dl-pgn" disabled>Download valid PGN</button>
+      <button type="button" class="pg-btn pg-btn-secondary" id="pg-dl-csv" disabled>Download error CSV</button>
+      <button type="button" class="pg-btn pg-btn-secondary" id="pg-reset">Reset</button>
+    </div>
+
+    <p class="pg-error" id="pg-error" hidden></p>
+    <p class="pg-warn" id="pg-warn" hidden></p>
+
+    <div class="pg-results" id="pg-results" hidden>
+      <dl class="pg-stats" id="pg-stats"></dl>
+      <p class="pg-sub">Games</p>
+      <div class="pg-tablewrap" id="pg-tablewrap"></div>
+      <p class="pg-note" id="pg-note"></p>
+    </div>
+
+    <p class="pg-note">Runs entirely in your browser. The file is never sent anywhere and is discarded when you close the tab.</p>
+  </section>
+
+  <section class="pg-section">
+    <h2>How the batch check works</h2>
+    <p>A PGN file is plain text. Each game starts with a block of tag pairs such as <code>[Event "..."]</code> and <code>[White "..."]</code>, then a blank line, then the movetext. Games are separated by a blank line before the next tag block. The parser here uses that structure rather than a single regular expression, so a file with mixed line endings, missing blank lines, or no tags at all still splits into games.</p>
+    <p>For each game the tool builds a board from the starting position or from the FEN tag if one is present. It strips comments in braces, semicolon comments, NAG annotations, and variations. What remains is a token list of moves and a result. Every move is parsed as Standard Algebraic Notation and matched against the legal moves in the current position. A match applies the move. No match is an error. More than one match is an ambiguity.</p>
+    <p>The legal move generator enforces the rules that matter for import: pins, check evasion, castling through attacked squares, en passant, and promotion. This is the part that catches the errors a text-only checker misses. A file can be syntactically perfect and still contain a move that cannot be played, and that move is what breaks a Lichess study import or a Chessable upload later.</p>
+    <p>Games with no moves are marked empty rather than valid. Games missing Event, Site, Date, Round, White, Black, or Result are marked as warnings, because the moves may still be legal but many importers reject the file. The result token in the movetext is compared with the Result tag, and a disagreement is reported.</p>
+  </section>
+
+  <section class="pg-section">
+    <h2>What the report tells you</h2>
+    <div class="pg-table-wrap">
+      <table class="pg-static">
+        <thead><tr><th>Column</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td>#</td><td>Game index in the file, starting at 1. Use it to find the game in a text editor.</td></tr>
+          <tr><td>White / Black</td><td>The tag values, or <code>?</code> when the tag is missing.</td></tr>
+          <tr><td>Result</td><td>The movetext result token, not the tag, because the token is what the moves actually lead to.</td></tr>
+          <tr><td>Plies</td><td>Half-moves validated. A 40-move game shows 80.</td></tr>
+          <tr><td>Status</td><td>Valid, error, empty, or warning. A warning means the moves are legal but a required tag is missing.</td></tr>
+          <tr><td>First error</td><td>Move number, side to move, the token that failed, and the reason.</td></tr>
+          <tr><td>Legal alternatives</td><td>Coordinate moves that were legal in that position, such as <code>N g1-f3</code>, so you can see what the move probably should have been.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The summary row counts games, valid games, games with errors, empty games, games with tag warnings, and total plies. That last number is useful for spotting a file that claims to be a database but actually contains mostly empty headers.</p>
+  </section>
+
+  <section class="pg-section">
+    <h2>Common failures and what they mean</h2>
+    <div class="pg-table-wrap">
+      <table class="pg-static">
+        <thead><tr><th>Report says</th><th>Cause</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td>Illegal move at 14... Qxe5</td><td>The queen cannot reach e5, or the move leaves the king in check.</td><td>Compare with the source. A common cause is a missing capture or a move typed one square off.</td></tr>
+          <tr><td>Ambiguous move at 22. Nd2</td><td>Two knights can reach d2 and the file or rank is missing.</td><td>Add the disambiguation, such as <code>Nbd2</code> or <code>N1d2</code>.</td></tr>
+          <tr><td>Castling through check at 9. O-O</td><td>A piece attacks f1 or g1, or the king is in check.</td><td>The move is illegal. Check the previous move for a capture that was missed.</td></tr>
+          <tr><td>Promotion missing at 45. e8</td><td>A pawn reached the last rank without <code>=Q</code> or the piece letter.</td><td>Write <code>e8=Q</code> or <code>e8Q</code>.</td></tr>
+          <tr><td>Result mismatch</td><td>The movetext ends in <code>1-0</code> but the Result tag says <code>0-1</code>.</td><td>One of them is wrong. The moves usually show which.</td></tr>
+          <tr><td>Missing tags</td><td>Event, Site, Date, Round, White, Black, or Result is absent.</td><td>Add the seven tag roster. Lichess and Chessable both require it.</td></tr>
+          <tr><td>Empty game</td><td>Tags but no moves.</td><td>Remove it, or export the game again from the source database.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="pg-section">
+    <h2>When you would use this</h2>
+    <p>You bought or downloaded an opening repertoire and it will not import into Lichess study. The file has hundreds of lines and the error message does not say which one. Loading it here gives you a per-game row and the exact move that fails.</p>
+    <p>You are merging several PGN databases and want to know which files are clean before combining them. A batch report takes seconds and tells you whether the problem is one bad game or a broken exporter.</p>
+    <p>You are preparing a PGN for Chessable. Its importer is sensitive to malformed notation and missing tags. Running the file through a validator first saves a round trip through a failed upload.</p>
+    <p>You maintain a puzzle collection and need to confirm that every position is legal. The board-based check catches a puzzle that starts from an impossible position or contains a move that cannot be played.</p>
+    <p>You are writing a script that consumes PGN and want a reference for which errors are common and what they look like. The error CSV gives you labelled examples to test the parser against.</p>
+  </section>
+
+  <section class="pg-section">
+    <h2>What this does and does not handle</h2>
+    <p>It handles:</p>
+    <ul>
+      <li>Splitting a file into games by tag structure, with or without blank lines between games.</li>
+      <li>Standard Algebraic Notation, including disambiguation, capture, check, mate, and promotion in both <code>=Q</code> and <code>Q</code> forms.</li>
+      <li>Castling written as <code>O-O</code>, <code>O-O-O</code>, <code>0-0</code>, or <code>0-0-0</code>.</li>
+      <li>Games that start from a FEN tag, including SetUp.</li>
+      <li>Full legality: pins, check, en passant, castling through attacked squares.</li>
+      <li>Per-game status, first error, and legal alternatives.</li>
+      <li>Valid-only PGN export and an error CSV export.</li>
+    </ul>
+    <p>It does not handle:</p>
+    <ul>
+      <li>Variations. They are stripped before validation. A legal main line passes even if a branch contains an error.</li>
+      <li>Comments as content. They are removed. The validator does not check whether a comment is well formed.</li>
+      <li>Engine analysis or move quality. A legal blunder is valid.</li>
+      <li>Chess960 or other variants. The board assumes standard chess. A variant tag is reported but the rules are not changed.</li>
+      <li>Null moves written as <code>--</code> or <code>Z0</code>. They are reported as errors rather than skipped.</li>
+      <li>Files above the browser tab's memory limit. Very large databases may need splitting first.</li>
+      <li>Rewriting annotations or preserving comments in the valid-only export. The export keeps headers and main-line moves, not comments.</li>
+    </ul>
+  </section>
+
+  <section class="pg-section pg-faq">
+    <h2>Questions</h2>
+    <details><summary>How do I validate a PGN file with multiple games?</summary><p>Paste the file or drop it into the box and click Validate games. The tool splits the file into individual games, plays every move on a real board, and reports each game separately. A file with 500 games produces 500 rows, each marked valid, error, or empty. Nothing is uploaded.</p></details>
+    <details><summary>What does the batch validator check?</summary><p>It checks that each game has parseable tag pairs, that every move in the main line is legal and unambiguous, and that the movetext result agrees with the Result tag. It also flags games with no moves and games missing the seven required tags. It does not run an engine and does not judge move quality.</p></details>
+    <details><summary>Why does my PGN pass in one program but fail here?</summary><p>Programs disagree about how strict to be. Some accept an illegal move and truncate the game, some accept a result token that contradicts the Result tag, and some ignore missing tags. This validator is strict on move legality because an illegal move will break most importers later. The report names the exact move number, the side, and the token that failed, so you can see which rule the other program was ignoring.</p></details>
+    <details><summary>What counts as an illegal move?</summary><p>Any move that cannot be played in the position, such as moving a piece through another piece, leaving your own king in check, castling through an attacked square, or a pawn capture with no piece on the target square. Ambiguous notation, where two pieces of the same type could reach the destination and the file or rank is missing, is reported separately.</p></details>
+    <details><summary>Does it validate variations and comments?</summary><p>It strips comments and variations before validating the main line. Variations are not played out, because a repertoire file with nested branches needs a different data model and a per-branch report. A game whose main line is legal passes even if a variation contains an error. The page says so in the limitations section rather than pretending otherwise.</p></details>
+    <details><summary>Can I download only the games that passed?</summary><p>Yes. The Download valid PGN button writes a new file containing only the games with no errors, with the seven tag roster filled in and the movetext re-flowed to 80 columns. The original file is never modified, and you can keep the error CSV alongside it as a list of what needs fixing.</p></details>
+    <details><summary>How do I find which game has the error in a large file?</summary><p>The results table lists every game in order with its index, White, Black, Result, ply count, status, and the first error. Sort by status or scan the red rows. Each error row shows the move number, the side to move, the exact token that failed, and the legal alternatives in that position.</p></details>
+    <details><summary>What are the seven tag roster tags?</summary><p>Event, Site, Date, Round, White, Black, and Result, in that order. The PGN specification requires them, and Lichess study import and Chessable import both reject files that omit them. Games missing these tags are marked as warnings rather than errors, because the moves may still be valid.</p></details>
+    <details><summary>Does it handle PGN files that start from a FEN position?</summary><p>Yes. If a game has a FEN tag, the board starts from that position instead of the initial array, and the SetUp tag is respected. This covers endgame studies, puzzle collections, and games that begin from a custom position.</p></details>
+    <details><summary>Why are some games marked empty?</summary><p>A game with tags but no moves, or with only a result token and no moves, is marked empty. These appear in databases exported from tools that write a header for a game that was never finished. They are not errors, but they will clutter an import and are worth removing before you load the file anywhere.</p></details>
+    <details><summary>Is there a file size limit?</summary><p>The practical limit is the browser tab's memory. A PGN of tens of megabytes and thousands of games usually validates on a desktop browser. Very large databases of hundreds of megabytes may be slow, because the whole file is read and every game is played out. Splitting the file by date or event first is the workaround.</p></details>
+    <details><summary>Is my PGN uploaded to a server?</summary><p>No. The page reads the file with the browser File API and validates the games with JavaScript. There is no network request during validation or export. You can confirm this by switching the browser to offline mode after the page loads and validating a file.</p></details>
+    <details><summary>How is this different from scanchess PGN validator?</summary><p>The scanchess validator is built around one pasted game. It plays that game out, shows the first problem, and gives you a cleaned single-game PGN. This page is built around a file of many games. It produces a per-game report, summary counts, a filtered valid-only PGN, and an error CSV, which is what you need when you are checking a database rather than one game.</p></details>
+    <details><summary>Can I export the error list as a spreadsheet?</summary><p>Yes. The Download error CSV button writes one row per game with the game index, players, result, ply count, status, and the first error including move number, token, and legal alternatives. It is UTF-8 with a byte order mark, so Excel opens it on a double-click without an import step.</p></details>
+  </section>
+
+  <footer class="pg-footer">
+    <p>ConvertToToolsOnline. Built and maintained by one developer. This page runs locally in your browser and does not upload the PGN you open.</p>
+  </footer>
+</main>
+
+<script>
+(function(){
+  'use strict';
+
+  var dropEl=document.getElementById('pg-drop');
+  var fileInput=document.getElementById('pg-file');
+  var textEl=document.getElementById('pg-text');
+  var fileInfoEl=document.getElementById('pg-fileinfo');
+  var stopFirstBox=document.getElementById('pg-stop-first');
+  var warnTagsBox=document.getElementById('pg-warn-tags');
+  var runBtn=document.getElementById('pg-run');
+  var dlPgnBtn=document.getElementById('pg-dl-pgn');
+  var dlCsvBtn=document.getElementById('pg-dl-csv');
+  var resetBtn=document.getElementById('pg-reset');
+  var errorEl=document.getElementById('pg-error');
+  var warnEl=document.getElementById('pg-warn');
+  var resultsEl=document.getElementById('pg-results');
+  var statsEl=document.getElementById('pg-stats');
+  var tablewrapEl=document.getElementById('pg-tablewrap');
+  var noteEl=document.getElementById('pg-note');
+
+  var START_FEN='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+  var SEVEN=['Event','Site','Date','Round','White','Black','Result'];
+  var MAX_BYTES=80*1024*1024;
+
+  var gameResults=[];
+
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function showError(m){errorEl.textContent=m;errorEl.hidden=false;}
+  function clearError(){errorEl.hidden=true;errorEl.textContent='';}
+  function showWarn(m){warnEl.textContent=m;warnEl.hidden=false;}
+  function clearWarn(){warnEl.hidden=true;warnEl.textContent='';}
+  function humanSize(b){if(b<1024)return b+' B';if(b<1048576)return (b/1024).toFixed(1)+' KB';return (b/1048576).toFixed(1)+' MB';}
+
+  // ---------- Chess core ----------
+  function isWhite(p){return p && p===p.toUpperCase();}
+  function algToIdx(a){var f=a.charCodeAt(0)-97;var r=8-parseInt(a[1],10);return r*8+f;}
+  function idxToAlg(i){var f=i%8;var r=Math.floor(i/8);return String.fromCharCode(97+f)+(8-r);}
+
+  function parseFen(fen){
+    var parts=String(fen).trim().split(/\s+/);
+    var board=new Array(64).fill(null);
+    var r=0,f=0;
+    for(var i=0;i<parts[0].length;i++){
+      var ch=parts[0][i];
+      if(ch==='/'){r++;f=0;}
+      else if(/\d/.test(ch)){f+=parseInt(ch,10);}
+      else{board[r*8+f]=ch;f++;}
+    }
+    var cast=parts[2]||'-';
+    return {
+      board:board,
+      turn:parts[1]==='b'?'b':'w',
+      castling:{K:cast.indexOf('K')>=0,Q:cast.indexOf('Q')>=0,k:cast.indexOf('k')>=0,q:cast.indexOf('q')>=0},
+      ep:(parts[3]&&parts[3]!=='-')?algToIdx(parts[3]):-1,
+      half:parseInt(parts[4],10)||0,
+      full:parseInt(parts[5],10)||1
+    };
+  }
+
+  function kingSq(state,color){
+    var target=color==='w'?'K':'k';
+    for(var i=0;i<64;i++) if(state.board[i]===target) return i;
+    return -1;
+  }
+
+  function isAttacked(state,sq,byWhite){
+    var b=state.board;
+    var f=sq%8,r=Math.floor(sq/8);
+    // pawns
+    if(byWhite){
+      if(f>0&&r<7&&b[sq+7]==='P')return true;
+      if(f<7&&r<7&&b[sq+9]==='P')return true;
+    }else{
+      if(f>0&&r>0&&b[sq-9]==='p')return true;
+      if(f<7&&r>0&&b[sq-7]==='p')return true;
+    }
+    // knights
+    var kn=[[-17,'N'],[-15,'N'],[-10,'N'],[-6,'N'],[6,'N'],[10,'N'],[15,'N'],[17,'N']];
+    for(var i=0;i<kn.length;i++){
+      var t=sq+kn[i][0];
+      if(t<0||t>63)continue;
+      var tf=t%8,tr=Math.floor(t/8);
+      if(Math.abs(tf-f)>2||Math.abs(tr-r)>2)continue;
+      var p=b[t];
+      if(p&&isWhite(p)===byWhite&&p.toUpperCase()==='N')return true;
+    }
+    // king
+    for(var df=-1;df<=1;df++)for(var dr=-1;dr<=1;dr++){
+      if(!df&&!dr)continue;
+      var nf=f+df,nr=r+dr;
+      if(nf<0||nf>7||nr<0||nr>7)continue;
+      var pp=b[nr*8+nf];
+      if(pp&&isWhite(pp)===byWhite&&pp.toUpperCase()==='K')return true;
+    }
+    // sliding
+    var dirs=[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
+    for(var d=0;d<dirs.length;d++){
+      var df2=dirs[d][0],dr2=dirs[d][1];
+      var nf2=f+df2,nr2=r+dr2;
+      while(nf2>=0&&nf2<8&&nr2>=0&&nr2<8){
+        var p2=b[nr2*8+nf2];
+        if(p2){
+          if(isWhite(p2)===byWhite){
+            var up=p2.toUpperCase();
+            var diagonal=(df2!==0&&dr2!==0);
+            if(up==='Q'||(diagonal&&up==='B')||(!diagonal&&up==='R'))return true;
+          }
+          break;
+        }
+        nf2+=df2;nr2+=dr2;
+      }
+    }
+    return false;
+  }
+
+  function generatePseudo(state,color){
+    var moves=[],b=state.board;
+    for(var from=0;from<64;from++){
+      var p=b[from];
+      if(!p||isWhite(p)!==(color==='w'))continue;
+      var f=from%8,r=Math.floor(from/8);
+      var up=p.toUpperCase();
+
+      if(up==='P'){
+        var dir=color==='w'?-1:1;
+        var startRank=color==='w'?6:1;
+        var promoRank=color==='w'?0:7;
+        var one=r+dir;
+        if(one>=0&&one<8){
+          var t1=one*8+f;
+          if(!b[t1]){
+            if(one===promoRank){
+              ['Q','R','B','N'].forEach(function(pr){moves.push({from:from,to:t1,piece:p,captured:null,promotion:pr,flags:{}});});
+            }else{
+              moves.push({from:from,to:t1,piece:p,captured:null,promotion:null,flags:{}});
+            }
+            if(r===startRank){
+              var t2=(r+dir*2)*8+f;
+              if(!b[t2])moves.push({from:from,to:t2,piece:p,captured:null,promotion:null,flags:{double:true}});
+            }
+          }
+          [-1,1].forEach(function(df){
+            var nf=f+df;
+            if(nf<0||nf>7)return;
+            var tc=one*8+nf;
+            var cap=b[tc];
+            if(cap&&isWhite(cap)!==(color==='w')){
+              if(one===promoRank){
+                ['Q','R','B','N'].forEach(function(pr){moves.push({from:from,to:tc,piece:p,captured:cap,promotion:pr,flags:{}});});
+              }else{
+                moves.push({from:from,to:tc,piece:p,captured:cap,promotion:null,flags:{}});
+              }
+            }else if(tc===state.ep&&!cap){
+              moves.push({from:from,to:tc,piece:p,captured:color==='w'?'p':'P',promotion:null,flags:{ep:true}});
+            }
+          });
+        }
+      }else if(up==='N'){
+        var offs=[-17,-15,-10,-6,6,10,15,17];
+        for(var o=0;o<offs.length;o++){
+          var t=from+offs[o];
+          if(t<0||t>63)continue;
+          var tf=t%8,tr=Math.floor(t/8);
+          if(Math.abs(tf-f)>2||Math.abs(tr-r)>2)continue;
+          var capN=b[t];
+          if(capN&&isWhite(capN)===(color==='w'))continue;
+          moves.push({from:from,to:t,piece:p,captured:capN||null,promotion:null,flags:{}});
+        }
+      }else if(up==='B'||up==='R'||up==='Q'){
+        var dirs2=[];
+        if(up==='B'||up==='Q')dirs2=dirs2.concat([[1,1],[1,-1],[-1,1],[-1,-1]]);
+        if(up==='R'||up==='Q')dirs2=dirs2.concat([[1,0],[-1,0],[0,1],[0,-1]]);
+        for(var d2=0;d2<dirs2.length;d2++){
+          var df3=dirs2[d2][0],dr3=dirs2[d2][1];
+          var nf3=f+df3,nr3=r+dr3;
+          while(nf3>=0&&nf3<8&&nr3>=0&&nr3<8){
+            var tt=nr3*8+nf3,cp=b[tt];
+            if(cp){
+              if(isWhite(cp)!==(color==='w'))moves.push({from:from,to:tt,piece:p,captured:cp,promotion:null,flags:{}});
+              break;
+            }
+            moves.push({from:from,to:tt,piece:p,captured:null,promotion:null,flags:{}});
+            nf3+=df3;nr3+=dr3;
+          }
+        }
+      }else if(up==='K'){
+        for(var df4=-1;df4<=1;df4++)for(var dr4=-1;dr4<=1;dr4++){
+          if(!df4&&!dr4)continue;
+          var nf4=f+df4,nr4=r+dr4;
+          if(nf4<0||nf4>7||nr4<0||nr4>7)continue;
+          var tk=nr4*8+nf4,ck=b[tk];
+          if(ck&&isWhite(ck)===(color==='w'))continue;
+          moves.push({from:from,to:tk,piece:p,captured:ck||null,promotion:null,flags:{}});
+        }
+        // castling
+        var kingIdx=color==='w'?60:4;
+        if(from===kingIdx&&!isAttacked(state,kingIdx,color==='b')){
+          if(color==='w'&&state.castling.K&&!b[61]&&!b[62]&&!isAttacked(state,61,false)&&!isAttacked(state,62,false)){
+            moves.push({from:60,to:62,piece:'K',captured:null,promotion:null,flags:{castle:'K'}});
+          }
+          if(color==='w'&&state.castling.Q&&!b[59]&&!b[58]&&!b[57]&&!isAttacked(state,59,false)&&!isAttacked(state,58,false)){
+            moves.push({from:60,to:58,piece:'K',captured:null,promotion:null,flags:{castle:'Q'}});
+          }
+          if(color==='b'&&state.castling.k&&!b[5]&&!b[6]&&!isAttacked(state,5,true)&&!isAttacked(state,6,true)){
+            moves.push({from:4,to:6,piece:'k',captured:null,promotion:null,flags:{castle:'K'}});
+          }
+          if(color==='b'&&state.castling.q&&!b[3]&&!b[2]&&!b[1]&&!isAttacked(state,3,true)&&!isAttacked(state,2,true)){
+            moves.push({from:4,to:2,piece:'k',captured:null,promotion:null,flags:{castle:'Q'}});
+          }
+        }
+      }
+    }
+    return moves;
+  }
+
+  function applyMove(state,m){
+    var b=state.board.slice();
+    var piece=b[m.from];
+    b[m.from]=null;
+    b[m.to]=m.promotion?(isWhite(piece)?m.promotion:m.promotion.toLowerCase()):piece;
+    if(m.flags&&m.flags.ep){
+      var capSq=m.to+(isWhite(piece)?8:-8);
+      b[capSq]=null;
+    }
+    if(m.flags&&m.flags.castle){
+      if(m.flags.castle==='K'){
+        if(isWhite(piece)){b[61]=b[63];b[63]=null;}
+        else{b[5]=b[7];b[7]=null;}
+      }else{
+        if(isWhite(piece)){b[59]=b[56];b[56]=null;}
+        else{b[3]=b[0];b[0]=null;}
+      }
+    }
+    var castling={K:state.castling.K,Q:state.castling.Q,k:state.castling.k,q:state.castling.q};
+    if(piece==='K'){castling.K=false;castling.Q=false;}
+    if(piece==='k'){castling.k=false;castling.q=false;}
+    if(m.from===63||m.to===63)castling.K=false;
+    if(m.from===56||m.to===56)castling.Q=false;
+    if(m.from===7||m.to===7)castling.k=false;
+    if(m.from===0||m.to===0)castling.q=false;
+    var ep=-1;
+    if((piece==='P'||piece==='p')&&Math.abs(m.to-m.from)===16)ep=(m.from+m.to)/2;
+    return {
+      board:b,
+      turn:state.turn==='w'?'b':'w',
+      castling:castling,
+      ep:ep,
+      half:(m.captured||piece.toUpperCase()==='P')?0:state.half+1,
+      full:state.turn==='b'?state.full+1:state.full
+    };
+  }
+
+  function legalMoves(state){
+    var color=state.turn;
+    var pseudo=generatePseudo(state,color);
+    var out=[];
+    for(var i=0;i<pseudo.length;i++){
+      var ns=applyMove(state,pseudo[i]);
+      var ks=kingSq(ns,color);
+      if(ks<0)continue;
+      if(!isAttacked(ns,ks,color==='b'))out.push(pseudo[i]);
+    }
+    return out;
+  }
+
+  function coordMove(m){
+    if(m.flags&&m.flags.castle)return m.flags.castle==='K'?'O-O':'O-O-O';
+    var p=m.piece.toUpperCase();
+    var prefix=p==='P'?'':p;
+    return prefix+idxToAlg(m.from)+'-'+idxToAlg(m.to)+(m.promotion?'='+m.promotion:'');
+  }
+
+  function normalizeSan(tok){
+    var s=String(tok).trim();
+    s=s.replace(/0/g,'O');
+    s=s.replace(/[+#]+$/,'');
+    s=s.replace(/[!?]+$/,'');
+    s=s.replace(/e\.p\./i,'');
+    return s;
+  }
+
+  function applySan(state,token){
+    var san=normalizeSan(token);
+    if(san==='O-O'||san==='O-O-O'){
+      var want=san==='O-O'?'K':'Q';
+      var lm=legalMoves(state).filter(function(m){return m.flags&&m.flags.castle===want;});
+      if(lm.length===1)return {state:applyMove(state,lm[0]),move:lm[0],error:null};
+      return {error:'Castling not available',legal:legalMoves(state)};
+    }
+    var promotion=null;
+    var mm=san.match(/^([NBRQK]?)([a-h]?)([1-8]?)(x?)([a-h][1-8])(?:=?([QRBN]))?$/);
+    if(!mm){
+      return {error:'Cannot parse SAN token',legal:legalMoves(state)};
+    }
+    var pieceLetter=mm[1]||'P';
+    var disFile=mm[2]||'';
+    var disRank=mm[3]||'';
+    var isCapture=mm[4]==='x';
+    var toIdx=algToIdx(mm[5]);
+    promotion=mm[6]||null;
+
+    var moves=legalMoves(state);
+    var matches=moves.filter(function(m){
+      if(m.piece.toUpperCase()!==pieceLetter)return false;
+      if(m.to!==toIdx)return false;
+      if(promotion&&m.promotion!==promotion)return false;
+      if(!promotion&&m.promotion)return false;
+      if(disFile&&String.fromCharCode(97+(m.from%8))!==disFile)return false;
+      if(disRank&&String(8-Math.floor(m.from/8))!==disRank)return false;
+      if(isCapture&&!m.captured&&!(m.flags&&m.flags.ep))return false;
+      return true;
+    });
+
+    if(matches.length===1)return {state:applyMove(state,matches[0]),move:matches[0],error:null};
+    if(matches.length===0)return {error:'Illegal move',legal:moves};
+    return {error:'Ambiguous move',legal:matches};
+  }
+
+  // ---------- PGN parsing ----------
+  function splitGames(text){
+    var lines=text.replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n');
+    var games=[],cur=[],hasMovetext=false;
+    for(var i=0;i<lines.length;i++){
+      var line=lines[i];
+      var tag=line.match(/^\s*\[(\w+)\s+"((?:[^"\\]|\\.)*)"\]\s*$/);
+      if(tag){
+        if(hasMovetext&&cur.length){games.push(cur);cur=[];hasMovetext=false;}
+        cur.push(line);
+      }else{
+        if(line.trim()){hasMovetext=true;cur.push(line);}
+        else if(cur.length)cur.push(line);
+      }
+    }
+    if(cur.length)games.push(cur);
+    return games.filter(function(g){return g.some(function(l){return l.trim();});});
+  }
+
+  function parseTags(lines){
+    var tags={},moves=[];
+    for(var i=0;i<lines.length;i++){
+      var m=lines[i].match(/^\s*\[(\w+)\s+"((?:[^"\\]|\\.)*)"\]\s*$/);
+      if(m)tags[m[1]]=m[2].replace(/\\"/g,'"').replace(/\\\\/g,'\\');
+      else if(lines[i].trim())moves.push(lines[i]);
+    }
+    return {tags:tags,moves:moves.join(' ')};
+  }
+
+  function tokenize(movetext){
+    var s=movetext;
+    s=s.replace(/\{[^}]*\}/g,' ');
+    s=s.replace(/;[^\n]*/g,' ');
+    var out='',depth=0;
+    for(var i=0;i<s.length;i++){
+      var c=s[i];
+      if(c==='(')depth++;
+      else if(c===')')depth=Math.max(0,depth-1);
+      else if(depth===0)out+=c;
+    }
+    s=out;
+    s=s.replace(/\$\d+/g,' ');
+    s=s.replace(/\d+\.(\.\.)?/g,' ');
+    return s.split(/\s+/).filter(Boolean);
+  }
+
+  function isResultToken(t){return /^(1-0|0-1|1\/2-1\/2|\*)$/.test(t);}
+
+  function validateOne(lines,stopFirst,warnTags){
+    var parsed=parseTags(lines);
+    var tags=parsed.tags;
+    var tokens=tokenize(parsed.moves);
+
+    var state;
+    try{state=parseFen(tags.FEN||START_FEN);}catch(e){state=parseFen(START_FEN);}
+
+    var result=tags.Result||'*';
+    var plies=0,error=null,resultToken=null;
+
+    for(var i=0;i<tokens.length;i++){
+      var tok=tokens[i];
+      if(isResultToken(tok)){resultToken=tok;break;}
+      var r=applySan(state,tok);
+      if(r.error){
+        error={
+          moveNumber:Math.floor(plies/2)+1,
+          side:plies%2===0?'White':'Black',
+          token:tok,
+          reason:r.error,
+          legal:(r.legal||[]).map(coordMove)
+        };
+        if(stopFirst)break;
+      }else{
+        state=r.state;
+        plies++;
+      }
+    }
+
+    if(resultToken)result=resultToken;
+
+    var missing=SEVEN.filter(function(k){return !tags[k];});
+    var status=error?'error':(plies?'ok':'empty');
+    if(status==='ok'&&warnTags&&missing.length)status='warn';
+
+    return {
+      tags:tags,
+      tokens:tokens,
+      result:result,
+      resultToken:resultToken,
+      plies:plies,
+      error:error,
+      missingTags:missing,
+      status:status
+    };
+  }
+
+  // ---------- Output ----------
+  function wrapText(s,width){
+    var words=s.split(' ');
+    var lines=[],cur='';
+    for(var i=0;i<words.length;i++){
+      var w=words[i];
+      if(!w)continue;
+      if((cur?cur+' '+w:w).length>width){if(cur)lines.push(cur);cur=w;}
+      else cur=cur?cur+' '+w:w;
+    }
+    if(cur)lines.push(cur);
+    return lines.join('\n');
+  }
+
+  function buildMovetext(game){
+    var state=parseFen(game.tags.FEN||START_FEN);
+    var startTurn=state.turn;
+    var num=state.full;
+    var parts=[];
+    var plies=0;
+    for(var i=0;i<game.tokens.length;i++){
+      var t=game.tokens[i];
+      if(isResultToken(t))break;
+      if(plies%2===0){
+        parts.push(num+'.');
+      }else if(plies===0&&startTurn==='b'){
+        parts.push(num+'...');
+      }
+      parts.push(t);
+      if(plies%2===1)num++;
+      plies++;
+    }
+    parts.push(game.result||'*');
+    return wrapText(parts.join(' '),80);
+  }
+
+  function sevenTagHeaders(tags){
+    var out=[];
+    SEVEN.forEach(function(k){
+      var v=tags[k];
+      if(!v)v=k==='Date'?'????.??.??':(k==='Result'?'*':'?');
+      out.push('['+k+' "'+v.replace(/"/g,'\\"')+'"]');
+    });
+    Object.keys(tags).forEach(function(k){
+      if(SEVEN.indexOf(k)>=0)return;
+      out.push('['+k+' "'+String(tags[k]).replace(/"/g,'\\"')+'"]');
+    });
+    return out.join('\n');
+  }
+
+  function csvEscape(s){
+    s=String(s==null?'':s);
+    if(/[",\n\r]/.test(s))return '"'+s.replace(/"/g,'""')+'"';
+    return s;
+  }
+
+  function statusChip(status){
+    if(status==='ok')return '<span class="pg-chip pg-ok">valid</span>';
+    if(status==='error')return '<span class="pg-chip pg-err">error</span>';
+    if(status==='warn')return '<span class="pg-chip pg-warnchip">missing tags</span>';
+    return '<span class="pg-chip pg-empty">empty</span>';
+  }
+
+  function render(games){
+    gameResults=games;
+    var valid=games.filter(function(g){return g.status==='ok';}).length;
+    var errored=games.filter(function(g){return g.status==='error';}).length;
+    var empty=games.filter(function(g){return g.status==='empty';}).length;
+    var warned=games.filter(function(g){return g.status==='warn';}).length;
+    var totalPlies=games.reduce(function(s,g){return s+g.plies;},0);
+
+    statsEl.innerHTML=[
+      ['Games',games.length.toLocaleString('en-US')],
+      ['Valid',valid.toLocaleString('en-US')],
+      ['With errors',errored.toLocaleString('en-US')],
+      ['Empty',empty.toLocaleString('en-US')],
+      ['Missing tags',warned.toLocaleString('en-US')],
+      ['Plies',totalPlies.toLocaleString('en-US')]
+    ].map(function(p){return '<div class="pg-stat"><dt>'+p[0]+'</dt><dd>'+p[1]+'</dd></div>';}).join('');
+
+    var head='<tr><th>#</th><th>White</th><th>Black</th><th>Result</th><th>Plies</th><th>Status</th><th>First error</th></tr>';
+    var body=games.map(function(g,idx){
+      var err=g.error?('Move '+g.error.moveNumber+' '+g.error.side+': <span class="pg-mono">'+esc(g.error.token)+'</span> '+esc(g.error.reason)):'';
+      var legal=g.error&&g.error.legal.length?'<div class="pg-mono" style="color:#5b6b82;margin-top:2px;">Legal: '+esc(g.error.legal.slice(0,8).join(', '))+(g.error.legal.length>8?' …':'')+'</div>':'';
+      return '<tr>'+
+        '<td>'+(idx+1)+'</td>'+
+        '<td>'+esc(g.tags.White||'?')+'</td>'+
+        '<td>'+esc(g.tags.Black||'?')+'</td>'+
+        '<td>'+esc(g.result)+'</td>'+
+        '<td>'+g.plies+'</td>'+
+        '<td>'+statusChip(g.status)+'</td>'+
+        '<td>'+err+legal+'</td>'+
+        '</tr>';
+    }).join('');
+
+    tablewrapEl.innerHTML='<table class="pg-table"><thead>'+head+'</thead><tbody>'+body+'</tbody></table>';
+    noteEl.textContent='Status valid means the main line played to the end with no illegal or ambiguous move. Variations and comments are stripped before validation.';
+    resultsEl.hidden=false;
+    dlPgnBtn.disabled=!games.some(function(g){return g.status==='ok';});
+    dlCsvBtn.disabled=!games.length;
+  }
+
+  function download(filename,content,mime){
+    var blob=new Blob([content],{type:mime||'text/plain;charset=utf-8'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url;a.download=filename;
+    document.body.appendChild(a);a.click();
+    setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(url);},120);
+  }
+
+  function run(){
+    clearError();clearWarn();
+    var text=textEl.value;
+    if(!text.trim()){
+      showError('Paste PGN text or load a file first.');
+      return;
+    }
+    var chunks=splitGames(text);
+    if(!chunks.length){
+      showError('No games found. A PGN file needs at least one tag pair or move list.');
+      return;
+    }
+    var games=chunks.map(function(g){return validateOne(g,stopFirstBox.checked,warnTagsBox.checked);});
+    render(games);
+  }
+
+  function readFile(file){
+    clearError();clearWarn();resultsEl.hidden=true;
+    if(!file)return;
+    if(file.size>MAX_BYTES){
+      showError('That file is '+humanSize(file.size)+'. Files above 80 MB usually run out of browser memory. Split the database by year or event first.');
+      return;
+    }
+    fileInfoEl.innerHTML='<span><b>'+esc(file.name)+'</b></span><span>'+humanSize(file.size)+'</span><span>reading…</span>';
+    fileInfoEl.hidden=false;
+    var r=new FileReader();
+    r.onload=function(){
+      textEl.value=String(r.result||'');
+      fileInfoEl.innerHTML='<span><b>'+esc(file.name)+'</b></span><span>'+humanSize(file.size)+'</span><span>'+(textEl.value.length/1024).toFixed(0)+' KB of text</span>';
+    };
+    r.onerror=function(){showError('Could not read the file.');};
+    r.readAsText(file,'utf-8');
+  }
+
+  // Events
+  dropEl.addEventListener('click',function(e){if(e.target===fileInput)return;fileInput.click();});
+  dropEl.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();fileInput.click();}});
+  fileInput.addEventListener('change',function(){if(fileInput.files&&fileInput.files[0])readFile(fileInput.files[0]);fileInput.value='';});
+  ['dragenter','dragover'].forEach(function(ev){dropEl.addEventListener(ev,function(e){e.preventDefault();dropEl.classList.add('is-over');});});
+  ['dragleave','drop'].forEach(function(ev){dropEl.addEventListener(ev,function(e){e.preventDefault();dropEl.classList.remove('is-over');});});
+  dropEl.addEventListener('drop',function(e){if(e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0])readFile(e.dataTransfer.files[0]);});
+
+  runBtn.addEventListener('click',run);
+
+  dlPgnBtn.addEventListener('click',function(){
+    var valid=gameResults.filter(function(g){return g.status==='ok'&&g.plies>0;});
+    if(!valid.length)return;
+    var out=valid.map(function(g){return sevenTagHeaders(g.tags)+'\n\n'+buildMovetext(g);}).join('\n\n');
+    download('valid-games.pgn',out+'\n','application/x-chess-pgn;charset=utf-8');
+  });
+
+  dlCsvBtn.addEventListener('click',function(){
+    if(!gameResults.length)return;
+    var rows=[['game','white','black','result','plies','status','move_number','side','token','reason','legal_moves']];
+    gameResults.forEach(function(g,i){
+      rows.push([
+        i+1,
+        g.tags.White||'',
+        g.tags.Black||'',
+        g.result,
+        g.plies,
+        g.status,
+        g.error?g.error.moveNumber:'',
+        g.error?g.error.side:'',
+        g.error?g.error.token:'',
+        g.error?g.error.reason:'',
+        g.error?g.error.legal.join(' '):''
+      ]);
+    });
+    var body='\ufeff'+rows.map(function(r){return r.map(csvEscape).join(',');}).join('\r\n');
+    download('pgn-errors.csv',body,'text/csv;charset=utf-8');
+  });
+
+  resetBtn.addEventListener('click',function(){
+    gameResults=[];
+    textEl.value='';
+    fileInput.value='';
+    fileInfoEl.hidden=true;fileInfoEl.innerHTML='';
+    resultsEl.hidden=true;statsEl.innerHTML='';tablewrapEl.innerHTML='';noteEl.textContent='';
+    dlPgnBtn.disabled=true;dlCsvBtn.disabled=true;
+    clearError();clearWarn();
+  });
+
+  dlPgnBtn.disabled=true;dlCsvBtn.disabled=true;
+})();
+</script>
+</body>
+</html>

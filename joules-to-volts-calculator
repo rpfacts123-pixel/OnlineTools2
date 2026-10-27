@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Joules to Volts Calculator – Convert J to V (300 J, 200 J, etc.)</title>
+  <meta name="description" content="Convert joules to volts instantly. Enter energy and charge (or capacitance) to find voltage. Includes formulas, a conversion table, and answers to common queries like '300 joules to volts'.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://onlinetoolsandconverters.cc/joules-to-volts-calculator">
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #5b6b82;
+      --blue: #245bcc;
+      --line: #dfe6ef;
+      --bg: #f7f9fc;
+      --white: #fff;
+      --radius: 12px;
+      --shadow: 0 4px 16px rgba(20,35,60,0.06);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 16px/1.6 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+    header { background: #fff; border-bottom: 1px solid var(--line); padding: 14px 0; }
+    header .container { display: flex; justify-content: space-between; align-items: center; }
+    .brand { font-weight: 800; color: var(--ink); letter-spacing: -0.3px; }
+    .brand span { color: var(--blue); }
+    nav a { margin-left: 18px; font-size: 0.9rem; font-weight: 600; color: #475569; }
+    h1 { font-size: 1.9rem; line-height: 1.2; margin: 28px 0 10px; letter-spacing: -0.03em; }
+    h2 { font-size: 1.35rem; margin: 32px 0 12px; letter-spacing: -0.02em; }
+    h3 { font-size: 1.1rem; margin: 22px 0 8px; }
+    p, li { color: var(--muted); }
+    .card { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); margin: 20px 0; }
+    label { display: block; font-weight: 700; font-size: 0.9rem; margin-bottom: 5px; color: var(--ink); }
+    input, select { width: 100%; padding: 11px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font: inherit; margin-bottom: 14px; background: #fff; }
+    button { background: var(--blue); color: #fff; border: 0; padding: 12px 18px; border-radius: 8px; font-weight: 800; font-size: 0.95rem; cursor: pointer; width: 100%; margin-top: 4px; }
+    button:hover { background: #1a46a8; }
+    .result { margin-top: 18px; padding: 16px; border-radius: 8px; background: #eef4ff; border: 1px solid #c9dbff; font-size: 1.1rem; font-weight: 700; display: none; }
+    .result.show { display: block; }
+    .result strong { font-size: 1.5rem; color: var(--blue); }
+    table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: 0.92rem; }
+    th, td { padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--line); }
+    th { background: #f0f4fa; font-weight: 700; }
+    .faq-item { border-bottom: 1px solid var(--line); padding: 12px 0; }
+    .faq-item summary { font-weight: 700; cursor: pointer; list-style: none; position: relative; padding-right: 28px; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: "+"; position: absolute; right: 4px; top: 0; font-weight: 900; color: var(--blue); }
+    .faq-item[open] summary::after { content: "–"; }
+    .faq-item p { margin: 8px 0 0; padding-left: 0; }
+    .note { font-size: 0.88rem; background: #fffbe6; border: 1px solid #f0e6a0; padding: 12px; border-radius: 8px; margin: 16px 0; }
+    footer { margin-top: 40px; padding: 24px 0; border-top: 1px solid var(--line); font-size: 0.85rem; color: var(--muted); text-align: center; }
+    @media (max-width: 500px) { h1 { font-size: 1.55rem; } .container { padding: 0 14px; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <a class="brand" href="/">Convert<span>ToToolsOnline</span></a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/Contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+
+  <h1>Joules to Volts Calculator</h1>
+  <p>Converting energy (joules) to voltage (volts) isn't a direct one-step calculation. You need one more piece of information: either the <strong>charge</strong> (in coulombs) or the <strong>capacitance</strong> (in farads). This tool handles both cases. Enter your values below to get the voltage instantly.</p>
+
+  <div class="card">
+    <h2 style="margin-top:0;">Calculator</h2>
+
+    <label for="method">What do you know?</label>
+    <select id="method">
+      <option value="charge">I know the charge (coulombs)</option>
+      <option value="cap">I know the capacitance (farads)</option>
+    </select>
+
+    <label for="energy">Energy (joules)</label>
+    <input type="number" id="energy" placeholder="e.g. 300" step="any">
+
+    <div id="charge-group">
+      <label for="charge">Charge (coulombs)</label>
+      <input type="number" id="charge" placeholder="e.g. 5" step="any">
+    </div>
+
+    <div id="cap-group" style="display:none;">
+      <label for="cap">Capacitance (farads)</label>
+      <input type="number" id="cap" placeholder="e.g. 0.001" step="any">
+    </div>
+
+    <button id="calc-btn">Calculate Voltage</button>
+
+    <div id="result" class="result" aria-live="polite"></div>
+  </div>
+
+  <h2>The formulas</h2>
+
+  <h3>1. Using charge</h3>
+  <p>If you know the energy in joules (E) and the charge in coulombs (Q), voltage is:</p>
+  <p><strong>V (volts) = E (joules) ÷ Q (coulombs)</strong></p>
+  <p>Example: 300 joules ÷ 5 coulombs = <strong>60 volts</strong>.</p>
+
+  <h3>2. Using capacitance</h3>
+  <p>For a capacitor, the stored energy is E = ½ × C × V². Rearranging to solve for voltage:</p>
+  <p><strong>V (volts) = √(2 × E (joules) ÷ C (farads))</strong></p>
+  <p>Example: 300 joules with a 0.1 F capacitor: √(2 × 300 ÷ 0.1) = √6000 ≈ <strong>77.46 volts</strong>.</p>
+
+  <div class="note">
+    <strong>Why the two formulas?</strong> Joules measure energy. Volts measure energy per unit of charge. If you only have energy, you must know either how much charge is involved (the first formula) or the capacitance of the component storing it (the second). There is no way around this — a joule alone does not determine a voltage.
+  </div>
+
+  <h2>Common conversions (quick reference)</h2>
+  <p>The table below assumes a charge of <strong>1 coulomb</strong> for simplicity. Real circuits will have different charge values, but this shows the pattern.</p>
+
+  <table>
+    <thead>
+      <tr><th>Energy (J)</th><th>Voltage (V) at 1 C</th><th>Voltage (V) at 5 C</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>100 J</td><td>100 V</td><td>20 V</td></tr>
+      <tr><td>200 J</td><td>200 V</td><td>40 V</td></tr>
+      <tr><td>300 J</td><td>300 V</td><td>60 V</td></tr>
+      <tr><td>400 J</td><td>400 V</td><td>80 V</td></tr>
+      <tr><td>500 J</td><td>500 V</td><td>100 V</td></tr>
+      <tr><td>1000 J</td><td>1000 V</td><td>200 V</td></tr>
+    </tbody>
+  </table>
+
+  <p>Remember: these numbers are only valid for the charge listed. For a different charge, divide the joule value by that charge to get volts.</p>
+
+  <h2>Frequently asked questions</h2>
+
+  <details class="faq-item">
+    <summary>How many volts is 300 joules?</summary>
+    <p>It depends on the charge. At <strong>1 coulomb</strong>, 300 joules = <strong>300 volts</strong>. At <strong>5 coulombs</strong>, 300 joules = <strong>60 volts</strong>. Use the calculator above with your actual charge value to get the exact answer.</p>
+  </details>
+
+  <details class="faq-item">
+    <summary>What is 200 joules in volts?</summary>
+    <p>Again, the charge matters. 200 joules at 1 C is 200 V. At 2 C it is 100 V. At 10 C it is 20 V. If you know the capacitance instead, use the second formula: V = √(2E/C).</p>
+  </details>
+
+  <details class="faq-item">
+    <summary>Can I convert joules to volts without knowing the charge?</summary>
+    <p>No. Joules and volts measure different things. You need either the charge (coulombs) or the capacitance (farads) to make the conversion. Any tool that claims to convert joules to volts directly is either assuming a charge value or using a capacitor formula without telling you.</p>
+  </details>
+
+  <details class="faq-item">
+    <summary>How do I convert 500 joules to volts?</summary>
+    <p>Use V = E ÷ Q. For 500 J and 10 C, V = 50 V. For 500 J and 2 C, V = 250 V. If you have a capacitor, use V = √(2 × 500 ÷ C). For example, with C = 0.01 F, V ≈ 316.2 V.</p>
+  </details>
+
+  <details class="faq-item">
+    <summary>What is the formula for joules to volts in a capacitor?</summary>
+    <p>The energy stored in a capacitor is E = ½ C V². Solving for V gives <strong>V = √(2E / C)</strong>. This is the formula to use when you know the capacitance in farads.</p>
+  </details>
+
+  <details class="faq-item">
+    <summary>Is 1 joule equal to 1 volt?</summary>
+    <p>No. They are different units. One joule is one coulomb multiplied by one volt (J = C × V). So 1 joule with 1 coulomb of charge corresponds to 1 volt, but the joule itself is an energy unit, not a voltage unit.</p>
+  </details>
+
+  <details class="faq-item">
+    <summary>What about joules to electron volts (eV)?</summary>
+    <p>That is a different conversion. 1 electron volt = 1.602 × 10⁻¹⁹ joules. To convert joules to eV, divide by 1.602 × 10⁻¹⁹. This calculator is specifically for joules to volts, not eV.</p>
+  </details>
+
+</main>
+
+<footer>
+  <div class="container">
+    <p>© 2026 ConvertToToolsOnline. Free utilities for practical tasks.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var method = document.getElementById('method');
+  var energy = document.getElementById('energy');
+  var charge = document.getElementById('charge');
+  var cap = document.getElementById('cap');
+  var chargeGroup = document.getElementById('charge-group');
+  var capGroup = document.getElementById('cap-group');
+  var btn = document.getElementById('calc-btn');
+  var result = document.getElementById('result');
+
+  method.addEventListener('change', function(){
+    if (method.value === 'charge') {
+      chargeGroup.style.display = 'block';
+      capGroup.style.display = 'none';
+    } else {
+      chargeGroup.style.display = 'none';
+      capGroup.style.display = 'block';
+    }
+    result.classList.remove('show');
+  });
+
+  btn.addEventListener('click', function(){
+    var e = parseFloat(energy.value);
+    if (isNaN(e) || e <= 0) {
+      result.textContent = 'Please enter a valid energy value greater than zero.';
+      result.classList.add('show');
+      return;
+    }
+
+    var v;
+    if (method.value === 'charge') {
+      var q = parseFloat(charge.value);
+      if (isNaN(q) || q <= 0) {
+        result.textContent = 'Please enter a valid charge value greater than zero.';
+        result.classList.add('show');
+        return;
+      }
+      v = e / q;
+      result.innerHTML = e + ' joules ÷ ' + q + ' coulombs = <strong>' + v.toFixed(2) + ' volts</strong>';
+    } else {
+      var c = parseFloat(cap.value);
+      if (isNaN(c) || c <= 0) {
+        result.textContent = 'Please enter a valid capacitance value greater than zero.';
+        result.classList.add('show');
+        return;
+      }
+      v = Math.sqrt((2 * e) / c);
+      result.innerHTML = '√(2 × ' + e + ' J ÷ ' + c + ' F) = <strong>' + v.toFixed(2) + ' volts</strong>';
+    }
+    result.classList.add('show');
+  });
+})();
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How many volts is 300 joules?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It depends on the charge. At 1 coulomb, 300 joules = 300 volts. At 5 coulombs, 300 joules = 60 volts. Use the calculator with your actual charge value."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is 200 joules in volts?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "200 joules at 1 coulomb is 200 V. At 2 coulombs it is 100 V. At 10 coulombs it is 20 V."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I convert joules to volts without knowing the charge?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. You need either the charge (coulombs) or the capacitance (farads) to make the conversion."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I convert 500 joules to volts?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use V = E ÷ Q. For 500 J and 10 C, V = 50 V. For a capacitor, use V = √(2 × 500 ÷ C)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the formula for joules to volts in a capacitor?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "V = √(2E / C), where E is energy in joules and C is capacitance in farads."
+      }
+    }
+  ]
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#2563eb">
+  <title>YAML Diff Checker – Compare YAML Files Online</title>
+  <meta name="description" content="Compare YAML files online with a free YAML diff checker. Find added, removed, and changed lines or compare parsed YAML structure, right in your browser.">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+  <link rel="canonical" href="https://onlinetoolsandconverters.cc/yaml-diff-checker.html">
+  <link rel="stylesheet" href="/style.css">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Online Tools &amp; Converters">
+  <meta property="og:title" content="YAML Diff Checker – Compare YAML Files Online">
+  <meta property="og:description" content="Compare YAML files line by line or structurally. Find configuration changes in Kubernetes, Docker Compose, Helm, CI/CD, and application YAML. Free and browser-based.">
+  <meta property="og:url" content="https://onlinetoolsandconverters.cc/yaml-diff-checker.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="YAML Diff Checker – Compare YAML Files Online">
+  <meta name="twitter:description" content="Find added, deleted, and changed YAML lines or compare parsed data structures in your browser.">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://onlinetoolsandconverters.cc/yaml-diff-checker.html#webpage",
+        "url": "https://onlinetoolsandconverters.cc/yaml-diff-checker.html",
+        "name": "YAML Diff Checker – Compare YAML Files Online",
+        "description": "Compare YAML files line by line or structurally with this free browser-based YAML diff checker.",
+        "isPartOf": { "@id": "https://onlinetoolsandconverters.cc/#website" },
+        "inLanguage": "en",
+        "mainEntity": { "@id": "https://onlinetoolsandconverters.cc/yaml-diff-checker.html#tool" },
+        "breadcrumb": { "@id": "https://onlinetoolsandconverters.cc/yaml-diff-checker.html#breadcrumb" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://onlinetoolsandconverters.cc/yaml-diff-checker.html#tool",
+        "name": "YAML Diff Checker",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any device with a modern browser",
+        "url": "https://onlinetoolsandconverters.cc/yaml-diff-checker.html",
+        "description": "Compare YAML text line by line or parse YAML documents and report structural changes.",
+        "isAccessibleForFree": true,
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://onlinetoolsandconverters.cc/yaml-diff-checker.html#breadcrumb",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://onlinetoolsandconverters.cc/" },
+          { "@type": "ListItem", "position": 2, "name": "YAML Diff Checker", "item": "https://onlinetoolsandconverters.cc/yaml-diff-checker.html" }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root{color-scheme:light;--yd-blue:#2563eb;--yd-blue-dark:#1d4ed8;--yd-ink:#172033;--yd-muted:#64748b;--yd-line:#e2e8f0;--yd-bg:#f5f8ff;--yd-white:#fff;--yd-green:#087443;--yd-red:#b42318;--yd-amber:#92400e;--yd-radius:18px;--yd-shadow:0 8px 28px rgba(15,23,42,.06)}
+    .yd-page,.yd-page *{box-sizing:border-box}
+    .yd-page{margin:0;background:var(--yd-bg);color:var(--yd-ink);font:16px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    .yd-page a{color:var(--yd-blue);text-decoration:none}.yd-page a:hover{text-decoration:underline}
+    .yd-page button,.yd-page input,.yd-page textarea,.yd-page select{font:inherit}.yd-page button{cursor:pointer}
+    .yd-shell{width:min(1160px,calc(100% - 32px));margin-inline:auto}
+    .yd-skip{position:absolute;left:-9999px;top:8px;z-index:100;padding:10px 14px;background:#fff;color:#111;border:2px solid var(--yd-blue)}.yd-skip:focus{left:12px}
+    .yd-header{background:#fff;border-bottom:1px solid var(--yd-line)}
+    .yd-header-inner{min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .yd-brand{display:inline-flex;align-items:center;gap:10px;color:var(--yd-ink)!important;font-weight:850;letter-spacing:-.3px}
+    .yd-brand-mark{display:grid;place-items:center;width:38px;height:38px;background:var(--yd-blue);color:#fff;border-radius:12px;font-size:.82rem;font-weight:900}
+    .yd-brand-name span{color:var(--yd-blue)}
+    .yd-nav{display:flex;align-items:center;gap:20px}.yd-nav a{color:#475569;font-size:.93rem;font-weight:650}
+    .yd-nav-toggle{display:none;border:1px solid var(--yd-line);border-radius:10px;padding:8px 12px;background:#fff;color:var(--yd-ink)}
+    .yd-main{min-height:60vh;padding-bottom:56px}.yd-breadcrumb{padding-top:17px;font-size:.86rem;color:var(--yd-muted)}.yd-breadcrumb a{color:var(--yd-muted)}
+    .yd-hero{padding:26px 0 20px}.yd-eyebrow{margin:0 0 8px;color:var(--yd-blue);text-transform:uppercase;letter-spacing:.11em;font-size:.76rem;font-weight:850}
+    .yd-hero h1{margin:0 0 12px;max-width:900px;font-size:clamp(2rem,5vw,3.25rem);line-height:1.1;letter-spacing:-.045em;color:var(--yd-ink)}
+    .yd-lead{max-width:850px;margin:0;color:#526176;font-size:1.06rem}
+    .yd-tool{background:var(--yd-white);border:1px solid var(--yd-line);border-radius:var(--yd-radius);box-shadow:var(--yd-shadow);overflow:hidden}
+    .yd-tool-top{padding:19px 22px 15px;border-bottom:1px solid var(--yd-line);display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
+    .yd-tool-top h2{margin:0 0 4px;font-size:1.25rem;line-height:1.3}.yd-tool-top p{margin:0;color:var(--yd-muted);font-size:.91rem}
+    .yd-local-badge{display:inline-flex;align-items:center;gap:7px;background:#ecfdf3;color:#05603a;border:1px solid #bbf7d0;border-radius:999px;padding:6px 11px;font-size:.8rem;font-weight:750;white-space:nowrap}
+    .yd-body{padding:21px}
+    .yd-input-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+    .yd-pane{min-width:0;border:1px solid var(--yd-line);border-radius:13px;overflow:hidden;background:#fff}
+    .yd-pane-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:12px 13px;background:#f8fafc;border-bottom:1px solid var(--yd-line)}
+    .yd-pane-title{font-weight:850;font-size:.92rem}.yd-file-label{position:relative;display:inline-flex;align-items:center;gap:6px;color:var(--yd-blue);font-weight:750;font-size:.82rem;cursor:pointer}
+    .yd-file-label input{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+    .yd-file-label:focus-within{outline:3px solid rgba(37,99,235,.25);outline-offset:3px;border-radius:4px}
+    .yd-editor{display:block;width:100%;min-height:235px;resize:vertical;padding:14px;border:0;border-radius:0;background:#fff;color:#172033;font:13.5px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;tab-size:2;overflow-wrap:anywhere}
+    .yd-editor:focus{outline:3px solid rgba(37,99,235,.2);outline-offset:-3px}
+    .yd-pane-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:8px 12px;border-top:1px solid var(--yd-line);color:var(--yd-muted);font-size:.78rem}
+    .yd-control-row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:17px 0 12px}
+    .yd-mode-group{display:inline-flex;gap:4px;align-items:center;flex-wrap:wrap;padding:4px;background:#f1f5f9;border:1px solid var(--yd-line);border-radius:12px}
+    .yd-mode-button{border:0;border-radius:8px;padding:9px 13px;background:transparent;color:#475569;font-weight:800;font-size:.88rem}
+    .yd-mode-button[aria-pressed="true"]{background:var(--yd-blue);color:#fff;box-shadow:0 2px 6px rgba(37,99,235,.18)}
+    .yd-mode-button:disabled{opacity:.45;cursor:not-allowed}
+    .yd-actions{display:flex;gap:8px;flex-wrap:wrap}.yd-btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:42px;padding:9px 14px;border:1px solid transparent;border-radius:10px;font-weight:780;font-size:.9rem;transition:background .15s ease,transform .15s ease}
+    .yd-btn:active{transform:translateY(1px)}.yd-btn-primary{color:#fff;background:var(--yd-blue)}.yd-btn-primary:hover{background:var(--yd-blue-dark)}
+    .yd-btn-secondary{color:#1e293b;background:#fff;border-color:#cbd5e1}.yd-btn-secondary:hover{background:#f8fafc}.yd-btn:disabled{opacity:.45;cursor:not-allowed}
+    .yd-options{display:flex;gap:10px 20px;flex-wrap:wrap;padding:13px;background:#f8fafc;border:1px solid var(--yd-line);border-radius:12px}
+    .yd-check{display:inline-flex;align-items:flex-start;gap:8px;color:#475569;font-size:.85rem}.yd-check input{margin-top:5px;accent-color:var(--yd-blue)}
+    .yd-help{margin:10px 0 0;color:var(--yd-muted);font-size:.84rem}.yd-status{min-height:24px;margin:13px 0 0;color:var(--yd-muted);font-size:.88rem}.yd-status.is-success{color:var(--yd-green)}.yd-status.is-error{color:var(--yd-red)}.yd-status.is-warning{color:var(--yd-amber)}
+    .yd-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:17px}.yd-stat{padding:12px 14px;border:1px solid var(--yd-line);border-radius:11px;background:#fff}.yd-stat span{display:block;color:var(--yd-muted);font-size:.78rem}.yd-stat strong{display:block;margin-top:2px;font-size:1.24rem;line-height:1.35;font-variant-numeric:tabular-nums}
+    .yd-results{margin-top:20px;border:1px solid var(--yd-line);border-radius:13px;overflow:hidden;background:#fff}.yd-results-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:13px 15px;border-bottom:1px solid var(--yd-line);background:#f8fafc}.yd-results-head h3{margin:0;font-size:1rem}.yd-results-note{color:var(--yd-muted);font-size:.8rem}
+    .yd-empty{padding:26px 18px;text-align:center;color:var(--yd-muted)}.yd-empty strong{display:block;color:#344054;margin-bottom:4px}
+    .yd-diff-list{margin:0;padding:0;list-style:none;max-height:560px;overflow:auto;font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .yd-diff-row{display:grid;grid-template-columns:48px 48px 22px minmax(0,1fr);min-height:27px;border-bottom:1px solid rgba(226,232,240,.55)}
+    .yd-diff-row:last-child{border-bottom:0}.yd-line-no{padding:4px 6px;text-align:right;color:#94a3b8;background:#f8fafc;border-right:1px solid #edf0f5;user-select:none;font-variant-numeric:tabular-nums}
+    .yd-diff-sign{padding:4px 4px;text-align:center;font-weight:900}.yd-diff-code{padding:4px 9px;white-space:pre-wrap;overflow-wrap:anywhere;min-width:0}
+    .yd-diff-row.is-add{background:#ecfdf3;color:#14532d}.yd-diff-row.is-add .yd-diff-sign{color:#15803d}.yd-diff-row.is-remove{background:#fff1f2;color:#881337}.yd-diff-row.is-remove .yd-diff-sign{color:#be123c}.yd-diff-row.is-same{background:#fff;color:#475569}
+    .yd-struct-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:.86rem}.yd-struct-table th,.yd-struct-table td{padding:10px 12px;border-bottom:1px solid var(--yd-line);text-align:left;vertical-align:top;overflow-wrap:anywhere}.yd-struct-table th{background:#f8fafc;color:#475569;font-size:.78rem}.yd-struct-table td code{white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.yd-struct-table tr:last-child td{border-bottom:0}.yd-change-badge{display:inline-block;border-radius:999px;padding:3px 8px;font-size:.73rem;font-weight:850;white-space:nowrap}.yd-change-added{background:#dcfce7;color:#166534}.yd-change-removed{background:#ffe4e6;color:#9f1239}.yd-change-changed{background:#fef3c7;color:#92400e}
+    .yd-content{padding-top:42px}.yd-content section{margin:0 0 32px}.yd-content h2{margin:0 0 12px;color:var(--yd-ink);font-size:clamp(1.4rem,3vw,1.85rem);line-height:1.25;letter-spacing:-.025em}.yd-content h3{margin:22px 0 7px;font-size:1.08rem;color:var(--yd-ink)}.yd-content p,.yd-content li{color:#475569}.yd-content p{margin:0 0 14px}.yd-content ul,.yd-content ol{padding-left:24px}.yd-content li{margin-bottom:8px}.yd-content code{font-size:.92em;overflow-wrap:anywhere}
+    .yd-example{overflow:auto;margin:12px 0;padding:13px 15px;border:1px solid var(--yd-line);border-radius:10px;background:#fff;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre}
+    .yd-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.yd-info-card{padding:17px;background:#fff;border:1px solid var(--yd-line);border-radius:13px}.yd-info-card h3{margin:0 0 7px}.yd-info-card p{margin:0;font-size:.93rem}
+    .yd-faq details{margin-bottom:10px;padding:15px 17px;background:#fff;border:1px solid var(--yd-line);border-radius:12px}.yd-faq summary{cursor:pointer;font-weight:800;color:#243047}.yd-faq details p{margin:12px 0 0}
+    .yd-related{display:flex;flex-wrap:wrap;gap:10px}.yd-related a{padding:8px 12px;background:#fff;border:1px solid var(--yd-line);border-radius:999px;font-size:.89rem;font-weight:700}
+    .yd-footer{padding:26px 0;color:#cbd5e1;background:#111c32}.yd-footer-inner{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}.yd-footer p{margin:0;font-size:.88rem}.yd-footer a{color:#fff}
+    .yd-page button:focus-visible,.yd-page a:focus-visible,.yd-page select:focus-visible,.yd-page input:focus-visible,.yd-page textarea:focus-visible{outline:3px solid rgba(37,99,235,.25);outline-offset:2px}
+    @media(max-width:850px){.yd-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.yd-control-row{align-items:flex-start}.yd-actions{width:100%}}
+    @media(max-width:760px){.yd-nav-toggle{display:inline-flex}.yd-nav{display:none;position:absolute;top:65px;left:0;right:0;z-index:20;padding:14px 20px;background:#fff;border-bottom:1px solid var(--yd-line);box-shadow:var(--yd-shadow);flex-direction:column;align-items:flex-start}.yd-nav.is-open{display:flex}.yd-input-grid{grid-template-columns:1fr}.yd-editor{min-height:180px}.yd-body{padding:15px}.yd-tool-top{padding:17px 16px}.yd-cards{grid-template-columns:1fr}}
+    @media(max-width:480px){.yd-shell{width:min(100% - 22px,1160px)}.yd-brand-name{font-size:.9rem}.yd-mode-group{width:100%}.yd-mode-button{flex:1}.yd-actions .yd-btn{flex:1 1 calc(50% - 8px)}.yd-diff-row{grid-template-columns:36px 36px 19px minmax(0,1fr)}.yd-diff-code{padding-inline:6px}.yd-struct-table{font-size:.78rem}.yd-struct-table th,.yd-struct-table td{padding:8px 7px}}
+    @media(prefers-reduced-motion:reduce){.yd-page *,.yd-page *::before,.yd-page *::after{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body class="yd-page">
+  <a class="yd-skip" href="#yd-main">Skip to content</a>
+  <header class="yd-header">
+    <div class="yd-shell yd-header-inner">
+      <a class="yd-brand" href="index.html" aria-label="Online Tools and Converters home"><span class="yd-brand-mark" aria-hidden="true">OT</span><span class="yd-brand-name">Online Tools <span>&amp; Converters</span></span></a>
+      <button class="yd-nav-toggle" id="yd-nav-toggle" type="button" aria-expanded="false" aria-controls="yd-navigation">Menu</button>
+      <nav class="yd-nav" id="yd-navigation" aria-label="Main navigation"><a href="index.html">Home</a><a href="index.html#tools">All tools</a><a href="regex-tester.html">Regex Tester</a><a href="text-diff-checker.html">Text Diff Checker</a><a href="sitemap.xml">XML Sitemap</a></nav>
+    </div>
+  </header>
+
+  <main class="yd-main yd-shell" id="yd-main">
+    <nav class="yd-breadcrumb" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true"> / </span><span aria-current="page">YAML Diff Checker</span></nav>
+    <section class="yd-hero">
+      <p class="yd-eyebrow">Free online developer tool</p>
+      <h1>YAML Diff Checker – Compare YAML Files Online</h1>
+      <p class="yd-lead">Compare two YAML files to find added, removed, and changed content. Use a line-by-line diff to inspect formatting or a structural YAML comparison to find data changes without the noise from comments, indentation, or mapping-key order.</p>
+    </section>
+
+    <section class="yd-tool" aria-labelledby="yd-tool-title">
+      <div class="yd-tool-top"><div><h2 id="yd-tool-title">Compare two YAML documents</h2><p>Paste content or load .yaml / .yml files, then choose how to compare them.</p></div><span class="yd-local-badge">✓ Compared in your browser</span></div>
+      <div class="yd-body">
+        <div class="yd-input-grid">
+          <section class="yd-pane" aria-labelledby="yd-left-title">
+            <div class="yd-pane-head"><span class="yd-pane-title" id="yd-left-title">Original YAML (A)</span><label class="yd-file-label">＋ Open file A<input type="file" id="yd-file-a" accept=".yaml,.yml,.txt,text/plain,application/yaml,text/yaml"></label></div>
+            <textarea class="yd-editor" id="yd-input-a" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Original YAML content" placeholder="Paste the original YAML here..."></textarea>
+            <div class="yd-pane-foot"><span id="yd-count-a">0 lines · 0 characters</span><span id="yd-name-a">No file selected</span></div>
+          </section>
+          <section class="yd-pane" aria-labelledby="yd-right-title">
+            <div class="yd-pane-head"><span class="yd-pane-title" id="yd-right-title">Modified YAML (B)</span><label class="yd-file-label">＋ Open file B<input type="file" id="yd-file-b" accept=".yaml,.yml,.txt,text/plain,application/yaml,text/yaml"></label></div>
+            <textarea class="yd-editor" id="yd-input-b" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Modified YAML content" placeholder="Paste the modified YAML here..."></textarea>
+            <div class="yd-pane-foot"><span id="yd-count-b">0 lines · 0 characters</span><span id="yd-name-b">No file selected</span></div>
+          </section>
+        </div>
+
+        <div class="yd-control-row">
+          <div class="yd-mode-group" role="group" aria-label="Comparison mode">
+            <button class="yd-mode-button" type="button" data-yd-mode="lines" aria-pressed="true">Line-by-line diff</button>
+            <button class="yd-mode-button" type="button" id="yd-structural-mode" data-yd-mode="structure" aria-pressed="false">Structural YAML diff</button>
+          </div>
+          <div class="yd-actions">
+            <button class="yd-btn yd-btn-primary" type="button" id="yd-compare">Compare YAML</button>
+            <button class="yd-btn yd-btn-secondary" type="button" id="yd-sample">Load sample</button>
+            <button class="yd-btn yd-btn-secondary" type="button" id="yd-swap">Swap</button>
+            <button class="yd-btn yd-btn-secondary" type="button" id="yd-clear">Clear</button>
+          </div>
+        </div>
+
+        <div class="yd-options" aria-label="Comparison options">
+          <label class="yd-check"><input type="checkbox" id="yd-ignore-space"> <span>Ignore leading and trailing whitespace in line mode</span></label>
+          <label class="yd-check"><input type="checkbox" id="yd-ignore-blank"> <span>Ignore blank lines in line mode</span></label>
+          <label class="yd-check"><input type="checkbox" id="yd-ignore-array" disabled> <span>Ignore array order in structural mode</span></label>
+        </div>
+        <p class="yd-help" id="yd-mode-help">Line-by-line diff compares the original text, so indentation, comments, quote style, and blank lines can appear as differences.</p>
+        <p class="yd-status" id="yd-status" role="status" aria-live="polite">Ready. Add two YAML documents or load the sample to start.</p>
+
+        <div class="yd-summary" aria-label="Comparison summary">
+          <div class="yd-stat"><span>Added</span><strong id="yd-added">—</strong></div>
+          <div class="yd-stat"><span>Removed</span><strong id="yd-removed">—</strong></div>
+          <div class="yd-stat"><span>Changed fields</span><strong id="yd-changed">—</strong></div>
+          <div class="yd-stat"><span>Unchanged lines / fields</span><strong id="yd-same">—</strong></div>
+        </div>
+
+        <section class="yd-results" aria-labelledby="yd-results-title">
+          <div class="yd-results-head"><h3 id="yd-results-title">Comparison results</h3><div class="yd-actions"><button class="yd-btn yd-btn-secondary" id="yd-copy" type="button" disabled>Copy diff</button><button class="yd-btn yd-btn-secondary" id="yd-download" type="button" disabled>Download diff</button></div></div>
+          <div id="yd-results" aria-live="polite"><div class="yd-empty"><strong>No comparison yet</strong>Choose Compare YAML to see what changed.</div></div>
+        </section>
+      </div>
+    </section>
+
+    <article class="yd-content">
+      <section id="what-is-yaml-diff">
+        <h2>What is a YAML diff checker?</h2>
+        <p>A YAML diff checker compares two YAML documents and highlights the differences between them. Developers use a YAML comparison tool to review configuration changes, check deployment settings, troubleshoot unexpected behavior, and verify that an edit changed only the intended values.</p>
+        <p>This page includes two comparison methods. A <strong>line-by-line YAML diff</strong> compares the source text and shows added, removed, and unchanged lines. A <strong>structural YAML comparison</strong> parses the documents first and compares their underlying data. Structural comparison can ignore formatting-only changes, such as comments, different indentation widths, and mapping keys written in a different order, when the parsed values are equivalent.</p>
+      </section>
+
+      <section id="how-to-compare">
+        <h2>How to compare two YAML files</h2>
+        <ol>
+          <li><strong>Load the original file.</strong> Paste the first document into Original YAML (A), or use Open file A to select a local <code>.yaml</code> or <code>.yml</code> file.</li>
+          <li><strong>Load the updated file.</strong> Paste the proposed version into Modified YAML (B), or select it using Open file B.</li>
+          <li><strong>Choose a comparison mode.</strong> Use Line-by-line diff to examine exact text edits. Use Structural YAML diff to compare parsed values and nested fields.</li>
+          <li><strong>Compare the documents.</strong> Select Compare YAML. Review the summary totals and the detailed result list.</li>
+          <li><strong>Copy or download the report.</strong> Copy diff places the report on your clipboard when browser permissions allow it. Download diff saves a text report for later review.</li>
+        </ol>
+        <p>For a quick test, choose Load sample first. The sample illustrates a changed replica count, an updated container image, and an added environment variable.</p>
+      </section>
+
+      <section id="compare-modes">
+        <h2>Line-by-line diff vs. structural YAML comparison</h2>
+        <div class="yd-cards">
+          <div class="yd-info-card"><h3>Line-by-line YAML diff</h3><p>Best when exact source changes matter. It can show indentation changes, reordered keys, comments, whitespace, and line-level edits. It can still compare text that is not valid YAML.</p></div>
+          <div class="yd-info-card"><h3>Structural YAML diff</h3><p>Best when you want to know whether the configuration data changed. It parses YAML and compares nested mappings, arrays, and values. Comments and formatting are not part of the parsed data.</p></div>
+        </div>
+        <p>Structural comparison depends on a YAML parser. This page uses the browser-based js-yaml parser for this mode. If the parser cannot load, line-by-line comparison remains available. Structural comparison reports the changes in parsed data; it does not validate your configuration against a Kubernetes schema, application schema, or deployment environment.</p>
+      </section>
+
+      <section id="common-yaml-use-cases">
+        <h2>When to use a YAML comparison tool</h2>
+        <ul>
+          <li><strong>Kubernetes manifests:</strong> review changes to replicas, image tags, ports, resource limits, environment variables, labels, and deployment settings.</li>
+          <li><strong>Docker Compose:</strong> compare service definitions, volumes, networks, ports, environment entries, and image versions.</li>
+          <li><strong>GitHub Actions and CI/CD:</strong> inspect changes in workflows, job dependencies, permissions, triggers, and build steps.</li>
+          <li><strong>Helm values:</strong> compare values files before a chart deployment and find added or changed nested settings.</li>
+          <li><strong>Application configuration:</strong> compare development, staging, and production YAML files while paying attention to changes that could affect behavior.</li>
+          <li><strong>Generated configuration:</strong> determine whether a formatter or generator changed only the document's appearance or changed its actual data.</li>
+        </ul>
+      </section>
+
+      <section id="yaml-examples">
+        <h2>Example: find a change in YAML configuration</h2>
+        <p>Consider these two simplified deployment settings. The updated version changes the replica count and container image, then adds an environment variable.</p>
+        <div class="yd-example"># Original YAML
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+        - name: web
+          image: example/web:1.0</div>
+        <div class="yd-example"># Modified YAML
+spec:
+  replicas: 3
+  template:
+    spec:
+      containers:
+        - name: web
+          image: example/web:1.1
+          env:
+            - name: LOG_LEVEL
+              value: info</div>
+        <p>A line diff highlights the affected lines. A structural diff instead reports the data paths for the changed replica count and image, along with the newly added environment configuration. This is useful when the YAML has been reformatted but you still need to identify the effective data changes.</p>
+      </section>
+
+      <section id="yaml-diff-tips">
+        <h2>Tips for accurate YAML diffs</h2>
+        <h3>Choose the right comparison for the task</h3><p>Use line mode when you need a source review, including comments or indentation edits. Use structural mode when the goal is to see whether the parsed settings changed. The two reports answer different questions and can complement each other.</p>
+        <h3>Remember that arrays can be order-sensitive</h3><p>YAML sequences represent ordered lists. Structural mode preserves array order by default, so moving list items can appear as changes. Enable Ignore array order only when the items are genuinely interchangeable for your use case. The tool cannot determine whether a particular application treats a list as order-independent.</p>
+        <h3>Diffing is not the same as validation</h3><p>Two files can be compared as text even if they contain a syntax error. Structural mode needs valid YAML documents to parse their data, but successful parsing does not guarantee that a Kubernetes manifest, GitHub Actions workflow, Docker Compose file, or Helm values file is valid for its intended platform. Use the platform-specific validator or deployment checks as well.</p>
+        <h3>Keep configuration data private</h3><p>Comparison is performed in your browser, and this page does not send the YAML text to our server. Structural comparison retrieves a parser library from a content-delivery network; that request loads the code, not your pasted documents. Still, avoid pasting secrets into any web application on a device or browser you do not trust.</p>
+      </section>
+
+      <section class="yd-faq" id="yaml-faq">
+        <h2>Frequently asked questions</h2>
+        <details><summary>How do I compare two YAML files online?</summary><p>Paste or load the original YAML in the left panel and the modified YAML in the right panel. Choose line-by-line or structural mode, then click Compare YAML. Review the change summary and copy or download the report.</p></details>
+        <details><summary>What is the difference between YAML diff and YAML compare?</summary><p>These names are often used for similar tasks. A line diff compares the exact text; a structural YAML comparison parses the documents and compares the data represented by them. This tool supports both so you can choose the report that suits your task.</p></details>
+        <details><summary>Can I compare YAML files when indentation or comments differ?</summary><p>Yes. Line-by-line mode shows those text changes. Structural mode ignores comments and formatting that do not change the parsed data, including mapping-key order. YAML indentation must still be valid for the parser to read the document.</p></details>
+        <details><summary>Can this YAML diff checker compare Kubernetes, Docker Compose, Helm, or CI/CD files?</summary><p>It can compare their YAML text or parsed data. It does not know every rule of those platforms and does not replace platform-specific schema validation, linting, testing, or deployment checks.</p></details>
+        <details><summary>Does structural comparison support multiple YAML documents?</summary><p>Structural mode parses documents separated by YAML document markers and compares them in order. A change in document order can therefore appear as a difference. Line-by-line mode compares the complete source text as entered.</p></details>
+        <details><summary>Does the tool upload my YAML files?</summary><p>No YAML content is sent by this page to our server for comparison. Text comparison runs in the browser. Structural comparison also runs in the browser using a parser script loaded from a CDN. For highly sensitive files, you should still follow your organization's data-handling rules.</p></details>
+        <details><summary>Why does structural comparison show an error?</summary><p>The YAML parser may have found invalid indentation, an unmatched quote, a malformed sequence or mapping, duplicate keys, or another syntax problem. Switch to line-by-line mode to inspect the text, correct the YAML, and run structural comparison again.</p></details>
+        <details><summary>Does a YAML diff checker validate Kubernetes or Docker configuration?</summary><p>No. It reports textual or structural differences, not whether the changed configuration is supported, secure, or valid for a specific runtime. Run the appropriate linter, schema validator, CI checks, and deployment tests for your environment.</p></details>
+      </section>
+
+      <section id="related-tools"><h2>Explore related developer tools</h2><p>Use these tools for other text, data, and website maintenance tasks.</p><div class="yd-related"><a href="text-diff-checker.html">Text Diff Checker</a><a href="json-to-csv.html">JSON to CSV Converter</a><a href="regex-tester.html">Regex Tester</a><a href="sitemap-xml-validator.html">Sitemap XML Validator</a><a href="unix-timestamp-converter.html">Unix Timestamp Converter</a></div></section>
+    </article>
+  </main>
+
+  <footer class="yd-footer"><div class="yd-shell yd-footer-inner"><p>© <span id="yd-year">2026</span> Online Tools &amp; Converters.</p><p><a href="index.html">Home</a> · <a href="sitemap.xml">XML Sitemap</a></p></div></footer>
+
+  <!-- js-yaml enables parsed/structural YAML comparison. Text diff works without it. -->
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js" onerror="window.ydYamlParserFailed=true"></script>
+  <script>
+  (() => {
+    "use strict";
+    const $ = (id) => document.getElementById(id);
+    const a = $("yd-input-a"), b = $("yd-input-b"), results = $("yd-results"), status = $("yd-status");
+    const copyButton = $("yd-copy"), downloadButton = $("yd-download"), structuralButton = $("yd-structural-mode");
+    const maxChars = 400000, maxLines = 2000;
+    let compareMode = "lines", lastReport = "", lastResultMode = "lines";
+    const MISSING = Symbol("missing");
+
+    function setStatus(message, kind = "") { status.textContent = message; status.className = "yd-status" + (kind ? " is-" + kind : ""); }
+    function lineArray(text) { return text === "" ? [] : text.split(/\r\n|\n|\r/); }
+    function updateInputCounts() {
+      [[a,"yd-count-a"],[b,"yd-count-b"]].forEach(([field,id]) => {
+        const lines = lineArray(field.value).length;
+        $(id).textContent = lines + " lines · " + field.value.length.toLocaleString() + " characters";
+      });
+    }
+    function setText(el, text) { el.textContent = text == null ? "" : String(text); }
+    function addCell(row, className, text) { const cell = document.createElement("div"); cell.className = className; cell.textContent = text; row.appendChild(cell); return cell; }
+    function showEmpty(title, detail) {
+      results.replaceChildren();
+      const div = document.createElement("div"); div.className = "yd-empty";
+      const strong = document.createElement("strong"); strong.textContent = title;
+      div.append(strong, document.createTextNode(detail)); results.appendChild(div);
+    }
+    function resetSummary() { $("yd-added").textContent = "—"; $("yd-removed").textContent = "—"; $("yd-changed").textContent = "—"; $("yd-same").textContent = "—"; }
+    function enableReport(report, mode) { lastReport = report; lastResultMode = mode; const ready = Boolean(report); copyButton.disabled = !ready; downloadButton.disabled = !ready; }
+    function checkLimits(textA, textB) {
+      if (textA.length > maxChars || textB.length > maxChars) { setStatus("Each input is limited to 400,000 characters to help keep your browser responsive.","error"); return false; }
+      if (compareMode === "lines" && (lineArray(textA).length > maxLines || lineArray(textB).length > maxLines)) { setStatus("Line-by-line mode supports up to 2,000 lines per document in this version. Try splitting very large files into smaller sections.","error"); return false; }
+      return true;
+    }
+    function renderLineDiff(ops) {
+      results.replaceChildren();
+      if (!ops.length) { showEmpty("No differences found", " Both inputs match under the selected line comparison options."); return; }
+      const list = document.createElement("ol"); list.className = "yd-diff-list"; list.setAttribute("aria-label","Line-by-line difference details");
+      ops.forEach(op => {
+        const row = document.createElement("li"); row.className = "yd-diff-row is-" + op.type;
+        addCell(row,"yd-line-no",op.oldNo == null ? "" : String(op.oldNo));
+        addCell(row,"yd-line-no",op.newNo == null ? "" : String(op.newNo));
+        addCell(row,"yd-diff-sign",op.type === "add" ? "+" : op.type === "remove" ? "−" : " ");
+        addCell(row,"yd-diff-code",op.text === "" ? " " : op.text);
+        list.appendChild(row);
+      });
+      results.appendChild(list);
+    }
+    function runLineDiff(textA, textB) {
+      let rawA = lineArray(textA).map((text,index) => ({text,no:index+1}));
+      let rawB = lineArray(textB).map((text,index) => ({text,no:index+1}));
+      if ($("yd-ignore-blank").checked) { rawA = rawA.filter(x => x.text.trim() !== ""); rawB = rawB.filter(x => x.text.trim() !== ""); }
+      const normalize = (s) => $("yd-ignore-space").checked ? s.trim() : s;
+      const A = rawA.map(x=>normalize(x.text)), B = rawB.map(x=>normalize(x.text));
+      const n=A.length,m=B.length;
+      // Bounded LCS table: clear and predictable line-level edits for small/medium config files.
+      const dp = Array.from({length:n+1},()=>new Uint16Array(m+1));
+      for(let i=n-1;i>=0;i--) for(let j=m-1;j>=0;j--) dp[i][j] = A[i]===B[j] ? dp[i+1][j+1]+1 : Math.max(dp[i+1][j],dp[i][j+1]);
+      const ops=[]; let i=0,j=0,added=0,removed=0,same=0;
+      while(i<n || j<m) {
+        if(i<n && j<m && A[i]===B[j]) { ops.push({type:"same",text:rawA[i].text,oldNo:rawA[i].no,newNo:rawB[j].no}); i++;j++;same++; }
+        else if(i<n && (j===m || dp[i+1][j]>=dp[i][j+1])) { ops.push({type:"remove",text:rawA[i].text,oldNo:rawA[i].no,newNo:null});i++;removed++; }
+        else { ops.push({type:"add",text:rawB[j].text,oldNo:null,newNo:rawB[j].no});j++;added++; }
+      }
+      $("yd-added").textContent=String(added); $("yd-removed").textContent=String(removed); $("yd-changed").textContent="—"; $("yd-same").textContent=String(same);
+      renderLineDiff(ops);
+      const report=ops.map(op => (op.type==="add"?"+ ":op.type==="remove"?"- ":"  ")+op.text).join("\n") || "No differences found.";
+      enableReport(report,"lines");
+      setStatus(added===0&&removed===0?"No line differences found under the selected options.":`Line comparison complete: ${added} added line(s), ${removed} removed line(s), ${same} unchanged line(s).`,"success");
+    }
+    function isMap(value) { return value !== null && typeof value === "object" && !Array.isArray(value) && !(value instanceof Date); }
+    function stableValue(value, ignoreArrayOrder) {
+      if(value instanceof Date) return {"$date":value.toISOString()};
+      if(Array.isArray(value)) { const values=value.map(v=>stableValue(v,ignoreArrayOrder)); if(ignoreArrayOrder) values.sort((x,y)=>JSON.stringify(x).localeCompare(JSON.stringify(y))); return values; }
+      if(isMap(value)) { const out=Object.create(null); Object.keys(value).sort().forEach(k=>{out[k]=stableValue(value[k],ignoreArrayOrder);}); return out; }
+      if(typeof value==="number" && !Number.isFinite(value)) return {"$number":String(value)};
+      return value;
+    }
+    function equalValues(x,y,ignoreArrayOrder) {
+      if(x instanceof Date || y instanceof Date) return x instanceof Date && y instanceof Date && x.getTime()===y.getTime();
+      if(Object.is(x,y)) return true;
+      if(Array.isArray(x) && Array.isArray(y)) {
+        if(x.length!==y.length) return false;
+        if(ignoreArrayOrder) { const sx=x.map(v=>JSON.stringify(stableValue(v,true))).sort(); const sy=y.map(v=>JSON.stringify(stableValue(v,true))).sort(); return sx.every((v,i)=>v===sy[i]); }
+        return x.every((v,i)=>equalValues(v,y[i],ignoreArrayOrder));
+      }
+      if(isMap(x) && isMap(y)) {
+        const kx=Object.keys(x).sort(), ky=Object.keys(y).sort();
+        return kx.length===ky.length && kx.every((key,i)=>key===ky[i] && equalValues(x[key],y[key],ignoreArrayOrder));
+      }
+      return false;
+    }
+    function pathFor(base,key,isArray) {
+      if(isArray) return base+"["+key+"]";
+      return /^[A-Za-z_$][\w$]*$/.test(String(key)) ? base+"."+key : base+"["+JSON.stringify(String(key))+ "]";
+    }
+    function valueDisplay(value) {
+      if(value===MISSING) return "—";
+      try { if(window.jsyaml) { const s=window.jsyaml.dump(value,{noRefs:true,lineWidth:100}); return s.trim() || "(empty value)"; } } catch {}
+      if(value===null) return "null";
+      if(typeof value==="string") return JSON.stringify(value);
+      try { return JSON.stringify(value,null,2) ?? String(value); } catch { return String(value); }
+    }
+    function collectStructuralDiff(x,y,path,out,ignoreArrayOrder) {
+      if(equalValues(x,y,ignoreArrayOrder)) return;
+      if(isMap(x) && isMap(y)) {
+        const keys=Array.from(new Set([...Object.keys(x),...Object.keys(y)])).sort();
+        for(const key of keys) {
+          const px=Object.prototype.hasOwnProperty.call(x,key), py=Object.prototype.hasOwnProperty.call(y,key), next=pathFor(path,key,false);
+          if(!px) out.push({type:"added",path:next,old:MISSING,value:y[key]});
+          else if(!py) out.push({type:"removed",path:next,old:x[key],value:MISSING});
+          else collectStructuralDiff(x[key],y[key],next,out,ignoreArrayOrder);
+        }
+        return;
+      }
+      if(Array.isArray(x) && Array.isArray(y)) {
+        let xa=x, ya=y;
+        if(ignoreArrayOrder) { xa=x.slice().sort((p,q)=>JSON.stringify(stableValue(p,true)).localeCompare(JSON.stringify(stableValue(q,true)))); ya=y.slice().sort((p,q)=>JSON.stringify(stableValue(p,true)).localeCompare(JSON.stringify(stableValue(q,true)))); }
+        const limit=Math.max(xa.length,ya.length);
+        for(let i=0;i<limit;i++) {
+          const px=i<xa.length, py=i<ya.length, next=pathFor(path,i,true);
+          if(!px) out.push({type:"added",path:next,old:MISSING,value:ya[i]});
+          else if(!py) out.push({type:"removed",path:next,old:xa[i],value:MISSING});
+          else collectStructuralDiff(xa[i],ya[i],next,out,ignoreArrayOrder);
+        }
+        return;
+      }
+      out.push({type:"changed",path,old:x,value:y});
+    }
+    function renderStructuralDiff(diffs) {
+      results.replaceChildren();
+      if(!diffs.length) { showEmpty("No structural differences found", " The YAML documents parse to equivalent data under the selected array-order setting."); return; }
+      const wrap=document.createElement("div"); wrap.style.overflowX="auto";
+      const table=document.createElement("table"); table.className="yd-struct-table";
+      const thead=document.createElement("thead"), hr=document.createElement("tr");
+      ["YAML path","Change","Original value","Modified value"].forEach(label=>{const th=document.createElement("th");th.textContent=label;hr.appendChild(th);}); thead.appendChild(hr);table.appendChild(thead);
+      const tbody=document.createElement("tbody");
+      diffs.forEach(item=>{
+        const tr=document.createElement("tr");
+        const path=document.createElement("td");const code=document.createElement("code");code.textContent=item.path;path.appendChild(code);tr.appendChild(path);
+        const type=document.createElement("td");const badge=document.createElement("span");badge.className="yd-change-badge yd-change-"+item.type;badge.textContent=item.type;type.appendChild(badge);tr.appendChild(type);
+        const old=document.createElement("td");const oldCode=document.createElement("code");oldCode.textContent=valueDisplay(item.old);old.appendChild(oldCode);tr.appendChild(old);
+        const val=document.createElement("td");const valCode=document.createElement("code");valCode.textContent=valueDisplay(item.value);val.appendChild(valCode);tr.appendChild(val);
+        tbody.appendChild(tr);
+      });
+      table.appendChild(tbody);wrap.appendChild(table);results.appendChild(wrap);
+    }
+    function runStructuralDiff(textA,textB) {
+      if(!window.jsyaml || typeof window.jsyaml.loadAll!=="function") {
+        setStatus("Structural YAML parsing is unavailable because the parser script could not load. Line-by-line diff still works; check your connection or try again later.","error");
+        return;
+      }
+      let parsedA,parsedB;
+      try { parsedA=window.jsyaml.loadAll(textA); }
+      catch(error) { showEmpty("Original YAML could not be parsed", error.message || "Check the syntax in YAML A."); setStatus("Could not parse Original YAML (A). Correct its syntax, then compare again.","error"); resetSummary(); enableReport("",""); return; }
+      try { parsedB=window.jsyaml.loadAll(textB); }
+      catch(error) { showEmpty("Modified YAML could not be parsed", error.message || "Check the syntax in YAML B."); setStatus("Could not parse Modified YAML (B). Correct its syntax, then compare again.","error"); resetSummary(); enableReport("",""); return; }
+      const diffs=[]; const ignoreOrder=$("yd-ignore-array").checked;
+      collectStructuralDiff(parsedA,parsedB,"$",diffs,ignoreOrder);
+      const counts={added:0,removed:0,changed:0}; diffs.forEach(d=>counts[d.type]++);
+      $("yd-added").textContent=String(counts.added); $("yd-removed").textContent=String(counts.removed); $("yd-changed").textContent=String(counts.changed); $("yd-same").textContent=diffs.length===0?"All":"—";
+      renderStructuralDiff(diffs);
+      const report=diffs.length?diffs.map(d=>`${d.type.toUpperCase()} ${d.path}\n  Original: ${valueDisplay(d.old)}\n  Modified: ${valueDisplay(d.value)}`).join("\n\n"):"No structural differences found.";
+      enableReport(report,"structure");
+      setStatus(diffs.length?`Structural comparison complete: ${counts.added} added, ${counts.removed} removed, ${counts.changed} changed field(s).`:"The parsed YAML data is equivalent under the selected options.","success");
+    }
+    function compare() {
+      const textA=a.value, textB=b.value;
+      updateInputCounts();
+      if(!checkLimits(textA,textB)) return;
+      if(compareMode==="structure") runStructuralDiff(textA,textB); else runLineDiff(textA,textB);
+    }
+    function setMode(mode) {
+      compareMode=mode;
+      document.querySelectorAll("[data-yd-mode]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.ydMode===mode)));
+      $("yd-ignore-array").disabled=mode!=="structure";
+      $("yd-ignore-space").disabled=mode!=="lines";
+      $("yd-ignore-blank").disabled=mode!=="lines";
+      $("yd-mode-help").textContent=mode==="lines"?"Line-by-line diff compares the original text, so indentation, comments, quote style, and blank lines can appear as differences.":"Structural mode parses the YAML and compares the represented data. Comments, formatting-only changes, and mapping-key order are ignored. Array order remains significant unless you enable Ignore array order.";
+      invalidateResults();
+      if(mode==="structure" && !window.jsyaml) setStatus("The YAML parser has not loaded. Line mode is available; structural mode needs an internet connection to fetch js-yaml.","warning");
+      else setStatus((mode==="lines"?"Line-by-line":"Structural YAML")+" mode selected. Select Compare YAML to refresh the results.");
+    }
+    async function readFile(event,field,nameId) {
+      const file=event.target.files && event.target.files[0]; if(!file) return;
+      if(file.size>maxChars) { setStatus("That file exceeds the 400,000-character tool limit. Try a smaller file or paste a smaller section.","error"); event.target.value=""; return; }
+      try { field.value=await file.text(); $(nameId).textContent=file.name; updateInputCounts(); setStatus("Loaded “"+file.name+"”. Select Compare YAML to review the changes.","success"); }
+      catch { setStatus("The selected file could not be read. Try another local YAML file.","error"); }
+      event.target.value="";
+    }
+    async function copyReport() {
+      if(!lastReport) return;
+      try {
+        if(navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(lastReport); setStatus("Diff report copied to the clipboard.","success"); return; }
+      } catch {}
+      const ta=document.createElement("textarea");ta.value=lastReport;ta.setAttribute("readonly","");ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();let ok=false;try{ok=document.execCommand("copy");}catch{}ta.remove();
+      setStatus(ok?"Diff report copied to the clipboard.":"Clipboard access was blocked. Try selecting and copying the result manually.",ok?"success":"warning");
+    }
+    function downloadReport() {
+      if(!lastReport) return;
+      const blob=new Blob([lastReport+"\n"],{type:"text/plain;charset=utf-8"});const url=URL.createObjectURL(blob);const link=document.createElement("a");link.href=url;link.download=lastResultMode==="structure"?"yaml-structural-diff.txt":"yaml-diff.txt";document.body.appendChild(link);link.click();link.remove();URL.revokeObjectURL(url);setStatus("Diff report downloaded.","success");
+    }
+    const sampleA=`apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+        - name: web
+          image: example/web:1.0
+          ports:
+            - containerPort: 8080`;
+    const sampleB=`apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+spec:
+  replicas: 3
+  template:
+    spec:
+      containers:
+        - name: web
+          image: example/web:1.1
+          ports:
+            - containerPort: 8080
+          env:
+            - name: LOG_LEVEL
+              value: info`;
+
+    $("yd-nav-toggle").addEventListener("click",()=>{const nav=$("yd-navigation"),open=nav.classList.toggle("is-open");$("yd-nav-toggle").setAttribute("aria-expanded",String(open));});
+    document.querySelectorAll("[data-yd-mode]").forEach(button=>button.addEventListener("click",()=>{if(!button.disabled)setMode(button.dataset.ydMode);}));
+    $("yd-compare").addEventListener("click",compare);
+    $("yd-sample").addEventListener("click",()=>{a.value=sampleA;b.value=sampleB;$("yd-name-a").textContent="Sample original";$("yd-name-b").textContent="Sample modified";updateInputCounts();compare();});
+    $("yd-swap").addEventListener("click",()=>{const text=a.value;a.value=b.value;b.value=text;const name=$("yd-name-a").textContent;$("yd-name-a").textContent=$("yd-name-b").textContent;$("yd-name-b").textContent=name;updateInputCounts();compare();});
+    $("yd-clear").addEventListener("click",()=>{a.value="";b.value="";$("yd-name-a").textContent="No file selected";$("yd-name-b").textContent="No file selected";updateInputCounts();resetSummary();enableReport("","");showEmpty("No comparison yet"," Add two YAML documents or load the sample to start.");setStatus("Inputs and results cleared.");a.focus();});
+    $("yd-copy").addEventListener("click",copyReport);$("yd-download").addEventListener("click",downloadReport);
+    $("yd-file-a").addEventListener("change",event=>readFile(event,a,"yd-name-a"));$("yd-file-b").addEventListener("change",event=>readFile(event,b,"yd-name-b"));
+    function invalidateResults() {
+      enableReport("","");
+      resetSummary();
+      showEmpty("Inputs changed"," Select Compare YAML to refresh the comparison.");
+      setStatus("Inputs or options changed. Select Compare YAML to refresh the results.");
+    }
+    [a,b].forEach(field=>field.addEventListener("input",()=>{updateInputCounts();invalidateResults();}));
+    [$("yd-ignore-space"),$("yd-ignore-blank"),$("yd-ignore-array")].forEach(option=>option.addEventListener("change",invalidateResults));
+    $("yd-year").textContent=new Date().getFullYear();
+    updateInputCounts();resetSummary();
+    if(!window.jsyaml) { structuralButton.disabled=true; structuralButton.title="Structural mode needs the js-yaml parser script."; }
+  })();
+  </script>
+  <script src="/script.js" defer></script>
+</body>
+</html>

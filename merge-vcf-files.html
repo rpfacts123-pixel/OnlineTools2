@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Merge VCF Files and Remove Duplicate Contacts</title>
+<meta name="description" content="Merge multiple VCF files into one and remove duplicate contacts in a single pass. Review duplicate groups before exporting, merge fields across cards, and download VCF 3.0 or CSV. Runs in your browser, no upload.">
+<link rel="canonical" href="https://onlinetoolsandconverters.cc/merge-vcf-files">
+<style>
+  :root {
+    --blue: #245bcc;
+    --ink: #172033;
+    --muted: #5b6b82;
+    --line: #dfe6ef;
+    --bg: #f7f9fc;
+    --card: #ffffff;
+    --radius: 12px;
+    --shadow: 0 1px 2px rgba(23,32,51,0.06), 0 6px 18px rgba(23,32,51,0.05);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.55;
+  }
+  .vcf-wrap { max-width: 880px; margin: 0 auto; padding: 28px 18px 64px; }
+  .vcf-header { margin-bottom: 22px; }
+  .vcf-header h1 {
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+    line-height: 1.2;
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+  }
+  .vcf-header p { margin: 0; color: var(--muted); font-size: 1rem; max-width: 68ch; }
+  .vcf-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    margin: 18px 0;
+  }
+  .vcf-drop {
+    display: block;
+    border: 2px dashed #c3d0e2;
+    border-radius: 10px;
+    padding: 26px 18px;
+    text-align: center;
+    cursor: pointer;
+    background: #fbfcfe;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .vcf-drop:hover, .vcf-drop.is-over { border-color: var(--blue); background: #f4f8ff; }
+  .vcf-drop input[type="file"] {
+    position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden;
+  }
+  .vcf-drop-title { font-weight: 700; font-size: 1rem; margin: 0 0 4px; }
+  .vcf-drop-sub { font-size: 0.86rem; color: var(--muted); margin: 0; }
+  .vcf-files {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px;
+  }
+  .vcf-file-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.8rem; background: #eef3fa; color: var(--ink);
+    border-radius: 6px; padding: 4px 9px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  .vcf-file-chip b { font-weight: 700; }
+  .vcf-file-chip span { color: var(--muted); }
+  .vcf-options {
+    display: flex; flex-wrap: wrap; gap: 10px 20px;
+    margin: 16px 0 4px; font-size: 0.9rem; color: var(--ink);
+  }
+  .vcf-options label {
+    display: inline-flex; align-items: center; gap: 7px;
+    cursor: pointer; user-select: none;
+  }
+  .vcf-options input[type="checkbox"] {
+    width: 16px; height: 16px; accent-color: var(--blue); margin: 0;
+  }
+  .vcf-optnote { font-size: 0.82rem; color: var(--muted); margin: 4px 0 0; max-width: 66ch; }
+  .vcf-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 0; }
+  .vcf-btn {
+    appearance: none; border: 1px solid transparent; border-radius: 8px;
+    padding: 10px 16px; font: inherit; font-size: 0.92rem; font-weight: 600; cursor: pointer;
+  }
+  .vcf-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .vcf-btn-primary { background: var(--blue); color: #fff; }
+  .vcf-btn-primary:hover:not(:disabled) { background: #1e4fae; }
+  .vcf-btn-secondary { background: #fff; color: var(--ink); border-color: var(--line); }
+  .vcf-btn-secondary:hover:not(:disabled) { border-color: #c7d3e2; }
+  .vcf-linkbtn {
+    appearance: none; border: 0; background: transparent; color: var(--blue);
+    font: inherit; font-size: 0.86rem; font-weight: 600; cursor: pointer; padding: 0;
+    text-decoration: underline; text-underline-offset: 3px;
+  }
+  .vcf-error {
+    margin: 14px 0 0; padding: 10px 12px; border-radius: 8px;
+    background: #fff4f2; border: 1px solid #f3cfc8; color: #8a2f1c; font-size: 0.86rem;
+  }
+  .vcf-error[hidden] { display: none; }
+  .vcf-warn {
+    margin: 14px 0 0; padding: 10px 12px; border-radius: 8px;
+    background: #fffbe8; border: 1px solid #f0e0a8; color: #6b551a; font-size: 0.86rem;
+  }
+  .vcf-warn[hidden] { display: none; }
+  .vcf-paste summary { cursor: pointer; font-size: 0.86rem; font-weight: 600; color: var(--blue); margin-top: 14px; }
+  .vcf-textarea {
+    width: 100%; min-height: 110px; resize: vertical; margin-top: 8px;
+    padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.82rem; color: var(--ink); background: #fbfcfe; outline: none;
+  }
+  .vcf-textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(36,91,204,0.12); }
+  .vcf-results { border-top: 1px solid var(--line); margin-top: 20px; padding-top: 18px; }
+  .vcf-results[hidden] { display: none; }
+  .vcf-stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 9px; margin: 0 0 18px;
+  }
+  .vcf-stat {
+    border: 1px solid var(--line); border-radius: 9px; padding: 10px 12px; background: #fbfcfe;
+  }
+  .vcf-stat dt {
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em;
+    color: var(--muted); margin: 0 0 3px; font-weight: 700;
+  }
+  .vcf-stat dd { margin: 0; font-size: 1.15rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .vcf-sub {
+    font-size: 0.94rem; font-weight: 700; margin: 0 0 4px; letter-spacing: -0.01em;
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; justify-content: space-between;
+  }
+  .vcf-sub span { font-size: 0.8rem; font-weight: 600; color: var(--muted); }
+  .vcf-grouplist { display: flex; flex-direction: column; gap: 8px; margin: 10px 0 0; }
+  .vcf-group {
+    border: 1px solid var(--line); border-radius: 9px; background: #fbfcfe; overflow: hidden;
+  }
+  .vcf-group-head {
+    display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; cursor: pointer;
+  }
+  .vcf-group-head input[type="checkbox"] {
+    width: 16px; height: 16px; accent-color: var(--blue); margin: 3px 0 0; flex: 0 0 auto;
+  }
+  .vcf-group-name { font-weight: 700; font-size: 0.92rem; margin: 0 0 2px; }
+  .vcf-group-meta { font-size: 0.8rem; color: var(--muted); margin: 0; }
+  .vcf-group-details { border-top: 1px solid var(--line); }
+  .vcf-group-details summary {
+    cursor: pointer; font-size: 0.8rem; font-weight: 600; color: var(--blue);
+    padding: 7px 12px; list-style: none;
+  }
+  .vcf-group-details summary::-webkit-details-marker { display: none; }
+  .vcf-group-details ul { margin: 0; padding: 0 12px 12px; list-style: none; }
+  .vcf-group-details li {
+    font-size: 0.82rem; padding: 5px 0; border-top: 1px dashed var(--line);
+    color: var(--ink); word-break: break-word;
+  }
+  .vcf-group-details li:first-child { border-top: 0; }
+  .vcf-group-details li b { font-weight: 700; }
+  .vcf-src {
+    display: inline-block; font-size: 0.72rem; background: #eef3fa; color: var(--muted);
+    border-radius: 4px; padding: 1px 6px; margin-left: 4px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  .vcf-more { font-size: 0.82rem; color: var(--muted); margin: 10px 0 0; }
+  .vcf-empty {
+    padding: 14px; border-radius: 9px; background: #f1f5fb;
+    font-size: 0.88rem; color: var(--ink);
+  }
+  .vcf-note { font-size: 0.84rem; color: var(--muted); margin: 12px 0 0; }
+  .vcf-section { margin-top: 34px; }
+  .vcf-section h2 { font-size: 1.25rem; margin: 0 0 10px; letter-spacing: -0.01em; }
+  .vcf-section h3 { font-size: 1.02rem; margin: 20px 0 8px; }
+  .vcf-section p { margin: 0 0 12px; max-width: 70ch; }
+  .vcf-section ul, .vcf-section ol { max-width: 70ch; padding-left: 22px; margin: 0 0 14px; }
+  .vcf-section li { margin-bottom: 6px; }
+  .vcf-pre {
+    background: #f1f5fb; border: 1px solid var(--line); border-radius: 8px;
+    padding: 12px 14px; overflow-x: auto;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.8rem; line-height: 1.6; margin: 0 0 12px; color: var(--ink); white-space: pre;
+  }
+  .vcf-table-wrap {
+    overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius);
+    background: var(--card); box-shadow: var(--shadow); margin-bottom: 8px;
+  }
+  table.vcf-static { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+  table.vcf-static th, table.vcf-static td {
+    text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top;
+  }
+  table.vcf-static th {
+    font-weight: 600; background: #f1f5fb; color: var(--ink); font-size: 0.8rem; letter-spacing: 0.01em;
+  }
+  table.vcf-static tr:last-child td { border-bottom: none; }
+  table.vcf-static td.mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.82rem; white-space: nowrap;
+  }
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.86em;
+    background: #eef3fa; padding: 1px 5px; border-radius: 4px; word-break: break-word;
+  }
+  .vcf-faq details { border-bottom: 1px solid var(--line); padding: 12px 0; }
+  .vcf-faq details:first-of-type { border-top: 1px solid var(--line); }
+  .vcf-faq summary {
+    font-weight: 600; cursor: pointer; list-style: none;
+    display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+  }
+  .vcf-faq summary::-webkit-details-marker { display: none; }
+  .vcf-faq summary::after {
+    content: "+"; font-weight: 400; color: var(--muted); font-size: 1.1rem; line-height: 1; flex: 0 0 auto;
+  }
+  .vcf-faq details[open] summary::after { content: "–"; }
+  .vcf-faq details p { margin: 8px 0 0; color: var(--muted); font-size: 0.93rem; max-width: 68ch; }
+  .vcf-footer {
+    margin-top: 44px; padding-top: 18px; border-top: 1px solid var(--line);
+    font-size: 0.82rem; color: var(--muted);
+  }
+  .vcf-footer p { margin: 0 0 6px; }
+  @media (max-width: 560px) {
+    .vcf-card { padding: 16px; }
+    .vcf-actions .vcf-btn { flex: 1 1 auto; }
+    .vcf-stats { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I merge VCF files into one file?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Drop two or more .vcf files into the box and click Analyze. Every contact from every file is read, duplicate groups are listed, and the download button writes one combined VCF. The merge happens in the browser tab, so the files are never uploaded to a server."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I remove duplicate contacts from a VCF file?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Load the file and open the duplicate groups in the result list. Each group shows every copy and which field matched. Leave a group checked to collapse it into one contact, or uncheck it to keep every copy. Then download the cleaned VCF. You can also review the groups without changing anything first, which is the step most duplicate removers skip."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What counts as a duplicate contact?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "By default, two cards are treated as the same person if they share a phone number, an email address, or a normalised full name. Phone matching compares the last nine digits after removing spaces, brackets, dashes, and country prefixes, so 0812 3456 7890 and +62 812 3456 7890 match. Email matching is case-insensitive. Name matching lowercases and strips punctuation. Any one match links the cards into a group."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I merge vCard contacts that have different phone numbers?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Turn on name matching and turn phone matching off, or leave both on and check the group manually. If two cards share a name but no phone and no email, name matching links them. If the name is common, such as two different people both called John Smith, uncheck that group before exporting so both are kept."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does merging keep both phone numbers and both email addresses?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Merging is field-level, not card-level. Every TEL and EMAIL value from every copy in the group is kept and written into the merged card. The same applies to URLs, addresses, and notes. For single-value fields such as the display name and organisation, the longest non-empty value wins."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I merge contacts from an iPhone and an Android phone?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, that is the most common case. Export contacts from each phone as a .vcf and load both files. The parser handles vCard 2.1, which older Android exports use, and vCard 3.0, which iOS uses. Quoted-printable encoding and folded lines from 2.1 exports are decoded before matching, so accented names and long notes compare correctly."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it work with Google Contacts and iCloud exports?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Google Contacts exports either a single .vcf or a .zip containing individual cards, and iCloud exports a .vcf. Unzip the Google export first and load the .vcf files. Both use vCard 3.0 with UTF-8 values, which this tool reads without conversion."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are my contact files uploaded to a server?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The page uses the browser File API to read the files locally and JavaScript to parse and merge them. There is no network request during analysis or export. You can confirm this by loading the page, switching the browser to offline mode, and running the merge."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between merging and deduplicating?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Deduplicating drops extra copies. Merging combines them. If two cards for the same person each hold a different phone number, deduplicating keeps one card and loses the other number. Merging keeps one card and writes both numbers into it. This tool does the second by default, and you can switch to the first by unchecking Merge duplicate fields."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I combine vCard files that use different versions?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Load them together. Each file is parsed according to its own VERSION line, so a 2.1 file and a 3.0 file in the same batch are both read correctly. The output is always written as vCard 3.0, which iOS, Android, Google Contacts, Outlook, and macOS Contacts all import. Lines are folded at 75 octets with CRLF endings, which is what the spec requires."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why did some contacts not merge?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Three common causes. First, the phone numbers differ in a way that survives normalisation, for example one card has an extension appended. Second, the names are spelled differently and name matching is off. Third, email matching is off and the emails differ. Turn on the extra match keys and rerun the analysis, or check the group list for a pair that looks like it should have matched and compare the fields shown under each copy."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I export the merged contacts as CSV instead of VCF?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. There are two download buttons, one for VCF and one for CSV. The CSV includes name, first and last name, up to two phone numbers, up to two email addresses, organisation, title, notes, and a joined address. It is UTF-8 with a byte order mark, so Excel opens accented characters correctly without an import step."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there a limit on file size or number of contacts?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "There is no hard limit in the code, and the practical limit is the browser tab's memory. Files totalling tens of megabytes and tens of thousands of contacts usually process without trouble on a desktop browser. The preview list is capped at 150 duplicate groups for rendering speed, but the export always includes every contact."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Will this work with VCF files exported from Outlook or Windows Contacts?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Outlook exports vCard 2.1 or 3.0 depending on the version, and Windows Contacts exports 2.1. Both are parsed. Outlook sometimes writes a CHARSET parameter on text fields; the decoder respects quoted-printable and falls back to UTF-8 when the charset is ambiguous."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is a VCF file?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A VCF file is a plain text file holding one or more vCards. Each card starts with BEGIN:VCARD and ends with END:VCARD, and the lines between them hold properties such as FN for the display name, N for the structured name, TEL for phone numbers, and EMAIL for addresses. A single file can contain hundreds of cards, which is why merging them is a text problem rather than a contacts app problem."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I split a VCF file into separate files?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not on this page. This tool merges and deduplicates. Splitting writes one file per contact or per group, which is a different output step. The merged VCF it produces can be split by any tool that accepts a standard vCard 3.0 file."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<main class="vcf-wrap">
+
+  <header class="vcf-header">
+    <h1>Merge VCF Files and Remove Duplicate Contacts</h1>
+    <p>Load several .vcf files, see which contacts are duplicates, and decide what happens to each group before anything is written. Everything runs in the browser.</p>
+  </header>
+
+  <section class="vcf-card" aria-labelledby="vcf-tool-label">
+
+    <label class="vcf-drop" id="vcf-drop" for="vcf-files" tabindex="0">
+      <input type="file" id="vcf-files" accept=".vcf,.vcard,.txt,text/vcard,text/x-vcard" multiple>
+      <p class="vcf-drop-title" id="vcf-tool-label">Drop .vcf files here, or click to choose</p>
+      <p class="vcf-drop-sub">Two or more files. iPhone, Android, Google Contacts, iCloud, Outlook. Nothing leaves your device.</p>
+    </label>
+
+    <div class="vcf-files" id="vcf-filelist" hidden></div>
+
+    <details class="vcf-paste">
+      <summary>Or paste vCard text instead of loading files</summary>
+      <label for="vcf-pastebox" class="vcf-optnote" style="display:block;margin-top:8px;">Paste one or more cards, including the BEGIN and END lines</label>
+      <textarea id="vcf-pastebox" class="vcf-textarea" spellcheck="false" placeholder="BEGIN:VCARD&#10;VERSION:3.0&#10;FN:John Doe&#10;TEL:+1 555 123 4567&#10;END:VCARD"></textarea>
+    </details>
+
+    <div class="vcf-options">
+      <label><input type="checkbox" id="vcf-by-phone" checked> Match by phone number</label>
+      <label><input type="checkbox" id="vcf-by-email" checked> Match by email</label>
+      <label><input type="checkbox" id="vcf-by-name"> Match by name</label>
+    </div>
+    <p class="vcf-optnote">Any one match links two cards into the same group. Phone matching compares the last nine digits after removing spaces, dashes, brackets, and country prefixes.</p>
+
+    <div class="vcf-options" style="margin-top:12px;">
+      <label><input type="checkbox" id="vcf-merge-fields" checked> Merge duplicate fields instead of dropping copies</label>
+    </div>
+    <p class="vcf-optnote">On keeps every phone, email, and address from every copy. Off keeps the first card in each group and discards the rest.</p>
+
+    <div class="vcf-actions">
+      <button type="button" class="vcf-btn vcf-btn-primary" id="vcf-run" disabled>Analyze contacts</button>
+      <button type="button" class="vcf-btn vcf-btn-secondary" id="vcf-sample">Load sample files</button>
+      <button type="button" class="vcf-btn vcf-btn-secondary" id="vcf-reset">Reset</button>
+    </div>
+
+    <p class="vcf-error" id="vcf-error" hidden></p>
+    <p class="vcf-warn" id="vcf-warn" hidden></p>
+
+    <div class="vcf-results" id="vcf-results" hidden>
+      <dl class="vcf-stats" id="vcf-stats"></dl>
+
+      <p class="vcf-sub">
+        <span style="font-size:0.94rem;font-weight:700;color:var(--ink);">Duplicate groups</span>
+        <button type="button" class="vcf-linkbtn" id="vcf-toggle-all">Uncheck all</button>
+      </p>
+      <div class="vcf-grouplist" id="vcf-grouplist"></div>
+      <p class="vcf-more" id="vcf-more" hidden></p>
+
+      <div class="vcf-actions" style="margin-top:18px;">
+        <button type="button" class="vcf-btn vcf-btn-primary" id="vcf-dl-vcf">Download merged VCF</button>
+        <button type="button" class="vcf-btn vcf-btn-secondary" id="vcf-dl-csv">Download CSV</button>
+      </div>
+      <p class="vcf-note">The VCF is written as vCard 3.0 with CRLF line endings and 75 octet folding. The CSV is UTF-8 with a BOM so Excel opens it without an import step.</p>
+    </div>
+
+  </section>
+
+  <section class="vcf-section">
+    <h2>How the merge works</h2>
+    <p>A VCF file is text. Each contact is a block that starts with <code>BEGIN:VCARD</code> and ends with <code>END:VCARD</code>, and the lines in between are properties such as <code>FN</code> for the display name and <code>TEL</code> for a phone number. A file can hold one card or twenty thousand. Merging is therefore a parsing problem, not a contacts app problem, and it does not need an account or a sync.</p>
+    <p>The tool reads every file, unfolds the lines, decodes quoted-printable values when the card declares vCard 2.1, and builds a list of cards. It then looks for links between cards using the match keys you enabled.</p>
+    <p>Links are resolved with a union-find structure. If card A matches card B on a phone number, and card B matches card C on an email, all three end up in one group even though A and C share nothing directly. That is the behaviour you want when the same person appears in an old phone export, a Google export, and a work directory with slightly different data in each.</p>
+    <p>Once the groups exist, the merge step walks the cards in each group and collects properties. Phone numbers, emails, URLs, addresses, and notes are all kept. A duplicate property with the same name and the same cleaned value is dropped once. For single-value fields, the longest non-empty value wins, which in practice means a card with a full name beats one with initials.</p>
+    <p>Nothing is written until you click a download button. The preview list is the point: you can see the groups, open one, read the copies side by side, and uncheck a group before it is collapsed. That review step is what separates a merge from a blind dedupe.</p>
+  </section>
+
+  <section class="vcf-section">
+    <h2>What counts as a match</h2>
+    <div class="vcf-table-wrap">
+      <table class="vcf-static">
+        <thead>
+          <tr>
+            <th>Key</th>
+            <th>Normalisation</th>
+            <th>Example that matches</th>
+            <th>Example that does not</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Phone</td>
+            <td>Keep digits only, compare the last nine</td>
+            <td class="mono">+62 812 3456 7890</td>
+            <td class="mono">0812 3456 7891</td>
+          </tr>
+          <tr>
+            <td>Phone</td>
+            <td>Spaces, dashes, and brackets removed</td>
+            <td class="mono">(555) 123-4567</td>
+            <td class="mono">555 123 4568</td>
+          </tr>
+          <tr>
+            <td>Email</td>
+            <td>Lowercase and trim</td>
+            <td class="mono">John.Doe@Example.com</td>
+            <td class="mono">john.doe@example.org</td>
+          </tr>
+          <tr>
+            <td>Name</td>
+            <td>Lowercase, punctuation stripped, spaces collapsed</td>
+            <td class="mono">José  Álvarez</td>
+            <td class="mono">Jose Alvarez (with a different email and no shared phone)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The nine-digit phone comparison is a deliberate trade. It is long enough that two different local numbers rarely collide, and short enough that a country code, a leading zero, or a trunk prefix does not prevent a match. Numbers shorter than seven digits are compared as-is, which covers short codes and extensions.</p>
+    <p>Name matching is off by default. It is the key most likely to over-merge, because common names are not unique. Turn it on when the phone numbers have changed and the emails are missing, and then read the preview before exporting.</p>
+  </section>
+
+  <section class="vcf-section">
+    <h2>Common inputs and what happens</h2>
+    <div class="vcf-table-wrap">
+      <table class="vcf-static">
+        <thead>
+          <tr>
+            <th>Input</th>
+            <th>Result</th>
+            <th>Why</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>iPhone export and Android export of the same address book</td>
+            <td>Groups form on phone and email. Both phone numbers survive in each merged card.</td>
+            <td>Same people, different formatting. Field-level merge keeps both numbers.</td>
+          </tr>
+          <tr>
+            <td>One file that already contains internal duplicates</td>
+            <td>Groups form inside the file. Same behaviour as across files.</td>
+            <td>Grouping does not care which file a card came from.</td>
+          </tr>
+          <tr>
+            <td>Google Contacts zip with one card per file</td>
+            <td>Load the unzipped .vcf files. A thousand single-card files merge the same as one big file.</td>
+            <td>Each file is parsed independently, then grouped together.</td>
+          </tr>
+          <tr>
+            <td>Two different people both named John Smith</td>
+            <td>If name matching is on and they share no phone or email, they group. Uncheck the group to keep both.</td>
+            <td>Name matching is the over-merge case. The preview exists for it.</td>
+          </tr>
+          <tr>
+            <td>One contact with three phone numbers</td>
+            <td>No group forms unless another card shares one of the numbers. All three numbers stay on the card.</td>
+            <td>Grouping links cards, it does not trim properties within one card.</td>
+          </tr>
+          <tr>
+            <td>vCard 2.1 with quoted-printable accented names</td>
+            <td>Decoded before matching, so Jos&eacute; in 2.1 matches Jos&eacute; in 3.0.</td>
+            <td>The decoder runs before the keys are built.</td>
+          </tr>
+          <tr>
+            <td>Outlook export with a CHARSET parameter</td>
+            <td>Read using the declared encoding, with a UTF-8 fallback.</td>
+            <td>Outlook writes 2.1 or 3.0 depending on version.</td>
+          </tr>
+          <tr>
+            <td>Cards with base64 photos</td>
+            <td>One photo kept per merged card. Duplicate photo data is dropped.</td>
+            <td>Photo values are deduplicated by content prefix, not re-encoded.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="vcf-section">
+    <h2>When you would use this</h2>
+    <p>You moved from an Android phone to an iPhone, exported both address books, and now have two VCF files with overlapping contacts. Importing both gives you duplicates in the new phone. Loading both here first and exporting one merged file skips that cleanup entirely.</p>
+    <p>You have a Google Contacts export, an iCloud export, and an old Outlook export from a previous job. Each holds a slightly different phone number for the same people. Merging at the field level keeps every number, which is usually the point of keeping old exports at all.</p>
+    <p>You are about to import into a CRM and the import tool refuses duplicates or, worse, silently creates them. A clean VCF with one card per person is the input the import expects.</p>
+    <p>You inherited a shared contacts file from a team and it has the same client listed three times with different spellings. The preview shows the three copies next to each other, so you can decide which name to keep rather than letting a script decide.</p>
+    <p>You want to check a file for duplicates without changing it. Analyze, read the groups, and stop. Nothing is written unless you click download.</p>
+  </section>
+
+  <section class="vcf-section">
+    <h2>What this does and does not handle</h2>
+    <p>It handles:</p>
+    <ul>
+      <li>Multiple files in one pass, plus pasted vCard text.</li>
+      <li>vCard 2.1, 3.0, and 4.0 input, with quoted-printable decoding and line unfolding.</li>
+      <li>Grouping by phone, email, or name, with any combination of the three enabled.</li>
+      <li>Transitive groups, where A matches B and B matches C.</li>
+      <li>Field-level merging that keeps every phone, email, URL, address, and note.</li>
+      <li>A preview of every duplicate group before anything is written.</li>
+      <li>Per-group include or exclude.</li>
+      <li>VCF 3.0 output with CRLF and 75 octet folding, and CSV output with a BOM for Excel.</li>
+    </ul>
+    <p>It does not handle:</p>
+    <ul>
+      <li>Importing directly into a phone, Google Contacts, or iCloud. It writes files. The import is your next step.</li>
+      <li>Resolving vCard 4.0 group membership, such as <code>KIND:group</code> and <code>MEMBER</code>. Those properties are passed through unchanged but groups are not expanded or collapsed.</li>
+      <li>Encrypted or signed vCards. They are treated as text and their payload is not decrypted.</li>
+      <li>Choosing a winner automatically when two copies disagree on a name. The longest non-empty value wins, and the preview shows you the result so you can override by editing the export.</li>
+      <li>Photo comparison. Base64 photos are deduplicated by a content prefix, not by image similarity.</li>
+      <li>Resolving conflicting addresses into a single canonical form. Addresses are kept as separate properties.</li>
+      <li>Splitting a VCF into individual files. That is a different output step.</li>
+    </ul>
+  </section>
+
+  <section class="vcf-section vcf-faq">
+    <h2>Questions</h2>
+
+    <details>
+      <summary>How do I merge VCF files into one file?</summary>
+      <p>Drop two or more .vcf files into the box and click Analyze. Every contact from every file is read, duplicate groups are listed, and the download button writes one combined VCF. The merge happens in the browser tab, so the files are never uploaded to a server.</p>
+    </details>
+
+    <details>
+      <summary>How do I remove duplicate contacts from a VCF file?</summary>
+      <p>Load the file and open the duplicate groups in the result list. Each group shows every copy and which field matched. Leave a group checked to collapse it into one contact, or uncheck it to keep every copy. Then download the cleaned VCF. You can also review the groups without changing anything first, which is the step most duplicate removers skip.</p>
+    </details>
+
+    <details>
+      <summary>What counts as a duplicate contact?</summary>
+      <p>By default, two cards are treated as the same person if they share a phone number, an email address, or a normalised full name. Phone matching compares the last nine digits after removing spaces, brackets, dashes, and country prefixes, so <code>0812 3456 7890</code> and <code>+62 812 3456 7890</code> match. Email matching is case-insensitive. Name matching lowercases and strips punctuation. Any one match links the cards into a group.</p>
+    </details>
+
+    <details>
+      <summary>How do I merge vCard contacts that have different phone numbers?</summary>
+      <p>Turn on name matching and turn phone matching off, or leave both on and check the group manually. If two cards share a name but no phone and no email, name matching links them. If the name is common, such as two different people both called John Smith, uncheck that group before exporting so both are kept.</p>
+    </details>
+
+    <details>
+      <summary>Does merging keep both phone numbers and both email addresses?</summary>
+      <p>Yes. Merging is field-level, not card-level. Every <code>TEL</code> and <code>EMAIL</code> value from every copy in the group is kept and written into the merged card. The same applies to URLs, addresses, and notes. For single-value fields such as the display name and organisation, the longest non-empty value wins.</p>
+    </details>
+
+    <details>
+      <summary>Can I merge contacts from an iPhone and an Android phone?</summary>
+      <p>Yes, that is the most common case. Export contacts from each phone as a .vcf and load both files. The parser handles vCard 2.1, which older Android exports use, and vCard 3.0, which iOS uses. Quoted-printable encoding and folded lines from 2.1 exports are decoded before matching, so accented names and long notes compare correctly.</p>
+    </details>
+
+    <details>
+      <summary>Does it work with Google Contacts and iCloud exports?</summary>
+      <p>Yes. Google Contacts exports either a single .vcf or a .zip containing individual cards, and iCloud exports a .vcf. Unzip the Google export first and load the .vcf files. Both use vCard 3.0 with UTF-8 values, which this tool reads without conversion.</p>
+    </details>
+
+    <details>
+      <summary>Are my contact files uploaded to a server?</summary>
+      <p>No. The page uses the browser File API to read the files locally and JavaScript to parse and merge them. There is no network request during analysis or export. You can confirm this by loading the page, switching the browser to offline mode, and running the merge.</p>
+    </details>
+
+    <details>
+      <summary>What is the difference between merging and deduplicating?</summary>
+      <p>Deduplicating drops extra copies. Merging combines them. If two cards for the same person each hold a different phone number, deduplicating keeps one card and loses the other number. Merging keeps one card and writes both numbers into it. This tool does the second by default, and you can switch to the first by unchecking <strong>Merge duplicate fields</strong>.</p>
+    </details>
+
+    <details>
+      <summary>How do I combine vCard files that use different versions?</summary>
+      <p>Load them together. Each file is parsed according to its own <code>VERSION</code> line, so a 2.1 file and a 3.0 file in the same batch are both read correctly. The output is always written as vCard 3.0, which iOS, Android, Google Contacts, Outlook, and macOS Contacts all import. Lines are folded at 75 octets with CRLF endings, which is what the spec requires.</p>
+    </details>
+
+    <details>
+      <summary>Why did some contacts not merge?</summary>
+      <p>Three common causes. First, the phone numbers differ in a way that survives normalisation, for example one card has an extension appended. Second, the names are spelled differently and name matching is off. Third, email matching is off and the emails differ. Turn on the extra match keys and rerun the analysis, or check the group list for a pair that looks like it should have matched and compare the fields shown under each copy.</p>
+    </details>
+
+    <details>
+      <summary>Can I export the merged contacts as CSV instead of VCF?</summary>
+      <p>Yes. There are two download buttons, one for VCF and one for CSV. The CSV includes name, first and last name, up to two phone numbers, up to two email addresses, organisation, title, notes, and a joined address. It is UTF-8 with a byte order mark, so Excel opens accented characters correctly without an import step.</p>
+    </details>
+
+    <details>
+      <summary>Is there a limit on file size or number of contacts?</summary>
+      <p>There is no hard limit in the code, and the practical limit is the browser tab's memory. Files totalling tens of megabytes and tens of thousands of contacts usually process without trouble on a desktop browser. The preview list is capped at 150 duplicate groups for rendering speed, but the export always includes every contact.</p>
+    </details>
+
+    <details>
+      <summary>Will this work with VCF files exported from Outlook or Windows Contacts?</summary>
+      <p>Yes. Outlook exports vCard 2.1 or 3.0 depending on the version, and Windows Contacts exports 2.1. Both are parsed. Outlook sometimes writes a <code>CHARSET</code> parameter on text fields; the decoder respects quoted-printable and falls back to UTF-8 when the charset is ambiguous.</p>
+    </details>
+
+    <details>
+      <summary>What is a VCF file?</summary>
+      <p>A VCF file is a plain text file holding one or more vCards. Each card starts with <code>BEGIN:VCARD</code> and ends with <code>END:VCARD</code>, and the lines between them hold properties such as <code>FN</code> for the display name, <code>N</code> for the structured name, <code>TEL</code> for phone numbers, and <code>EMAIL</code> for addresses. A single file can contain hundreds of cards, which is why merging them is a text problem rather than a contacts app problem.</p>
+    </details>
+
+    <details>
+      <summary>Can I split a VCF file into separate files?</summary>
+      <p>Not on this page. This tool merges and deduplicates. Splitting writes one file per contact or per group, which is a different output step. The merged VCF it produces can be split by any tool that accepts a standard vCard 3.0 file.</p>
+    </details>
+
+  </section>
+
+  <footer class="vcf-footer">
+    <p>ConvertToToolsOnline. Built and maintained by one developer. This page runs locally in your browser and does not upload the contact files you load.</p>
+  </footer>
+
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  var dropEl = document.getElementById('vcf-drop');
+  var fileInput = document.getElementById('vcf-files');
+  var fileListEl = document.getElementById('vcf-filelist');
+  var pasteBox = document.getElementById('vcf-pastebox');
+  var byPhone = document.getElementById('vcf-by-phone');
+  var byEmail = document.getElementById('vcf-by-email');
+  var byName = document.getElementById('vcf-by-name');
+  var mergeFields = document.getElementById('vcf-merge-fields');
+  var runBtn = document.getElementById('vcf-run');
+  var sampleBtn = document.getElementById('vcf-sample');
+  var resetBtn = document.getElementById('vcf-reset');
+  var errorEl = document.getElementById('vcf-error');
+  var warnEl = document.getElementById('vcf-warn');
+  var resultsEl = document.getElementById('vcf-results');
+  var statsEl = document.getElementById('vcf-stats');
+  var groupListEl = document.getElementById('vcf-grouplist');
+  var moreEl = document.getElementById('vcf-more');
+  var toggleAllBtn = document.getElementById('vcf-toggle-all');
+  var dlVcfBtn = document.getElementById('vcf-dl-vcf');
+  var dlCsvBtn = document.getElementById('vcf-dl-csv');
+
+  var MAX_GROUPS = 150;
+  var MAX_BYTES = 60 * 1024 * 1024;
+
+  var loadedFiles = [];   // {name, text}
+  var cards = [];         // parsed cards with _source
+  var groups = [];        // array of arrays of indices
+  var groupStats = [];    // per group: {added, reasons}
+
+  // ---------------- Parser ----------------
+
+  function unfold(text) {
+    var raw = String(text).replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+    var lines = raw.split('\n');
+    var out = [];
+    for (var i = 0; i < lines.length; i++) {
+      var ln = lines[i];
+      if (/^[ \t]/.test(ln) && out.length) out[out.length - 1] += ln.slice(1);
+      else out.push(ln);
+    }
+    return out;
+  }
+
+  function findColon(s) {
+    var q = false;
+    for (var i = 0; i < s.length; i++) {
+      var c = s.charAt(i);
+      if (c === '"') q = !q;
+      else if (c === ':' && !q) return i;
+    }
+    return -1;
+  }
+
+  function splitHead(head) {
+    var segs = [], cur = '', q = false;
+    for (var i = 0; i < head.length; i++) {
+      var c = head.charAt(i);
+      if (c === '"') { q = !q; cur += c; }
+      else if (c === ';' && !q) { segs.push(cur); cur = ''; }
+      else cur += c;
+    }
+    segs.push(cur);
+
+    var first = segs[0], group = '';
+    var dot = first.indexOf('.');
+    if (dot > 0) { group = first.slice(0, dot); first = first.slice(dot + 1); }
+
+    var params = {};
+    for (var k = 1; k < segs.length; k++) {
+      var seg = segs[k], eq = seg.indexOf('=');
+      if (eq === -1) {
+        var t = seg.toUpperCase().trim();
+        if (t) { if (params.TYPE) params.TYPE += ',' + t; else params.TYPE = t; }
+      } else {
+        var pn = seg.slice(0, eq).toUpperCase().trim();
+        var pv = seg.slice(eq + 1).replace(/^"|"$/g, '');
+        if (params[pn]) params[pn] += ',' + pv; else params[pn] = pv;
+      }
+    }
+    return { name: first, params: params, group: group };
+  }
+
+  function decodeQP(s) {
+    var bytes = [];
+    for (var i = 0; i < s.length; i++) {
+      var c = s.charAt(i);
+      if (c === '=') {
+        var hex = s.substr(i + 1, 2);
+        if (/^[0-9A-Fa-f]{2}$/.test(hex)) { bytes.push(parseInt(hex, 16)); i += 2; }
+        else if (s.charAt(i + 1) === '\n' || s.charAt(i + 1) === '\r') { i += 1; }
+        else { bytes.push(61); }
+      } else {
+        var code = c.charCodeAt(0);
+        if (code < 128) bytes.push(code);
+        else {
+          var enc = new TextEncoder().encode(c);
+          for (var b = 0; b < enc.length; b++) bytes.push(enc[b]);
+        }
+      }
+    }
+    try {
+      return new TextDecoder('utf-8', { fatal: false }).decode(new Uint8Array(bytes));
+    } catch (e) {
+      return s;
+    }
+  }
+
+  function parseVCF(text, source) {
+    var lines = unfold(text);
+    var blocks = [], cur = null;
+    for (var i = 0; i < lines.length; i++) {
+      var t = lines[i].trim();
+      if (!t) continue;
+      var up = t.toUpperCase();
+      if (up === 'BEGIN:VCARD') { cur = []; continue; }
+      if (up === 'END:VCARD') { if (cur) blocks.push(cur); cur = null; continue; }
+      if (cur) cur.push(t);
+    }
+
+    var out = [];
+    for (var b = 0; b < blocks.length; b++) {
+      var block = blocks[b];
+      var version = '3.0';
+      for (var v = 0; v < block.length; v++) {
+        if (/^VERSION:/i.test(block[v])) { version = block[v].slice(8).trim(); break; }
+      }
+
+      var props = [];
+      for (var j = 0; j < block.length; j++) {
+        var line = block[j];
+        if (/^VERSION:/i.test(line)) continue;
+        var ci = findColon(line);
+        if (ci === -1) continue;
+        var h = splitHead(line.slice(0, ci));
+        var name = h.name.toUpperCase().trim();
+        if (!name) continue;
+        var val = line.slice(ci + 1);
+        var decoded = false;
+        if (version === '2.1' || (h.params.ENCODING && /QUOTED-PRINTABLE/i.test(h.params.ENCODING))) {
+          val = decodeQP(val);
+          decoded = true;
+        }
+        props.push({ name: name, params: h.params, value: val, decoded: decoded });
+      }
+
+      if (props.length) out.push({ properties: props, version: version, _source: source || '' });
+    }
+    return out;
+  }
+
+  // ---------------- Helpers ----------------
+
+  function cleanValue(p) {
+    return String(p.value).replace(/\\([\\,;nN])/g, function (m, c) {
+      return (c === 'n' || c === 'N') ? '\n' : c;
+    });
+  }
+
+  function getFN(card) {
+    var n = '';
+    for (var i = 0; i < card.properties.length; i++) {
+      var p = card.properties[i];
+      if (p.name === 'FN') {
+        var v = cleanValue(p).trim();
+        if (v) return v;
+      }
+      if (p.name === 'N' && !n) n = cleanValue(p);
+    }
+    if (n) {
+      var parts = n.split(';');
+      var fam = (parts[0] || '').trim();
+      var giv = (parts[1] || '').trim();
+      var full = (giv + ' ' + fam).trim();
+      if (full) return full;
+    }
+    for (var k = 0; k < card.properties.length; k++) {
+      if (card.properties[k].name === 'ORG') {
+        var o = cleanValue(card.properties[k]).trim();
+        if (o) return o;
+      }
+    }
+    for (var m = 0; m < card.properties.length; m++) {
+      if (card.properties[m].name === 'EMAIL') {
+        var e = cleanValue(card.properties[m]).trim();
+        if (e) return e;
+      }
+    }
+    for (var z = 0; z < card.properties.length; z++) {
+      if (card.properties[z].name === 'TEL') {
+        var ph = cleanValue(card.properties[z]).trim();
+        if (ph) return ph;
+      }
+    }
+    return '(no name)';
+  }
+
+  function getPhones(card) {
+    var out = [];
+    for (var i = 0; i < card.properties.length; i++) {
+      if (card.properties[i].name === 'TEL') {
+        var v = cleanValue(card.properties[i]).trim();
+        if (v) out.push(v);
+      }
+    }
+    return out;
+  }
+
+  function getEmails(card) {
+    var out = [];
+    for (var i = 0; i < card.properties.length; i++) {
+      if (card.properties[i].name === 'EMAIL') {
+        var v = cleanValue(card.properties[i]).trim();
+        if (v) out.push(v);
+      }
+    }
+    return out;
+  }
+
+  function getNotes(card) {
+    var out = [];
+    for (var i = 0; i < card.properties.length; i++) {
+      if (card.properties[i].name === 'NOTE') {
+        var v = cleanValue(card.properties[i]).trim();
+        if (v) out.push(v);
+      }
+    }
+    return out;
+  }
+
+  function phoneKey(v) {
+    var d = String(v).replace(/\D/g, '');
+    if (!d) return '';
+    if (d.length < 7) return 'p:' + d;
+    return 'p:' + d.slice(-9);
+  }
+
+  function emailKey(v) {
+    var e = String(v).trim().toLowerCase();
+    return e ? 'e:' + e : '';
+  }
+
+  function nameKey(v) {
+    var n = String(v).toLowerCase()
+      .replace(/[^\p{L}\p{N}\s]/gu, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    if (!n || n === '(no name)') return '';
+    return 'n:' + n;
+  }
+
+  // ---------------- Grouping ----------------
+
+  function groupCards(list, opts) {
+    var n = list.length;
+    var parent = new Array(n);
+    for (var i = 0; i < n; i++) parent[i] = i;
+
+    function find(x) {
+      while (parent[x] !== x) { parent[x] = parent[parent[x]]; x = parent[x]; }
+      return x;
+    }
+    function union(a, b) {
+      var ra = find(a), rb = find(b);
+      if (ra !== rb) parent[rb] = ra;
+    }
+
+    var index = Object.create(null);
+    for (var c = 0; c < n; c++) {
+      var keys = [];
+      if (opts.phone) {
+        getPhones(list[c]).forEach(function (v) {
+          var k = phoneKey(v); if (k) keys.push(k);
+        });
+      }
+      if (opts.email) {
+        getEmails(list[c]).forEach(function (v) {
+          var k = emailKey(v); if (k) keys.push(k);
+        });
+      }
+      if (opts.name) {
+        var k2 = nameKey(getFN(list[c]));
+        if (k2) keys.push(k2);
+      }
+      for (var q = 0; q < keys.length; q++) {
+        var key = keys[q];
+        if (index[key] !== undefined) union(index[key], c);
+        else index[key] = c;
+      }
+    }
+
+    var map = Object.create(null), order = [];
+    for (var j = 0; j < n; j++) {
+      var root = find(j);
+      if (!map[root]) { map[root] = []; order.push(root); }
+      map[root].push(j);
+    }
+    return order.map(function (r) { return map[r]; });
+  }
+
+  function matchReasons(indices) {
+    var reasons = {};
+    var seenPhones = {}, seenEmails = {}, seenNames = {};
+    indices.forEach(function (i) {
+      getPhones(cards[i]).forEach(function (v) {
+        var k = phoneKey(v); if (!k) return;
+        if (seenPhones[k]) { reasons.phone = true; } else { seenPhones[k] = 1; }
+      });
+      getEmails(cards[i]).forEach(function (v) {
+        var k = emailKey(v); if (!k) return;
+        if (seenEmails[k]) { reasons.email = true; } else { seenEmails[k] = 1; }
+      });
+      var nk = nameKey(getFN(cards[i]));
+      if (nk) {
+        if (seenNames[nk]) reasons.name = true; else seenNames[nk] = 1;
+      }
+    });
+    return reasons;
+  }
+
+  function mergeGroup(indices) {
+    var props = [], seen = Object.create(null);
+    var fnBest = null, nBest = null, orgBest = null, titleBest = null, noteBest = null;
+    var added = 0;
+
+    indices.forEach(function (idx, pos) {
+      var card = cards[idx];
+      card.properties.forEach(function (p) {
+        if (p.name === 'FN') {
+          var v = cleanValue(p).trim();
+          if (!fnBest || v.length > cleanValue(fnBest).trim().length) fnBest = p;
+          return;
+        }
+        if (p.name === 'N') { if (!nBest) nBest = p; return; }
+        if (p.name === 'ORG') {
+          if (!orgBest || cleanValue(p).length > cleanValue(orgBest).length) orgBest = p;
+          return;
+        }
+        if (p.name === 'TITLE') { if (!titleBest) titleBest = p; return; }
+        if (p.name === 'NOTE') {
+          if (!noteBest || cleanValue(p).length > cleanValue(noteBest).length) noteBest = p;
+          return;
+        }
+        if (p.name === 'PHOTO') {
+          var pk = 'PHOTO|' + String(p.value).slice(0, 200);
+          if (seen[pk]) return;
+          seen[pk] = true;
+          if (pos > 0) added++;
+          props.push(p);
+          return;
+        }
+        var key = p.name + '|' + cleanValue(p).trim().toLowerCase();
+        if (seen[key]) return;
+        seen[key] = true;
+        if (pos > 0) added++;
+        props.push(p);
+      });
+    });
+
+    var head = [];
+    if (nBest) head.push(nBest);
+    if (fnBest) head.push(fnBest);
+    if (orgBest) head.push(orgBest);
+    if (titleBest) head.push(titleBest);
+    if (noteBest) head.push(noteBest);
+
+    return { properties: head.concat(props), version: '3.0', added: added };
+  }
+
+  // ---------------- Serialisation ----------------
+
+  function outputValue(p) {
+    if (!p.decoded) return p.value;
+    var v = String(p.value);
+    var structured = (p.name === 'N' || p.name === 'ADR' || p.name === 'GEO');
+    v = v.replace(/\\/g, '\\\\').replace(/\n/g, '\\n');
+    if (!structured) v = v.replace(/,/g, '\\,').replace(/;/g, '\\;');
+    return v;
+  }
+
+  function serializeProp(p) {
+    var head = p.name;
+    var params = p.params || {};
+    var keys = Object.keys(params).filter(function (k) {
+      if (k === 'ENCODING' && p.decoded) return false;
+      return true;
+    });
+    keys.sort();
+    for (var i = 0; i < keys.length; i++) {
+      var k = keys[i], v = params[k];
+      if (v === true) head += ';' + k;
+      else head += ';' + k + '=' + v;
+    }
+    return head + ':' + outputValue(p);
+  }
+
+  function foldLine(line) {
+    var enc = new TextEncoder().encode(line);
+    if (enc.length <= 75) return line;
+    var out = [], cur = '', curBytes = 0;
+    var chars = Array.from(line);
+    for (var i = 0; i < chars.length; i++) {
+      var ch = chars[i];
+      var b = new TextEncoder().encode(ch).length;
+      if (curBytes + b > 73 && cur) {
+        out.push(cur);
+        cur = ch;
+        curBytes = b;
+      } else {
+        cur += ch;
+        curBytes += b;
+      }
+    }
+    if (cur) out.push(cur);
+    return out.join('\r\n ');
+  }
+
+  function serializeCard(card) {
+    var lines = ['BEGIN:VCARD', 'VERSION:3.0'];
+    for (var i = 0; i < card.properties.length; i++) {
+      var p = card.properties[i];
+      if (p.name === 'VERSION' || p.name === 'BEGIN' || p.name === 'END') continue;
+      lines.push(foldLine(serializeProp(p)));
+    }
+    lines.push('END:VCARD');
+    return lines.join('\r\n');
+  }
+
+  function csvEscape(s) {
+    s = String(s == null ? '' : s);
+    if (/[",\n\r]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+    return s;
+  }
+
+  function toCSV(list) {
+    var rows = [['Name', 'First Name', 'Last Name', 'Phone 1', 'Phone 2', 'Email 1', 'Email 2', 'Organization', 'Title', 'Notes', 'Address']];
+    list.forEach(function (card) {
+      var fn = getFN(card);
+      var fam = '', giv = '';
+      for (var i = 0; i < card.properties.length; i++) {
+        if (card.properties[i].name === 'N') {
+          var parts = cleanValue(card.properties[i]).split(';');
+          fam = parts[0] || '';
+          giv = parts[1] || '';
+          break;
+        }
+      }
+      var phones = getPhones(card);
+      var emails = getEmails(card);
+      var org = '', title = '', note = getNotes(card).join(' | '), addr = '';
+      for (var j = 0; j < card.properties.length; j++) {
+        var p = card.properties[j];
+        if (p.name === 'ORG' && !org) org = cleanValue(p);
+        if (p.name === 'TITLE' && !title) title = cleanValue(p);
+        if (p.name === 'ADR' && !addr) {
+          var a = cleanValue(p).split(';');
+          addr = [a[2], a[3], a[4], a[5], a[6]].filter(Boolean).join(', ');
+        }
+      }
+      rows.push([fn, giv, fam, phones[0] || '', phones[1] || '', emails[0] || '', emails[1] || '', org, title, note, addr]);
+    });
+    return rows.map(function (r) { return r.map(csvEscape).join(','); }).join('\r\n');
+  }
+
+  // ---------------- UI ----------------
+
+  function showError(msg) {
+    errorEl.textContent = msg;
+    errorEl.hidden = false;
+  }
+  function clearError() {
+    errorEl.hidden = true;
+    errorEl.textContent = '';
+  }
+  function showWarn(msg) {
+    warnEl.textContent = msg;
+    warnEl.hidden = false;
+  }
+  function clearWarn() {
+    warnEl.hidden = true;
+    warnEl.textContent = '';
+  }
+
+  function renderFileList() {
+    if (!loadedFiles.length) {
+      fileListEl.hidden = true;
+      fileListEl.innerHTML = '';
+      return;
+    }
+    fileListEl.innerHTML = loadedFiles.map(function (f) {
+      return '<span class="vcf-file-chip"><b>' + escapeHtml(f.name) + '</b> <span>' + escapeHtml(f.size) + '</span></span>';
+    }).join('');
+    fileListEl.hidden = false;
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function humanSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  }
+
+  function readFiles(fileList) {
+    clearError();
+    clearWarn();
+    var files = Array.prototype.slice.call(fileList || []);
+    if (!files.length) return;
+
+    var tooBig = files.reduce(function (s, f) { return s + f.size; }, 0);
+    if (tooBig > MAX_BYTES) {
+      showError('Those files total more than 60 MB. Load a subset at a time.');
+      return;
+    }
+
+    var pending = files.length;
+    files.forEach(function (f) {
+      var reader = new FileReader();
+      reader.onload = function () {
+        loadedFiles.push({ name: f.name, size: humanSize(f.size), text: String(reader.result || '') });
+        pending--;
+        if (pending === 0) {
+          renderFileList();
+          runBtn.disabled = false;
+          clearWarn();
+        }
+      };
+      reader.onerror = function () {
+        pending--;
+        showError('Could not read ' + f.name + '.');
+      };
+      reader.readAsText(f, 'utf-8');
+    });
+  }
+
+  function collectCards() {
+    var list = [];
+    loadedFiles.forEach(function (f) {
+      var parsed = parseVCF(f.text, f.name);
+      parsed.forEach(function (c) { list.push(c); });
+    });
+    var pasted = pasteBox.value.trim();
+    if (pasted) {
+      var pc = parseVCF(pasted, 'pasted text');
+      pc.forEach(function (c) { list.push(c); });
+    }
+    return list;
+  }
+
+  function analyze() {
+    clearError();
+    clearWarn();
+    cards = collectCards();
+    if (!cards.length) {
+      showError('No contacts found. Check that the file contains BEGIN:VCARD and END:VCARD lines, or paste the cards into the text box.');
+      resultsEl.hidden = true;
+      return;
+    }
+
+    var opts = {
+      phone: byPhone.checked,
+      email: byEmail.checked,
+      name: byName.checked
+    };
+
+    if (!opts.phone && !opts.email && !opts.name) {
+      showError('Turn on at least one match key, or every contact is treated as unique.');
+      resultsEl.hidden = true;
+      return;
+    }
+
+    groups = groupCards(cards, opts);
+    groupStats = groups.map(function (g) {
+      if (g.length < 2) return { reasons: {}, added: 0 };
+      var merged = mergeGroup(g);
+      return { reasons: matchReasons(g), added: merged.added };
+    });
+
+    renderResults();
+  }
+
+  function renderResults() {
+    var dupGroups = [];
+    groups.forEach(function (g, i) {
+      if (g.length > 1) dupGroups.push(i);
+    });
+
+    var extras = 0;
+    dupGroups.forEach(function (i) { extras += groups[i].length - 1; });
+
+    var fieldsRescued = 0;
+    dupGroups.forEach(function (i) {
+      if (mergeFields.checked) fieldsRescued += groupStats[i].added;
+    });
+
+    var uniqueCount = groups.length;
+
+    statsEl.innerHTML = [
+      ['Files', loadedFiles.length + (pasteBox.value.trim() ? ' + paste' : '')],
+      ['Contacts read', cards.length.toLocaleString('en-US')],
+      ['Unique people', uniqueCount.toLocaleString('en-US')],
+      ['Duplicate groups', dupGroups.length.toLocaleString('en-US')],
+      ['Extra copies', extras.toLocaleString('en-US')],
+      ['Fields rescued', mergeFields.checked ? fieldsRescued.toLocaleString('en-US') : '0 (off)']
+    ].map(function (pair) {
+      return '<div class="vcf-stat"><dt>' + pair[0] + '</dt><dd>' + pair[1] + '</dd></div>';
+    }).join('');
+
+    if (!dupGroups.length) {
+      groupListEl.innerHTML = '<div class="vcf-empty">No duplicate groups found with the current match keys. Every contact was treated as a different person. Try enabling name matching, or check that the phone numbers share at least the last nine digits.</div>';
+      moreEl.hidden = true;
+      resultsEl.hidden = false;
+      toggleAllBtn.hidden = true;
+      return;
+    }
+
+    toggleAllBtn.hidden = false;
+    var shown = dupGroups.slice(0, MAX_GROUPS);
+    groupListEl.innerHTML = shown.map(function (gi) {
+      return renderGroup(gi);
+    }).join('');
+
+    if (dupGroups.length > shown.length) {
+      moreEl.textContent = 'Showing the first ' + shown.length + ' of ' + dupGroups.length + ' duplicate groups. The download still includes every contact.';
+      moreEl.hidden = false;
+    } else {
+      moreEl.hidden = true;
+    }
+
+    resultsEl.hidden = false;
+  }
+
+  function renderGroup(gi) {
+    var indices = groups[gi];
+    var reasons = groupStats[gi].reasons;
+    var added = groupStats[gi].added;
+    var bits = [];
+    if (reasons.phone) bits.push('phone');
+    if (reasons.email) bits.push('email');
+    if (reasons.name) bits.push('name');
+    var reasonText = bits.length ? 'matched by ' + bits.join(', ') : 'grouped by a chain of matches';
+
+    var meta = indices.length + ' copies · ' + reasonText;
+    if (mergeFields.checked && added > 0) meta += ' · ' + added + ' field' + (added === 1 ? '' : 's') + ' added when merged';
+
+    var name = getFN(cards[indices[0]]);
+
+    var copies = indices.map(function (ci) {
+      var card = cards[ci];
+      var phones = getPhones(card);
+      var emails = getEmails(card);
+      var notes = getNotes(card);
+      var detail = [getFN(card)];
+      if (phones.length) detail.push(phones.join(', '));
+      if (emails.length) detail.push(emails.join(', '));
+      if (notes.length) detail.push('Note: ' + notes[0]);
+      return '<li><b>' + escapeHtml(detail[0]) + '</b>' +
+        (detail.length > 1 ? ' · ' + escapeHtml(detail.slice(1).join(' · ')) : '') +
+        (card._source ? ' <span class="vcf-src">' + escapeHtml(card._source) + '</span>' : '') +
+        '</li>';
+    }).join('');
+
+    return '<div class="vcf-group" data-gi="' + gi + '">' +
+      '<label class="vcf-group-head">' +
+        '<input type="checkbox" checked aria-label="Include this group">' +
+        '<span>' +
+          '<span class="vcf-group-name">' + escapeHtml(name) + '</span>' +
+          '<span class="vcf-group-meta">' + escapeHtml(meta) + '</span>' +
+        '</span>' +
+      '</label>' +
+      '<details class="vcf-group-details">' +
+        '<summary>Show the ' + indices.length + ' copies</summary>' +
+        '<ul>' + copies + '</ul>' +
+      '</details>' +
+    '</div>';
+  }
+
+  function buildOutput() {
+    var out = [];
+    groups.forEach(function (indices, gi) {
+      var row = groupListEl.querySelector('.vcf-group[data-gi="' + gi + '"]');
+      var include = true;
+      if (row) {
+        var cb = row.querySelector('input[type="checkbox"]');
+        if (cb) include = cb.checked;
+      }
+
+      if (indices.length === 1) {
+        out.push(cards[indices[0]]);
+        return;
+      }
+      if (!include) {
+        indices.forEach(function (i) { out.push(cards[i]); });
+        return;
+      }
+      if (mergeFields.checked) {
+        out.push(mergeGroup(indices));
+      } else {
+        out.push(cards[indices[0]]);
+      }
+    });
+    return out;
+  }
+
+  function download(filename, content, mime) {
+    var blob = new Blob([content], { type: mime || 'text/plain;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 120);
+  }
+
+  function timestamp() {
+    var d = new Date();
+    function pad(n) { return n < 10 ? '0' + n : String(n); }
+    return d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate());
+  }
+
+  // ---------------- Events ----------------
+
+  dropEl.addEventListener('click', function (e) {
+    if (e.target === fileInput) return;
+    fileInput.click();
+  });
+  dropEl.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      fileInput.click();
+    }
+  });
+
+  fileInput.addEventListener('change', function () {
+    readFiles(fileInput.files);
+    fileInput.value = '';
+  });
+
+  ['dragenter', 'dragover'].forEach(function (ev) {
+    dropEl.addEventListener(ev, function (e) {
+      e.preventDefault();
+      dropEl.classList.add('is-over');
+    });
+  });
+  ['dragleave', 'drop'].forEach(function (ev) {
+    dropEl.addEventListener(ev, function (e) {
+      e.preventDefault();
+      dropEl.classList.remove('is-over');
+    });
+  });
+  dropEl.addEventListener('drop', function (e) {
+    if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) {
+      readFiles(e.dataTransfer.files);
+    }
+  });
+
+  runBtn.addEventListener('click', analyze);
+
+  pasteBox.addEventListener('input', function () {
+    if (loadedFiles.length || pasteBox.value.trim()) runBtn.disabled = false;
+  });
+
+  resetBtn.addEventListener('click', function () {
+    loadedFiles = [];
+    cards = [];
+    groups = [];
+    groupStats = [];
+    fileListEl.hidden = true;
+    fileListEl.innerHTML = '';
+    pasteBox.value = '';
+    resultsEl.hidden = true;
+    groupListEl.innerHTML = '';
+    statsEl.innerHTML = '';
+    moreEl.hidden = true;
+    runBtn.disabled = true;
+    clearError();
+    clearWarn();
+  });
+
+  toggleAllBtn.addEventListener('click', function () {
+    var boxes = groupListEl.querySelectorAll('.vcf-group input[type="checkbox"]');
+    var anyChecked = false;
+    for (var i = 0; i < boxes.length; i++) {
+      if (boxes[i].checked) { anyChecked = true; break; }
+    }
+    for (var j = 0; j < boxes.length; j++) boxes[j].checked = !anyChecked;
+    toggleAllBtn.textContent = anyChecked ? 'Check all' : 'Uncheck all';
+  });
+
+  mergeFields.addEventListener('change', function () {
+    if (resultsEl.hidden) return;
+    renderResults();
+  });
+
+  dlVcfBtn.addEventListener('click', function () {
+    var out = buildOutput();
+    if (!out.length) { showError('Nothing to export.'); return; }
+    var body = out.map(serializeCard).join('\r\n') + '\r\n';
+    download('merged-contacts-' + timestamp() + '.vcf', body, 'text/vcard;charset=utf-8');
+  });
+
+  dlCsvBtn.addEventListener('click', function () {
+    var out = buildOutput();
+    if (!out.length) { showError('Nothing to export.'); return; }
+    var body = '\ufeff' + toCSV(out);
+    download('merged-contacts-' + timestamp() + '.csv', body, 'text/csv;charset=utf-8');
+  });
+
+  // ---------------- Sample ----------------
+
+  var SAMPLE = [
+    {
+      name: 'iphone-export.vcf',
+      text: 'BEGIN:VCARD\r\nVERSION:3.0\r\nN:Doe;John;;;\r\nFN:John Doe\r\nTEL;TYPE=CELL:+1 555 123 4567\r\nEMAIL:john.doe@example.com\r\nORG:Acme Inc\r\nTITLE:Engineer\r\nEND:VCARD\r\n' +
+            'BEGIN:VCARD\r\nVERSION:3.0\r\nN:Smith;Jane;;;\r\nFN:Jane Smith\r\nTEL;TYPE=CELL:+1 555 987 6543\r\nEMAIL:jane@example.com\r\nEND:VCARD\r\n'
+    },
+    {
+      name: 'android-export.vcf',
+      text: 'BEGIN:VCARD\r\nVERSION:2.1\r\nN:Doe;John;;;\r\nFN:John Doe\r\nTEL;CELL:15551234567\r\nEMAIL;INTERNET:jdoe@work.com\r\nNOTE:Moved to Portland in 2024\r\nEND:VCARD\r\n' +
+            'BEGIN:VCARD\r\nVERSION:2.1\r\nN:Rivera;Carlos;;;\r\nFN:Carlos Rivera\r\nTEL;WORK:+1 555 222 3333\r\nEND:VCARD\r\n'
+    },
+    {
+      name: 'google-contacts.vcf',
+      text: 'BEGIN:VCARD\r\nVERSION:3.0\r\nN:Smith;Jane;;;\r\nFN:Jane Smith\r\nTEL;TYPE=HOME:+1 555 987 6543\r\nEMAIL:jane.smith@gmail.com\r\nEND:VCARD\r\n'
+    }
+  ];
+
+  sampleBtn.addEventListener('click', function () {
+    loadedFiles = SAMPLE.map(function (f) {
+      return { name: f.name, size: humanSize(f.text.length), text: f.text };
+    });
+    pasteBox.value = '';
+    renderFileList();
+    runBtn.disabled = false;
+    clearError();
+    clearWarn();
+    analyze();
+  });
+
+  // Initial state.
+  runBtn.disabled = true;
+
+})();
+</script>
+</body>
+</html>

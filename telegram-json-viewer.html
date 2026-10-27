@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Telegram JSON Viewer: Read and Convert result.json</title>
+<meta name="description" content="Open a Telegram Desktop JSON export and read the chat in your browser. Search messages, filter by chat, and export to CSV or Markdown. No upload, no install, no account.">
+<link rel="canonical" href="https://onlinetoolsandconverters.cc/telegram-json-viewer">
+<style>
+  :root {
+    --blue: #245bcc;
+    --ink: #172033;
+    --muted: #5b6b82;
+    --line: #dfe6ef;
+    --bg: #f7f9fc;
+    --card: #ffffff;
+    --radius: 12px;
+    --shadow: 0 1px 2px rgba(23,32,51,0.06), 0 6px 18px rgba(23,32,51,0.05);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.55;
+  }
+  .tg-wrap { max-width: 900px; margin: 0 auto; padding: 28px 18px 64px; }
+  .tg-header { margin-bottom: 22px; }
+  .tg-header h1 {
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+    line-height: 1.2;
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+  }
+  .tg-header p { margin: 0; color: var(--muted); font-size: 1rem; max-width: 68ch; }
+  .tg-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    margin: 18px 0;
+  }
+  .tg-drop {
+    display: block;
+    border: 2px dashed #c3d0e2;
+    border-radius: 10px;
+    padding: 26px 18px;
+    text-align: center;
+    cursor: pointer;
+    background: #fbfcfe;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .tg-drop:hover, .tg-drop.is-over { border-color: var(--blue); background: #f4f8ff; }
+  .tg-drop input[type="file"] {
+    position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden;
+  }
+  .tg-drop-title { font-weight: 700; font-size: 1rem; margin: 0 0 4px; }
+  .tg-drop-sub { font-size: 0.86rem; color: var(--muted); margin: 0; }
+  .tg-fileinfo {
+    display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center;
+    margin-top: 12px; font-size: 0.82rem; color: var(--muted);
+  }
+  .tg-fileinfo b { color: var(--ink); font-weight: 700; }
+  .tg-controls {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px;
+  }
+  .tg-input {
+    flex: 1 1 200px;
+    padding: 9px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font: inherit;
+    font-size: 0.9rem;
+    color: var(--ink);
+    background: #fbfcfe;
+    outline: none;
+    min-width: 0;
+  }
+  .tg-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(36,91,204,0.12); }
+  .tg-select {
+    padding: 9px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font: inherit;
+    font-size: 0.88rem;
+    color: var(--ink);
+    background: #fbfcfe;
+    outline: none;
+    max-width: 100%;
+  }
+  .tg-select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(36,91,204,0.12); }
+  .tg-btn {
+    appearance: none;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 9px 16px;
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .tg-btn-primary { background: var(--blue); color: #fff; }
+  .tg-btn-primary:hover { background: #1e4fae; }
+  .tg-btn-secondary { background: #fff; color: var(--ink); border-color: var(--line); }
+  .tg-btn-secondary:hover { border-color: #c7d3e2; }
+  .tg-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .tg-error {
+    margin: 14px 0 0; padding: 10px 12px; border-radius: 8px;
+    background: #fff4f2; border: 1px solid #f3cfc8; color: #8a2f1c; font-size: 0.86rem;
+  }
+  .tg-error[hidden] { display: none; }
+  .tg-warn {
+    margin: 14px 0 0; padding: 10px 12px; border-radius: 8px;
+    background: #fffbe8; border: 1px solid #f0e0a8; color: #6b551a; font-size: 0.86rem;
+  }
+  .tg-warn[hidden] { display: none; }
+  .tg-stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 9px; margin: 18px 0;
+  }
+  .tg-stat {
+    border: 1px solid var(--line); border-radius: 9px; padding: 10px 12px; background: #fbfcfe;
+  }
+  .tg-stat dt {
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em;
+    color: var(--muted); margin: 0 0 3px; font-weight: 700;
+  }
+  .tg-stat dd { margin: 0; font-size: 1.15rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .tg-results { border-top: 1px solid var(--line); margin-top: 18px; padding-top: 18px; }
+  .tg-results[hidden] { display: none; }
+  .tg-msgs { display: flex; flex-direction: column; gap: 2px; max-height: 560px; overflow-y: auto; padding-right: 4px; }
+  .tg-msg {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 12px;
+    padding: 9px 10px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    border-bottom: 1px solid #f1f5fb;
+  }
+  .tg-msg:hover { background: #fbfcfe; }
+  .tg-msg-meta {
+    font-size: 0.76rem; color: var(--muted); line-height: 1.4;
+    font-variant-numeric: tabular-nums;
+  }
+  .tg-msg-meta b { display: block; color: var(--ink); font-weight: 700; font-size: 0.8rem; margin-bottom: 1px; }
+  .tg-msg-body { min-width: 0; word-wrap: break-word; overflow-wrap: break-word; }
+  .tg-msg-text { white-space: pre-wrap; }
+  .tg-msg-text a { color: var(--blue); }
+  .tg-msg-text code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.85em; background: #eef3fa; padding: 1px 5px; border-radius: 4px;
+  }
+  .tg-msg-text pre {
+    background: #f1f5fb; border: 1px solid var(--line); border-radius: 6px;
+    padding: 8px 10px; overflow-x: auto; font-size: 0.82rem; margin: 6px 0;
+  }
+  .tg-msg-media {
+    display: inline-block; font-size: 0.78rem; color: var(--muted);
+    background: #eef3fa; border-radius: 5px; padding: 2px 8px; margin-top: 4px;
+  }
+  .tg-msg-service { font-style: italic; color: var(--muted); font-size: 0.84rem; }
+  .tg-msg.is-hit { background: #fffbe8; }
+  .tg-more {
+    display: block; margin: 14px auto 0;
+    appearance: none; border: 1px solid var(--line); background: #fff; color: var(--ink);
+    font: inherit; font-size: 0.86rem; font-weight: 600; padding: 9px 18px; border-radius: 8px; cursor: pointer;
+  }
+  .tg-more:hover { border-color: var(--blue); color: var(--blue); }
+  .tg-empty {
+    padding: 16px; border-radius: 9px; background: #f1f5fb; font-size: 0.88rem; color: var(--ink);
+  }
+  .tg-note { font-size: 0.84rem; color: var(--muted); margin: 12px 0 0; }
+  .tg-section { margin-top: 34px; }
+  .tg-section h2 { font-size: 1.25rem; margin: 0 0 10px; letter-spacing: -0.01em; }
+  .tg-section h3 { font-size: 1.02rem; margin: 20px 0 8px; }
+  .tg-section p { margin: 0 0 12px; max-width: 70ch; }
+  .tg-section ul, .tg-section ol { max-width: 70ch; padding-left: 22px; margin: 0 0 14px; }
+  .tg-section li { margin-bottom: 6px; }
+  .tg-pre {
+    background: #f1f5fb; border: 1px solid var(--line); border-radius: 8px;
+    padding: 12px 14px; overflow-x: auto;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.8rem; line-height: 1.6; margin: 0 0 12px; color: var(--ink); white-space: pre;
+  }
+  .tg-table-wrap {
+    overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius);
+    background: var(--card); box-shadow: var(--shadow); margin-bottom: 8px;
+  }
+  table.tg-static { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+  table.tg-static th, table.tg-static td {
+    text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top;
+  }
+  table.tg-static th {
+    font-weight: 600; background: #f1f5fb; color: var(--ink); font-size: 0.8rem; letter-spacing: 0.01em;
+  }
+  table.tg-static tr:last-child td { border-bottom: none; }
+  table.tg-static td.mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.82rem;
+    word-break: break-word;
+  }
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.86em;
+    background: #eef3fa; padding: 1px 5px; border-radius: 4px; word-break: break-word;
+  }
+  .tg-faq details { border-bottom: 1px solid var(--line); padding: 12px 0; }
+  .tg-faq details:first-of-type { border-top: 1px solid var(--line); }
+  .tg-faq summary {
+    font-weight: 600; cursor: pointer; list-style: none;
+    display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+  }
+  .tg-faq summary::-webkit-details-marker { display: none; }
+  .tg-faq summary::after {
+    content: "+"; font-weight: 400; color: var(--muted); font-size: 1.1rem; line-height: 1; flex: 0 0 auto;
+  }
+  .tg-faq details[open] summary::after { content: "–"; }
+  .tg-faq details p { margin: 8px 0 0; color: var(--muted); font-size: 0.93rem; max-width: 68ch; }
+  .tg-footer {
+    margin-top: 44px; padding-top: 18px; border-top: 1px solid var(--line);
+    font-size: 0.82rem; color: var(--muted);
+  }
+  .tg-footer p { margin: 0 0 6px; }
+  @media (max-width: 600px) {
+    .tg-card { padding: 16px; }
+    .tg-msg { grid-template-columns: 1fr; gap: 4px; }
+    .tg-msg-meta { display: flex; gap: 8px; align-items: baseline; }
+    .tg-msg-meta b { display: inline; margin: 0; }
+    .tg-stats { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I open a Telegram JSON export?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Drop the result.json file into the box on this page. The parser reads it in your browser and shows the chats and messages. Nothing is uploaded, so the file never leaves your device. If you exported a single chat, the file contains one chat. If you used Export Telegram data from Settings, the file contains every chat you selected."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is result.json in a Telegram export?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "result.json is the machine-readable file Telegram Desktop writes when you export chat history in JSON format instead of HTML. It holds an array of messages with ids, dates, senders, text, and media references. The HTML export writes a separate messages.html file, and the JSON export writes result.json. Both are produced by the same Export chat history menu."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I export my Telegram chat as JSON?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Open Telegram Desktop, open the chat, click the three-dot menu, and choose Export chat history. Pick JSON as the format. If you want every chat at once, go to Settings, Advanced, Export Telegram data, and tick the chat types you need. The export produces a folder containing result.json plus a media folder when media is included."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my chat uploaded to a server?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The page reads the file with the browser File API and parses it with JavaScript. There is no network request during parsing, search, or export. You can confirm this by loading the page, switching the browser to offline mode, and opening a file. It still works."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I convert a Telegram export to CSV?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Open the result.json file, then click Export CSV. The download contains one row per message with the chat name, message id, date, sender, message type, text, and media reference. It is UTF-8 with a byte order mark, so Excel opens it without an import step. Emoji and non-Latin text survive intact."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I convert a Telegram export to Markdown?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Open the file and click Export Markdown. Each chat becomes a heading and each message becomes a line with the sender and date, followed by the text. Bold, italic, links, and code formatting from the original message entities are converted to Markdown syntax. Media is written as a bracketed reference to the file path in the export."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I search inside an exported Telegram chat?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Type into the search box after loading a file. The search runs across every message in every chat in the export, case-insensitively. Results are highlighted in the message list. Clear the box to return to the full list. The search is client-side and works offline."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it work with a single-chat export and a full-account export?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Both. A single-chat export has a name, type, id, and a messages array at the top level. A full-account export has chats.list and messages.list. The parser checks for both shapes and flattens them into the same view. The chat selector shows one entry for a single-chat file and every chat for a full export."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How are bold, italic, links, and code handled?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Telegram stores rich text as an array of entities alongside the plain text. The parser walks that array and rebuilds the formatting. Bold becomes strong, italic becomes em, links become anchors, code becomes code, and pre blocks become pre. In the Markdown export the same entities become asterisks, underscores, brackets, and backticks."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why do some media messages show only a filename?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A JSON export references media by relative path, such as photos/photo_1.jpg. The browser cannot read a folder automatically, so the viewer shows the reference and the media type instead of the image itself. If you need the actual files, open the export folder on disk and use the path shown in the message."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How large a result.json can it handle?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The practical limit is the browser tab's memory. A result.json of tens of megabytes and hundreds of thousands of messages usually opens on a desktop browser. Very large exports of several gigabytes may be slow or fail, because the whole JSON has to be parsed at once. Splitting the export by chat is the workaround."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it work with Telegram exports from a phone?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Telegram mobile apps do not produce a JSON export. The JSON format is written by Telegram Desktop on Windows, macOS, and Linux. If you only have a phone, use Telegram Web or install Telegram Desktop and export from there. The mobile app exports HTML in some regions, which this page does not parse."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this the same as a Telegram bot JSON viewer?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. A bot JSON viewer shows the update objects Telegram sends to a bot, which have a different shape and are used for bot development. This page reads the chat history export written by Telegram Desktop. The field names and nesting are different, and a bot update object will not parse as a chat export."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happened to the media and stickers in the export?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "They are still in the export folder if you ticked the media options. The JSON holds the reference, the type, and any caption. The viewer shows the type and path rather than rendering the file, because a browser cannot read a sibling folder without the user selecting it. Stickers and GIFs often have no file in the export at all, and appear as a type only."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<main class="tg-wrap">
+
+  <header class="tg-header">
+    <h1>Telegram JSON Viewer</h1>
+    <p>Open a Telegram Desktop <code>result.json</code> export and read the chat in your browser. Search it, filter it, export it. No upload, no install, no account.</p>
+  </header>
+
+  <section class="tg-card" aria-labelledby="tg-tool-label">
+
+    <label class="tg-drop" id="tg-drop" for="tg-file" tabindex="0">
+      <input type="file" id="tg-file" accept=".json,application/json">
+      <p class="tg-drop-title" id="tg-tool-label">Drop result.json here, or click to choose</p>
+      <p class="tg-drop-sub">Single chat export or full account export. Parsed in the browser. Nothing leaves your device.</p>
+    </label>
+
+    <div class="tg-fileinfo" id="tg-fileinfo" hidden></div>
+
+    <p class="tg-error" id="tg-error" hidden></p>
+    <p class="tg-warn" id="tg-warn" hidden></p>
+
+    <div class="tg-controls" id="tg-controls" hidden>
+      <select class="tg-select" id="tg-chat" aria-label="Filter by chat"></select>
+      <input class="tg-input" id="tg-search" type="search" placeholder="Search messages" aria-label="Search messages" autocomplete="off">
+      <button type="button" class="tg-btn tg-btn-secondary" id="tg-clear-search">Clear</button>
+    </div>
+
+    <div class="tg-results" id="tg-results" hidden>
+      <dl class="tg-stats" id="tg-stats"></dl>
+      <div class="tg-msgs" id="tg-msgs"></div>
+      <button type="button" class="tg-more" id="tg-more" hidden>Show more</button>
+      <p class="tg-note" id="tg-count-note"></p>
+
+      <div class="tg-controls" style="margin-top:16px;">
+        <button type="button" class="tg-btn tg-btn-primary" id="tg-dl-csv">Export CSV</button>
+        <button type="button" class="tg-btn tg-btn-secondary" id="tg-dl-md">Export Markdown</button>
+        <button type="button" class="tg-btn tg-btn-secondary" id="tg-dl-html">Export HTML</button>
+      </div>
+      <p class="tg-note">The CSV has one row per message. The Markdown keeps sender and date per line. The HTML is a single self-contained file you can open offline.</p>
+    </div>
+
+    <p class="tg-note">Runs entirely in your browser. The file is never sent anywhere and is discarded when you close the tab.</p>
+  </section>
+
+  <section class="tg-section">
+    <h2>How this works</h2>
+    <p>Telegram Desktop writes two kinds of export. A single-chat export puts a <code>name</code>, a <code>type</code>, and a <code>messages</code> array at the top level of <code>result.json</code>. A full-account export wraps everything in <code>chats.list</code> for the chat metadata and <code>messages.list</code> for the messages, with a <code>chat_id</code> on each message linking the two.</p>
+    <p>The parser checks which shape it has before reading anything else. If <code>messages</code> is an array, it is a single-chat file and every message belongs to the one chat. If <code>messages.list</code> exists, it is a full export and each message is grouped by its <code>chat_id</code> against <code>chats.list</code>. Both are flattened into the same list of messages with a chat name attached, which is why the viewer behaves the same way for either file.</p>
+    <p>Rich text is the other part that matters. Telegram does not store bold, italic, links, or code as markup in the <code>text</code> field. It stores a plain string plus a parallel <code>text_entities</code> array, where each entry has a <code>type</code> and the substring it applies to. The viewer walks that array and rebuilds the formatting as HTML for display and as Markdown for the export. If an export has no <code>text_entities</code>, the plain string is shown as-is, which is what you want for very old exports or hand-edited files.</p>
+    <p>Media is referenced by relative path, such as <code>photos/photo_1.jpg</code> or <code>video_files/video_1.mp4</code>. The browser cannot read a sibling folder automatically, so the viewer shows the media type and the reference rather than trying to render the file. The export folder on disk still has the actual files. Copying the reference into a file manager is the fastest way to open one.</p>
+  </section>
+
+  <section class="tg-section">
+    <h2>What the export contains</h2>
+    <div class="tg-table-wrap">
+      <table class="tg-static">
+        <thead>
+          <tr>
+            <th>Field</th>
+            <th>Where it lives</th>
+            <th>What the viewer does with it</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mono">name</td>
+            <td>Top level, or <code>chats.list[].name</code></td>
+            <td>Shown as the chat label in the filter dropdown.</td>
+          </tr>
+          <tr>
+            <td class="mono">type</td>
+            <td>Top level, or <code>chats.list[].type</code></td>
+            <td>Kept in the CSV so you can tell personal chats from groups and channels.</td>
+          </tr>
+          <tr>
+            <td class="mono">id</td>
+            <td>Each message</td>
+            <td>Kept in the CSV for cross-referencing against the original file.</td>
+          </tr>
+          <tr>
+            <td class="mono">date</td>
+            <td>Each message, ISO string</td>
+            <td>Shown as a local date and time, and written to CSV in ISO form.</td>
+          </tr>
+          <tr>
+            <td class="mono">from</td>
+            <td>Each message</td>
+            <td>Shown as the sender name.</td>
+          </tr>
+          <tr>
+            <td class="mono">text</td>
+            <td>Each message, string or entity array</td>
+            <td>Rendered with formatting, searched, and exported.</td>
+          </tr>
+          <tr>
+            <td class="mono">text_entities</td>
+            <td>Each message, optional</td>
+            <td>Rebuilt as bold, italic, links, code, and pre.</td>
+          </tr>
+          <tr>
+            <td class="mono">photo</td>
+            <td>Each message, optional</td>
+            <td>Shown as a media reference, not rendered.</td>
+          </tr>
+          <tr>
+            <td class="mono">file</td>
+            <td>Each message, optional</td>
+            <td>Shown as a media reference, not rendered.</td>
+          </tr>
+          <tr>
+            <td class="mono">media_type</td>
+            <td>Each message, optional</td>
+            <td>Shown next to the reference so you know what the file is.</td>
+          </tr>
+          <tr>
+            <td class="mono">type: "service"</td>
+            <td>Each message, optional</td>
+            <td>Shown in italic, and included in the CSV.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="tg-section">
+    <h2>When you would use this</h2>
+    <p>You exported a chat for a research project and the JSON is unreadable in a text editor. Loading it here gives you a scrollable transcript you can search in seconds, without installing Python or writing a parser.</p>
+    <p>You need the messages in a spreadsheet and the export is JSON. The CSV export gives you one row per message with the sender, date, and text, ready to open in Excel or import into a database.</p>
+    <p>You want to move a channel archive into a static site or a notes app. The Markdown export preserves the sender and date per line and converts the original formatting, which is the shape a Markdown-based tool expects.</p>
+    <p>You are checking what Telegram actually exported before deleting the original account. The viewer shows every message and every media reference, so you can confirm the export is complete before relying on it.</p>
+    <p>You are building a parser yourself and want to see how a real export is shaped. The viewer's source and the field table above are a faster reference than the schema docs for the common cases.</p>
+  </section>
+
+  <section class="tg-section">
+    <h2>What this does and does not handle</h2>
+    <p>It handles:</p>
+    <ul>
+      <li>Single-chat exports with a top-level <code>messages</code> array.</li>
+      <li>Full-account exports with <code>chats.list</code> and <code>messages.list</code>.</li>
+      <li>Rich text entities: bold, italic, underline, strikethrough, links, code, pre, and spoiler.</li>
+      <li>Service messages, shown in italic and included in exports.</li>
+      <li>Media references, shown as type plus path.</li>
+      <li>Search across every message in every chat in the file, case-insensitive.</li>
+      <li>CSV, Markdown, and self-contained HTML exports.</li>
+      <li>Files of tens of megabytes on a desktop browser.</li>
+    </ul>
+    <p>It does not handle:</p>
+    <ul>
+      <li>Opening the media folder and rendering images or video. The browser cannot read a sibling folder without the user selecting it, and a folder picker is a different interaction.</li>
+      <li>Bot update JSON. That is a different object shape and is not a chat export.</li>
+      <li>HTML exports from Telegram. This page reads JSON only. If you have <code>messages.html</code>, open it in a browser directly.</li>
+      <li>Telegram mobile app exports. The mobile apps do not produce a JSON export.</li>
+      <li>Very large exports of several gigabytes. The whole JSON is parsed at once and the tab will run out of memory. Split the export by chat.</li>
+      <li>Editing the export. The viewer reads and exports, it does not write back to the original file.</li>
+      <li>Decrypting a passcode-protected Telegram account. The export is already decrypted when Telegram writes it.</li>
+    </ul>
+  </section>
+
+  <section class="tg-section tg-faq">
+    <h2>Questions</h2>
+
+    <details>
+      <summary>How do I open a Telegram JSON export?</summary>
+      <p>Drop the <code>result.json</code> file into the box on this page. The parser reads it in your browser and shows the chats and messages. Nothing is uploaded, so the file never leaves your device. If you exported a single chat, the file contains one chat. If you used Export Telegram data from Settings, the file contains every chat you selected.</p>
+    </details>
+
+    <details>
+      <summary>What is result.json in a Telegram export?</summary>
+      <p><code>result.json</code> is the machine-readable file Telegram Desktop writes when you export chat history in JSON format instead of HTML. It holds an array of messages with ids, dates, senders, text, and media references. The HTML export writes a separate <code>messages.html</code> file, and the JSON export writes <code>result.json</code>. Both are produced by the same Export chat history menu.</p>
+    </details>
+
+    <details>
+      <summary>How do I export my Telegram chat as JSON?</summary>
+      <p>Open Telegram Desktop, open the chat, click the three-dot menu, and choose Export chat history. Pick JSON as the format. If you want every chat at once, go to Settings, Advanced, Export Telegram data, and tick the chat types you need. The export produces a folder containing <code>result.json</code> plus a media folder when media is included.</p>
+    </details>
+
+    <details>
+      <summary>Is my chat uploaded to a server?</summary>
+      <p>No. The page reads the file with the browser File API and parses it with JavaScript. There is no network request during parsing, search, or export. You can confirm this by loading the page, switching the browser to offline mode, and opening a file. It still works.</p>
+    </details>
+
+    <details>
+      <summary>How do I convert a Telegram export to CSV?</summary>
+      <p>Open the <code>result.json</code> file, then click Export CSV. The download contains one row per message with the chat name, message id, date, sender, message type, text, and media reference. It is UTF-8 with a byte order mark, so Excel opens it without an import step. Emoji and non-Latin text survive intact.</p>
+    </details>
+
+    <details>
+      <summary>How do I convert a Telegram export to Markdown?</summary>
+      <p>Open the file and click Export Markdown. Each chat becomes a heading and each message becomes a line with the sender and date, followed by the text. Bold, italic, links, and code formatting from the original message entities are converted to Markdown syntax. Media is written as a bracketed reference to the file path in the export.</p>
+    </details>
+
+    <details>
+      <summary>Can I search inside an exported Telegram chat?</summary>
+      <p>Yes. Type into the search box after loading a file. The search runs across every message in every chat in the export, case-insensitively. Results are highlighted in the message list. Clear the box to return to the full list. The search is client-side and works offline.</p>
+    </details>
+
+    <details>
+      <summary>Does it work with a single-chat export and a full-account export?</summary>
+      <p>Both. A single-chat export has a name, type, id, and a <code>messages</code> array at the top level. A full-account export has <code>chats.list</code> and <code>messages.list</code>. The parser checks for both shapes and flattens them into the same view. The chat selector shows one entry for a single-chat file and every chat for a full export.</p>
+    </details>
+
+    <details>
+      <summary>How are bold, italic, links, and code handled?</summary>
+      <p>Telegram stores rich text as an array of entities alongside the plain text. The parser walks that array and rebuilds the formatting. Bold becomes <code>strong</code>, italic becomes <code>em</code>, links become anchors, code becomes <code>code</code>, and pre blocks become <code>pre</code>. In the Markdown export the same entities become asterisks, underscores, brackets, and backticks.</p>
+    </details>
+
+    <details>
+      <summary>Why do some media messages show only a filename?</summary>
+      <p>A JSON export references media by relative path, such as <code>photos/photo_1.jpg</code>. The browser cannot read a folder automatically, so the viewer shows the reference and the media type instead of the image itself. If you need the actual files, open the export folder on disk and use the path shown in the message.</p>
+    </details>
+
+    <details>
+      <summary>How large a result.json can it handle?</summary>
+      <p>The practical limit is the browser tab's memory. A <code>result.json</code> of tens of megabytes and hundreds of thousands of messages usually opens on a desktop browser. Very large exports of several gigabytes may be slow or fail, because the whole JSON has to be parsed at once. Splitting the export by chat is the workaround.</p>
+    </details>
+
+    <details>
+      <summary>Does it work with Telegram exports from a phone?</summary>
+      <p>Telegram mobile apps do not produce a JSON export. The JSON format is written by Telegram Desktop on Windows, macOS, and Linux. If you only have a phone, use Telegram Web or install Telegram Desktop and export from there. The mobile app exports HTML in some regions, which this page does not parse.</p>
+    </details>
+
+    <details>
+      <summary>Is this the same as a Telegram bot JSON viewer?</summary>
+      <p>No. A bot JSON viewer shows the update objects Telegram sends to a bot, which have a different shape and are used for bot development. This page reads the chat history export written by Telegram Desktop. The field names and nesting are different, and a bot update object will not parse as a chat export.</p>
+    </details>
+
+    <details>
+      <summary>What happened to the media and stickers in the export?</summary>
+      <p>They are still in the export folder if you ticked the media options. The JSON holds the reference, the type, and any caption. The viewer shows the type and path rather than rendering the file, because a browser cannot read a sibling folder without the user selecting it. Stickers and GIFs often have no file in the export at all, and appear as a type only.</p>
+    </details>
+
+  </section>
+
+  <footer class="tg-footer">
+    <p>ConvertToToolsOnline. Built and maintained by one developer. This page runs locally in your browser and does not upload the export you open.</p>
+  </footer>
+
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  var dropEl = document.getElementById('tg-drop');
+  var fileInput = document.getElementById('tg-file');
+  var fileInfoEl = document.getElementById('tg-fileinfo');
+  var errorEl = document.getElementById('tg-error');
+  var warnEl = document.getElementById('tg-warn');
+  var controlsEl = document.getElementById('tg-controls');
+  var chatSelect = document.getElementById('tg-chat');
+  var searchEl = document.getElementById('tg-search');
+  var clearSearchBtn = document.getElementById('tg-clear-search');
+  var resultsEl = document.getElementById('tg-results');
+  var statsEl = document.getElementById('tg-stats');
+  var msgsEl = document.getElementById('tg-msgs');
+  var moreBtn = document.getElementById('tg-more');
+  var countNoteEl = document.getElementById('tg-count-note');
+  var dlCsvBtn = document.getElementById('tg-dl-csv');
+  var dlMdBtn = document.getElementById('tg-dl-md');
+  var dlHtmlBtn = document.getElementById('tg-dl-html');
+
+  var PAGE_SIZE = 200;
+  var MAX_BYTES = 200 * 1024 * 1024;
+
+  var allMessages = [];   // {chatName, chatType, id, date, from, fromId, text, html, media, isService}
+  var chatNames = [];     // unique ordered list
+  var filtered = [];      // current filtered list
+  var shownCount = 0;
+  var activeChat = '__all__';
+  var searchTerm = '';
+  var fileName = '';
+
+  // -------- Helpers --------
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function showError(msg) {
+    errorEl.textContent = msg;
+    errorEl.hidden = false;
+  }
+  function clearError() {
+    errorEl.hidden = true;
+    errorEl.textContent = '';
+  }
+  function showWarn(msg) {
+    warnEl.textContent = msg;
+    warnEl.hidden = false;
+  }
+  function clearWarn() {
+    warnEl.hidden = true;
+    warnEl.textContent = '';
+  }
+
+  function humanSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return '';
+    try {
+      var d = new Date(iso);
+      if (isNaN(d.getTime())) return iso;
+      var y = d.getFullYear();
+      var m = String(d.getMonth() + 1).padStart(2, '0');
+      var day = String(d.getDate()).padStart(2, '0');
+      var hh = String(d.getHours()).padStart(2, '0');
+      var mm = String(d.getMinutes()).padStart(2, '0');
+      return y + '-' + m + '-' + day + ' ' + hh + ':' + mm;
+    } catch (e) {
+      return iso;
+    }
+  }
+
+  // -------- Text extraction --------
+
+  function entityHtml(entity) {
+    var t = entity.text || '';
+    switch (entity.type) {
+      case 'bold': return '<strong>' + escapeHtml(t) + '</strong>';
+      case 'italic': return '<em>' + escapeHtml(t) + '</em>';
+      case 'underline': return '<u>' + escapeHtml(t) + '</u>';
+      case 'strikethrough': return '<s>' + escapeHtml(t) + '</s>';
+      case 'code': return '<code>' + escapeHtml(t) + '</code>';
+      case 'pre': return '<pre>' + escapeHtml(t) + '</pre>';
+      case 'spoiler': return '<span class="tg-spoiler">' + escapeHtml(t) + '</span>';
+      case 'link': return '<a href="' + escapeHtml(t) + '" rel="noopener nofollow" target="_blank">' + escapeHtml(t) + '</a>';
+      case 'text_link': return '<a href="' + escapeHtml(entity.href || '') + '" rel="noopener nofollow" target="_blank">' + escapeHtml(t) + '</a>';
+      case 'mention': return '<a href="#" class="tg-mention">' + escapeHtml(t) + '</a>';
+      case 'email': return '<a href="mailto:' + escapeHtml(t) + '">' + escapeHtml(t) + '</a>';
+      case 'phone': return '<a href="tel:' + escapeHtml(t) + '">' + escapeHtml(t) + '</a>';
+      case 'hashtag': return '<span class="tg-hashtag">' + escapeHtml(t) + '</span>';
+      case 'bot_command': return '<code>' + escapeHtml(t) + '</code>';
+      default: return escapeHtml(t);
+    }
+  }
+
+  function extractHtml(msg) {
+    var text = msg.text;
+    if (Array.isArray(text)) {
+      return text.map(function (e) {
+        if (typeof e === 'string') return escapeHtml(e);
+        if (e && e.type && e.text !== undefined) return entityHtml(e);
+        return '';
+      }).join('');
+    }
+    if (typeof text === 'string') return escapeHtml(text);
+    return '';
+  }
+
+  function extractPlain(msg) {
+    var text = msg.text;
+    if (Array.isArray(text)) {
+      return text.map(function (e) {
+        if (typeof e === 'string') return e;
+        if (e && e.text !== undefined) return e.text;
+        return '';
+      }).join('');
+    }
+    if (typeof text === 'string') return text;
+    return '';
+  }
+
+  function mediaLabel(msg) {
+    if (msg.photo) return 'photo: ' + msg.photo;
+    if (msg.file) return (msg.media_type || 'file') + ': ' + msg.file;
+    if (msg.sticker_emoji) return 'sticker ' + msg.sticker_emoji;
+    if (msg.media_type) return msg.media_type;
+    return '';
+  }
+
+  // -------- Parsing --------
+
+  function buildMessages(data, sourceName) {
+    var out = [];
+    var chats = [];
+
+    // Single chat shape.
+    if (Array.isArray(data.messages)) {
+      var cname = data.name || sourceName || 'Chat';
+      var ctype = data.type || 'unknown';
+      chats.push({ name: cname, type: ctype });
+      data.messages.forEach(function (m) {
+        var pushed = normalise(m, cname, ctype);
+        if (pushed) out.push(pushed);
+      });
+      return { messages: out, chats: chats };
+    }
+
+    // Full export shape.
+    if (data.messages && Array.isArray(data.messages.list)) {
+      var byId = {};
+      if (data.chats && Array.isArray(data.chats.list)) {
+        data.chats.list.forEach(function (c) {
+          byId[c.id] = c;
+          chats.push({ name: c.name || ('Chat ' + c.id), type: c.type || 'unknown' });
+        });
+      } else {
+        chats.push({ name: sourceName || 'Export', type: 'unknown' });
+      }
+      data.messages.list.forEach(function (m) {
+        var meta = byId[m.chat_id] || { name: sourceName || 'Chat', type: 'unknown' };
+        var pushed = normalise(m, meta.name, meta.type);
+        if (pushed) out.push(pushed);
+      });
+      return { messages: out, chats: chats };
+    }
+
+    // Unknown shape.
+    return { messages: [], chats: [] };
+  }
+
+  function normalise(m, chatName, chatType) {
+    if (!m || typeof m !== 'object') return null;
+    var html = extractHtml(m);
+    var plain = extractPlain(m);
+    var media = mediaLabel(m);
+    var isService = m.type === 'service' || (!plain && !html && !media);
+    if (!plain && !html && !media) return null;
+    return {
+      chatName: chatName,
+      chatType: chatType,
+      id: m.id !== undefined ? m.id : '',
+      date: m.date || '',
+      from: m.from || m.actor || '',
+      fromId: m.from_id || '',
+      text: plain,
+      html: html,
+      media: media,
+      isService: isService
+    };
+  }
+
+  // -------- Rendering --------
+
+  function renderStats() {
+    var chatCount = {};
+    allMessages.forEach(function (m) { chatCount[m.chatName] = (chatCount[m.chatName] || 0) + 1; });
+    var uniqueChats = Object.keys(chatCount).length;
+    var dates = allMessages.map(function (m) { return m.date; }).filter(Boolean).sort();
+    var first = dates.length ? fmtDate(dates[0]).slice(0, 10) : '';
+    var last = dates.length ? fmtDate(dates[dates.length - 1]).slice(0, 10) : '';
+
+    var items = [
+      ['Messages', allMessages.length.toLocaleString('en-US')],
+      ['Chats', uniqueChats.toLocaleString('en-US')],
+      ['First message', first || 'n/a'],
+      ['Last message', last || 'n/a']
+    ];
+    statsEl.innerHTML = items.map(function (p) {
+      return '<div class="tg-stat"><dt>' + p[0] + '</dt><dd>' + p[1] + '</dd></div>';
+    }).join('');
+  }
+
+  function applyFilter() {
+    filtered = allMessages.filter(function (m) {
+      if (activeChat !== '__all__' && m.chatName !== activeChat) return false;
+      if (searchTerm) {
+        var hay = (m.text + ' ' + m.from + ' ' + m.chatName + ' ' + m.media).toLowerCase();
+        if (hay.indexOf(searchTerm) === -1) return false;
+      }
+      return true;
+    });
+    shownCount = 0;
+    msgsEl.innerHTML = '';
+    renderMore();
+  }
+
+  function renderMore() {
+    var slice = filtered.slice(shownCount, shownCount + PAGE_SIZE);
+    if (!slice.length && shownCount === 0) {
+      msgsEl.innerHTML = '<div class="tg-empty">No messages match this filter. Clear the search box or pick a different chat.</div>';
+      moreBtn.hidden = true;
+      countNoteEl.textContent = '';
+      return;
+    }
+
+    var frag = document.createDocumentFragment();
+    slice.forEach(function (m) {
+      var div = document.createElement('div');
+      div.className = 'tg-msg' + (searchTerm ? ' is-hit' : '');
+      var meta = '<div class="tg-msg-meta"><b>' + escapeHtml(m.from || 'unknown') + '</b>' +
+        escapeHtml(fmtDate(m.date)) + '</div>';
+      var body = '<div class="tg-msg-body">';
+      if (m.isService) {
+        body += '<span class="tg-msg-service">' + (m.html || escapeHtml(m.text)) + '</span>';
+      } else {
+        body += '<div class="tg-msg-text">' + (m.html || escapeHtml(m.text)) + '</div>';
+      }
+      if (m.media) {
+        body += '<span class="tg-msg-media">' + escapeHtml(m.media) + '</span>';
+      }
+      body += '</div>';
+      div.innerHTML = meta + body;
+      frag.appendChild(div);
+    });
+    msgsEl.appendChild(frag);
+    shownCount += slice.length;
+
+    if (shownCount < filtered.length) {
+      moreBtn.hidden = false;
+      moreBtn.textContent = 'Show more (' + (filtered.length - shownCount).toLocaleString('en-US') + ' left)';
+    } else {
+      moreBtn.hidden = true;
+    }
+    countNoteEl.textContent = 'Showing ' + shownCount.toLocaleString('en-US') + ' of ' +
+      filtered.length.toLocaleString('en-US') + ' messages.';
+  }
+
+  function renderChatSelect() {
+    var counts = {};
+    allMessages.forEach(function (m) { counts[m.chatName] = (counts[m.chatName] || 0) + 1; });
+    var names = Object.keys(counts).sort();
+    chatSelect.innerHTML = '<option value="__all__">All chats (' + allMessages.length.toLocaleString('en-US') + ')</option>' +
+      names.map(function (n) {
+        return '<option value="' + escapeHtml(n) + '">' + escapeHtml(n) + ' (' + counts[n].toLocaleString('en-US') + ')</option>';
+      }).join('');
+  }
+
+  function renderAll() {
+    renderStats();
+    renderChatSelect();
+    applyFilter();
+    controlsEl.hidden = false;
+    resultsEl.hidden = false;
+  }
+
+  // -------- Export --------
+
+  function csvEscape(s) {
+    s = String(s == null ? '' : s);
+    if (/[",\n\r]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+    return s;
+  }
+
+  function exportCSV() {
+    var rows = [['chat', 'chat_type', 'message_id', 'date', 'from', 'type', 'text', 'media']];
+    filtered.forEach(function (m) {
+      rows.push([
+        m.chatName,
+        m.chatType,
+        m.id,
+        m.date,
+        m.from,
+        m.isService ? 'service' : 'message',
+        m.text,
+        m.media
+      ]);
+    });
+    var body = '\ufeff' + rows.map(function (r) { return r.map(csvEscape).join(','); }).join('\r\n');
+    download('telegram-export-' + stamp() + '.csv', body, 'text/csv;charset=utf-8');
+  }
+
+  function mdEscape(s) {
+    return String(s).replace(/([\\`*_{}\[\]()#+\-.!])/g, '\\$1');
+  }
+
+  function entityMarkdown(entity) {
+    var t = entity.text || '';
+    switch (entity.type) {
+      case 'bold': return '**' + t + '**';
+      case 'italic': return '*' + t + '*';
+      case 'code': return '`' + t + '`';
+      case 'pre': return '```\n' + t + '\n```';
+      case 'strikethrough': return '~~' + t + '~~';
+      case 'link': return '<' + t + '>';
+      case 'text_link': return '[' + t + '](' + (entity.href || '') + ')';
+      default: return t;
+    }
+  }
+
+  function markdownText(m) {
+    if (Array.isArray(m.text)) {
+      return m.text.map(function (e) {
+        if (typeof e === 'string') return e;
+        if (e && e.type) return entityMarkdown(e);
+        return (e && e.text) || '';
+      }).join('');
+    }
+    return m.text || '';
+  }
+
+  function exportMarkdown() {
+    var lines = ['# Telegram export', '', 'Exported ' + new Date().toISOString().slice(0, 10), ''];
+    var currentChat = null;
+    filtered.forEach(function (m) {
+      if (m.chatName !== currentChat) {
+        currentChat = m.chatName;
+        lines.push('', '## ' + currentChat, '');
+      }
+      var when = fmtDate(m.date);
+      var who = m.from || 'unknown';
+      var body = markdownText(m);
+      if (m.isService) body = '*' + body + '*';
+      lines.push('**' + who + '** · ' + when + '  ');
+      lines.push(body);
+      if (m.media) lines.push('> ' + m.media);
+      lines.push('');
+    });
+    download('telegram-export-' + stamp() + '.md', lines.join('\n'), 'text/markdown;charset=utf-8');
+  }
+
+  function exportHTML() {
+    var parts = [];
+    parts.push('<!DOCTYPE html>');
+    parts.push('<html lang="en"><head><meta charset="utf-8">');
+    parts.push('<title>Telegram export</title>');
+    parts.push('<style>body{font-family:system-ui,sans-serif;max-width:760px;margin:2rem auto;padding:0 1rem;color:#172033;background:#fff;line-height:1.5}');
+    parts.push('h1{font-size:1.4rem}h2{font-size:1.1rem;margin-top:2rem;border-bottom:1px solid #dfe6ef;padding-bottom:.3rem}');
+    parts.push('.m{display:grid;grid-template-columns:130px 1fr;gap:.75rem;padding:.4rem 0;border-bottom:1px solid #f1f5fb;font-size:.9rem}');
+    parts.push('.meta{font-size:.78rem;color:#5b6b82}.meta b{display:block;color:#172033}');
+    parts.push('.media{display:inline-block;font-size:.78rem;background:#eef3fa;padding:2px 8px;border-radius:5px;margin-top:4px;color:#5b6b82}');
+    parts.push('.svc{font-style:italic;color:#5b6b82}code{background:#eef3fa;padding:1px 5px;border-radius:4px;font-size:.85em}');
+    parts.push('pre{background:#f1f5fb;padding:8px 10px;border-radius:6px;overflow-x:auto}');
+    parts.push('@media(max-width:600px){.m{grid-template-columns:1fr}}');
+    parts.push('</style></head><body>');
+    parts.push('<h1>Telegram export</h1>');
+    parts.push('<p style="color:#5b6b82">Exported ' + new Date().toISOString().slice(0, 10) + '</p>');
+    var currentChat = null;
+    filtered.forEach(function (m) {
+      if (m.chatName !== currentChat) {
+        currentChat = m.chatName;
+        parts.push('<h2>' + escapeHtml(currentChat) + '</h2>');
+      }
+      parts.push('<div class="m">');
+      parts.push('<div class="meta"><b>' + escapeHtml(m.from || 'unknown') + '</b>' + escapeHtml(fmtDate(m.date)) + '</div>');
+      parts.push('<div>');
+      if (m.isService) parts.push('<span class="svc">' + (m.html || escapeHtml(m.text)) + '</span>');
+      else parts.push(m.html || escapeHtml(m.text));
+      if (m.media) parts.push('<div class="media">' + escapeHtml(m.media) + '</div>');
+      parts.push('</div></div>');
+    });
+    parts.push('</body></html>');
+    download('telegram-export-' + stamp() + '.html', parts.join('\n'), 'text/html;charset=utf-8');
+  }
+
+  function stamp() {
+    var d = new Date();
+    function p(n) { return n < 10 ? '0' + n : String(n); }
+    return d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate());
+  }
+
+  function download(filename, content, mime) {
+    var blob = new Blob([content], { type: mime || 'application/octet-stream' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 120);
+  }
+
+  // -------- File handling --------
+
+  function handleFile(file) {
+    clearError();
+    clearWarn();
+    if (!file) return;
+    if (file.size > MAX_BYTES) {
+      showError('That file is ' + humanSize(file.size) + '. Files above 200 MB usually run out of memory in a browser tab. Split the export by chat and try again.');
+      return;
+    }
+    fileName = file.name;
+    fileInfoEl.innerHTML = '<span><b>' + escapeHtml(file.name) + '</b></span><span>' + humanSize(file.size) + '</span><span>reading…</span>';
+    fileInfoEl.hidden = false;
+
+    var reader = new FileReader();
+    reader.onload = function () {
+      var text = String(reader.result || '');
+      var data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        showError('That file is not valid JSON. Telegram writes result.json as strict JSON with no trailing commas. If you edited it by hand, a single missing quote will cause this error.');
+        fileInfoEl.hidden = true;
+        return;
+      }
+
+      var parsed;
+      try {
+        parsed = buildMessages(data, file.name.replace(/\.json$/i, ''));
+      } catch (e) {
+        showError('The file parsed as JSON but does not match the Telegram export shape. Expected a top-level messages array or messages.list.');
+        fileInfoEl.hidden = true;
+        return;
+      }
+
+      if (!parsed.messages.length) {
+        showError('No messages found. The file may be an empty export, a bot update dump, or a different JSON file. This page reads Telegram Desktop chat exports only.');
+        fileInfoEl.hidden = true;
+        return;
+      }
+
+      allMessages = parsed.messages;
+      activeChat = '__all__';
+      searchTerm = '';
+      searchEl.value = '';
+      fileInfoEl.innerHTML = '<span><b>' + escapeHtml(file.name) + '</b></span><span>' + humanSize(file.size) + '</span><span>' + allMessages.length.toLocaleString('en-US') + ' messages</span>';
+
+      if (!parsed.chats.length) {
+        showWarn('Chat metadata was missing from the file, so messages are labelled with the filename.');
+      }
+
+      renderAll();
+    };
+    reader.onerror = function () {
+      showError('Could not read the file. Try again, or check that the file is not open in another program.');
+    };
+    reader.readAsText(file, 'utf-8');
+  }
+
+  // -------- Events --------
+
+  dropEl.addEventListener('click', function (e) {
+    if (e.target === fileInput) return;
+    fileInput.click();
+  });
+  dropEl.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      fileInput.click();
+    }
+  });
+  fileInput.addEventListener('change', function () {
+    if (fileInput.files && fileInput.files[0]) handleFile(fileInput.files[0]);
+    fileInput.value = '';
+  });
+
+  ['dragenter', 'dragover'].forEach(function (ev) {
+    dropEl.addEventListener(ev, function (e) {
+      e.preventDefault();
+      dropEl.classList.add('is-over');
+    });
+  });
+  ['dragleave', 'drop'].forEach(function (ev) {
+    dropEl.addEventListener(ev, function (e) {
+      e.preventDefault();
+      dropEl.classList.remove('is-over');
+    });
+  });
+  dropEl.addEventListener('drop', function (e) {
+    if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFile(e.dataTransfer.files[0]);
+    }
+  });
+
+  chatSelect.addEventListener('change', function () {
+    activeChat = chatSelect.value;
+    applyFilter();
+  });
+
+  var searchTimer = null;
+  searchEl.addEventListener('input', function () {
+    if (searchTimer) clearTimeout(searchTimer);
+    searchTimer = setTimeout(function () {
+      searchTerm = searchEl.value.trim().toLowerCase();
+      applyFilter();
+    }, 180);
+  });
+
+  clearSearchBtn.addEventListener('click', function () {
+    searchEl.value = '';
+    searchTerm = '';
+    applyFilter();
+    searchEl.focus();
+  });
+
+  moreBtn.addEventListener('click', renderMore);
+
+  dlCsvBtn.addEventListener('click', function () {
+    if (!filtered.length) return;
+    exportCSV();
+  });
+  dlMdBtn.addEventListener('click', function () {
+    if (!filtered.length) return;
+    exportMarkdown();
+  });
+  dlHtmlBtn.addEventListener('click', function () {
+    if (!filtered.length) return;
+    exportHTML();
+  });
+
+})();
+</script>
+</body>
+</html>

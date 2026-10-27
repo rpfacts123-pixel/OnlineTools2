@@ -1,0 +1,1502 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#2563eb">
+
+  <title>URL Encoder &amp; Decoder Online – Free URL Encode Tool</title>
+  <meta name="description" content="Encode or decode URLs and query parameters with this free URL encoder and decoder. Convert special characters to percent encoding instantly in your browser—no upload.">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+  <link rel="canonical" href="https://onlinetoolsandconverters.cc/url-encode-decode.html">
+  <link rel="stylesheet" href="/style.css">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Online Tools &amp; Converters">
+  <meta property="og:title" content="URL Encoder &amp; Decoder Online – Free URL Encode Tool">
+  <meta property="og:description" content="Encode or decode URLs, query parameters, and special characters in your browser. Free, fast, and no upload required.">
+  <meta property="og:url" content="https://onlinetoolsandconverters.cc/url-encode-decode.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="URL Encoder &amp; Decoder Online">
+  <meta name="twitter:description" content="Free online URL encoding and decoding for text, query parameters, and complete URLs.">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://onlinetoolsandconverters.cc/url-encode-decode.html#webpage",
+        "url": "https://onlinetoolsandconverters.cc/url-encode-decode.html",
+        "name": "URL Encoder & Decoder Online",
+        "description": "Free online URL encoder and decoder for percent-encoding text, query parameter values, and complete URLs.",
+        "isPartOf": {
+          "@id": "https://onlinetoolsandconverters.cc/#website"
+        },
+        "inLanguage": "en",
+        "mainEntity": {
+          "@id": "https://onlinetoolsandconverters.cc/url-encode-decode.html#tool"
+        },
+        "breadcrumb": {
+          "@id": "https://onlinetoolsandconverters.cc/url-encode-decode.html#breadcrumb"
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://onlinetoolsandconverters.cc/url-encode-decode.html#tool",
+        "name": "URL Encoder & Decoder",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any",
+        "url": "https://onlinetoolsandconverters.cc/url-encode-decode.html",
+        "description": "A browser-based utility to encode and decode URL components, complete URLs, form query values, and RFC 3986 component values.",
+        "isAccessibleForFree": true,
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://onlinetoolsandconverters.cc/url-encode-decode.html#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://onlinetoolsandconverters.cc/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "URL Encoder & Decoder",
+            "item": "https://onlinetoolsandconverters.cc/url-encode-decode.html"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      color-scheme: light;
+      --ued-blue: #2563eb;
+      --ued-blue-dark: #1d4ed8;
+      --ued-ink: #172033;
+      --ued-muted: #64748b;
+      --ued-line: #e2e8f0;
+      --ued-bg: #f5f8ff;
+      --ued-white: #ffffff;
+      --ued-green: #087443;
+      --ued-red: #b42318;
+      --ued-radius: 18px;
+      --ued-shadow: 0 8px 28px rgba(15,23,42,.06);
+    }
+
+    .ued-page, .ued-page * {
+      box-sizing: border-box;
+    }
+
+    .ued-page {
+      margin: 0;
+      background: var(--ued-bg);
+      color: var(--ued-ink);
+      font: 16px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+
+    .ued-page a {
+      color: var(--ued-blue);
+      text-decoration: none;
+    }
+
+    .ued-page a:hover {
+      text-decoration: underline;
+    }
+
+    .ued-page button,
+    .ued-page input,
+    .ued-page textarea,
+    .ued-page select {
+      font: inherit;
+    }
+
+    .ued-page button {
+      cursor: pointer;
+    }
+
+    .ued-shell {
+      width: min(1120px, calc(100% - 32px));
+      margin-inline: auto;
+    }
+
+    .ued-skip {
+      position: absolute;
+      left: -9999px;
+      top: 8px;
+      z-index: 100;
+      padding: 10px 14px;
+      background: #fff;
+      color: #111;
+      border: 2px solid var(--ued-blue);
+    }
+
+    .ued-skip:focus {
+      left: 12px;
+    }
+
+    .ued-header {
+      background: #fff;
+      border-bottom: 1px solid var(--ued-line);
+    }
+
+    .ued-header-inner {
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .ued-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ued-ink) !important;
+      font-weight: 850;
+      letter-spacing: -.3px;
+    }
+
+    .ued-brand-mark {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      background: var(--ued-blue);
+      color: #fff;
+      border-radius: 12px;
+      font-size: .82rem;
+      font-weight: 900;
+    }
+
+    .ued-brand-name span {
+      color: var(--ued-blue);
+    }
+
+    .ued-nav {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .ued-nav a {
+      color: #475569;
+      font-size: .93rem;
+      font-weight: 650;
+    }
+
+    .ued-nav-toggle {
+      display: none;
+      border: 1px solid var(--ued-line);
+      border-radius: 10px;
+      padding: 8px 12px;
+      background: #fff;
+      color: var(--ued-ink);
+    }
+
+    .ued-main {
+      min-height: 60vh;
+      padding-bottom: 56px;
+    }
+
+    .ued-breadcrumb {
+      padding-top: 17px;
+      font-size: .86rem;
+      color: var(--ued-muted);
+    }
+
+    .ued-breadcrumb a {
+      color: var(--ued-muted);
+    }
+
+    .ued-hero {
+      padding: 28px 0 22px;
+    }
+
+    .ued-eyebrow {
+      margin: 0 0 8px;
+      color: var(--ued-blue);
+      text-transform: uppercase;
+      letter-spacing: .11em;
+      font-size: .76rem;
+      font-weight: 850;
+    }
+
+    .ued-hero h1 {
+      margin: 0 0 12px;
+      max-width: 850px;
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      line-height: 1.1;
+      letter-spacing: -.045em;
+    }
+
+    .ued-lead {
+      max-width: 800px;
+      margin: 0;
+      color: #526176;
+      font-size: 1.06rem;
+    }
+
+    .ued-tool-card {
+      background: var(--ued-white);
+      border: 1px solid var(--ued-line);
+      border-radius: var(--ued-radius);
+      box-shadow: var(--ued-shadow);
+      overflow: hidden;
+    }
+
+    .ued-tool-top {
+      padding: 20px 22px 16px;
+      border-bottom: 1px solid var(--ued-line);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .ued-tool-top h2 {
+      margin: 0 0 4px;
+      font-size: 1.25rem;
+      line-height: 1.3;
+    }
+
+    .ued-tool-top p {
+      margin: 0;
+      color: var(--ued-muted);
+      font-size: .91rem;
+    }
+
+    .ued-local-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: #ecfdf3;
+      color: #05603a;
+      border: 1px solid #bbf7d0;
+      border-radius: 999px;
+      padding: 6px 11px;
+      font-size: .8rem;
+      font-weight: 750;
+      white-space: nowrap;
+    }
+
+    .ued-tool-body {
+      padding: 22px;
+    }
+
+    .ued-toolbar {
+      display: grid;
+      grid-template-columns: auto minmax(180px, 1fr);
+      align-items: end;
+      gap: 16px;
+      margin-bottom: 19px;
+    }
+
+    .ued-label {
+      display: block;
+      margin-bottom: 7px;
+      color: #344054;
+      font-size: .88rem;
+      font-weight: 750;
+    }
+
+    .ued-direction {
+      display: flex;
+      gap: 5px;
+      background: #f1f5f9;
+      border: 1px solid var(--ued-line);
+      padding: 4px;
+      border-radius: 12px;
+    }
+
+    .ued-direction button {
+      padding: 9px 16px;
+      border: 0;
+      border-radius: 8px;
+      color: #475569;
+      background: transparent;
+      font-weight: 750;
+    }
+
+    .ued-direction button[aria-pressed="true"] {
+      background: var(--ued-blue);
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(37,99,235,.18);
+    }
+
+    .ued-mode {
+      width: 100%;
+      min-height: 44px;
+      padding: 9px 12px;
+      color: var(--ued-ink);
+      background: #fff;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+    }
+
+    .ued-fields {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+      gap: 18px;
+    }
+
+    .ued-field {
+      min-width: 0;
+    }
+
+    .ued-field-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 7px;
+    }
+
+    .ued-field-heading label {
+      font-size: .92rem;
+      font-weight: 800;
+    }
+
+    .ued-field-heading span {
+      color: var(--ued-muted);
+      font-size: .76rem;
+    }
+
+    .ued-textarea {
+      display: block;
+      width: 100%;
+      min-height: 220px;
+      resize: vertical;
+      padding: 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      background: #fff;
+      color: #172033;
+      line-height: 1.55;
+      font-size: .94rem;
+      overflow-wrap: anywhere;
+    }
+
+    .ued-textarea:focus,
+    .ued-mode:focus,
+    .ued-page button:focus-visible,
+    .ued-page a:focus-visible {
+      outline: 3px solid rgba(37,99,235,.24);
+      outline-offset: 2px;
+    }
+
+    .ued-output {
+      background: #f8fafc;
+    }
+
+    .ued-controls {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .ued-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 43px;
+      padding: 9px 15px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      font-weight: 780;
+      font-size: .91rem;
+      transition: background .15s ease, transform .15s ease;
+    }
+
+    .ued-btn:active {
+      transform: translateY(1px);
+    }
+
+    .ued-btn-primary {
+      color: #fff;
+      background: var(--ued-blue);
+    }
+
+    .ued-btn-primary:hover {
+      background: var(--ued-blue-dark);
+    }
+
+    .ued-btn-secondary {
+      color: #1e293b;
+      background: #fff;
+      border-color: #cbd5e1;
+    }
+
+    .ued-btn-secondary:hover {
+      background: #f8fafc;
+    }
+
+    .ued-btn:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+    }
+
+    .ued-options {
+      display: flex;
+      gap: 12px 22px;
+      flex-wrap: wrap;
+      margin-top: 17px;
+      padding: 14px;
+      background: #f8fafc;
+      border: 1px solid var(--ued-line);
+      border-radius: 12px;
+    }
+
+    .ued-check {
+      display: inline-flex;
+      align-items: flex-start;
+      gap: 9px;
+      color: #475569;
+      font-size: .87rem;
+    }
+
+    .ued-check input {
+      margin-top: 5px;
+      accent-color: var(--ued-blue);
+    }
+
+    .ued-mode-help {
+      margin: 12px 0 0;
+      color: var(--ued-muted);
+      font-size: .86rem;
+    }
+
+    .ued-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 20px;
+      padding-top: 15px;
+      margin-top: 16px;
+      border-top: 1px solid var(--ued-line);
+      color: var(--ued-muted);
+      font-size: .82rem;
+    }
+
+    .ued-stats strong {
+      color: #344054;
+    }
+
+    .ued-status {
+      min-height: 26px;
+      margin: 12px 0 0;
+      font-size: .88rem;
+      color: var(--ued-muted);
+    }
+
+    .ued-status.is-success {
+      color: var(--ued-green);
+    }
+
+    .ued-status.is-error {
+      color: var(--ued-red);
+    }
+
+    .ued-trust {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 20px;
+      margin: 13px 0 0;
+      color: var(--ued-muted);
+      font-size: .84rem;
+    }
+
+    .ued-trust span::before {
+      content: "✓";
+      color: var(--ued-green);
+      font-weight: 900;
+      margin-right: 7px;
+    }
+
+    .ued-content {
+      padding-top: 42px;
+    }
+
+    .ued-content section {
+      margin: 0 0 32px;
+    }
+
+    .ued-content h2 {
+      margin: 0 0 12px;
+      font-size: clamp(1.4rem, 3vw, 1.8rem);
+      line-height: 1.25;
+      letter-spacing: -.025em;
+    }
+
+    .ued-content h3 {
+      margin: 22px 0 7px;
+      font-size: 1.08rem;
+    }
+
+    .ued-content p,
+    .ued-content li {
+      color: #475569;
+    }
+
+    .ued-content p {
+      margin: 0 0 14px;
+    }
+
+    .ued-content ul,
+    .ued-content ol {
+      padding-left: 24px;
+    }
+
+    .ued-content li {
+      margin-bottom: 8px;
+    }
+
+    .ued-example {
+      overflow-wrap: anywhere;
+      margin: 12px 0;
+      padding: 13px 15px;
+      border: 1px solid var(--ued-line);
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    .ued-example strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: .86rem;
+    }
+
+    .ued-example code {
+      font-size: .91rem;
+      color: #1d4ed8;
+      word-break: break-word;
+    }
+
+    .ued-mode-grid {
+      display: grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap: 14px;
+    }
+
+    .ued-info-card {
+      padding: 17px;
+      background: #fff;
+      border: 1px solid var(--ued-line);
+      border-radius: 13px;
+    }
+
+    .ued-info-card h3 {
+      margin: 0 0 7px;
+    }
+
+    .ued-info-card p {
+      margin: 0;
+      font-size: .93rem;
+    }
+
+    .ued-faq details {
+      margin-bottom: 10px;
+      padding: 15px 17px;
+      background: #fff;
+      border: 1px solid var(--ued-line);
+      border-radius: 12px;
+    }
+
+    .ued-faq summary {
+      cursor: pointer;
+      font-weight: 800;
+      color: #243047;
+    }
+
+    .ued-faq details p {
+      margin: 12px 0 0;
+    }
+
+    .ued-related {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .ued-related a {
+      padding: 8px 12px;
+      background: #fff;
+      border: 1px solid var(--ued-line);
+      border-radius: 999px;
+      font-size: .89rem;
+      font-weight: 700;
+    }
+
+    .ued-footer {
+      padding: 26px 0;
+      color: #cbd5e1;
+      background: #111c32;
+    }
+
+    .ued-footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .ued-footer p {
+      margin: 0;
+      font-size: .88rem;
+    }
+
+    .ued-footer a {
+      color: #fff;
+    }
+
+    @media (max-width: 760px) {
+      .ued-nav-toggle {
+        display: inline-flex;
+      }
+
+      .ued-nav {
+        display: none;
+        position: absolute;
+        top: 65px;
+        left: 0;
+        right: 0;
+        z-index: 20;
+        padding: 14px 20px;
+        background: #fff;
+        border-bottom: 1px solid var(--ued-line);
+        box-shadow: var(--ued-shadow);
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .ued-nav.is-open {
+        display: flex;
+      }
+
+      .ued-toolbar,
+      .ued-fields {
+        grid-template-columns: 1fr;
+      }
+
+      .ued-textarea {
+        min-height: 170px;
+      }
+
+      .ued-mode-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .ued-tool-body {
+        padding: 16px;
+      }
+
+      .ued-tool-top {
+        padding: 17px 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .ued-shell {
+        width: min(100% - 22px, 1120px);
+      }
+
+      .ued-brand-name {
+        font-size: .9rem;
+      }
+
+      .ued-direction {
+        width: 100%;
+      }
+
+      .ued-direction button {
+        flex: 1;
+      }
+
+      .ued-controls .ued-btn {
+        flex: 1 1 calc(50% - 9px);
+      }
+
+      .ued-options {
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ued-page *,
+      .ued-page *::before,
+      .ued-page *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="ued-page">
+  <a class="ued-skip" href="#main-content">Skip to content</a>
+
+  <header class="ued-header">
+    <div class="ued-shell ued-header-inner">
+      <a class="ued-brand" href="index.html" aria-label="Online Tools and Converters home">
+        <span class="ued-brand-mark" aria-hidden="true">OT</span>
+        <span class="ued-brand-name">Online Tools <span>&amp; Converters</span></span>
+      </a>
+
+      <button class="ued-nav-toggle" id="ued-nav-toggle" type="button"
+        aria-expanded="false" aria-controls="ued-navigation">
+        Menu
+      </button>
+
+      <nav class="ued-nav" id="ued-navigation" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="index.html#tools">All tools</a>
+        <a href="regex-tester.html">Regex Tester</a>
+        <a href="sitemap.xml">XML Sitemap</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="ued-main" id="main-content">
+    <div class="ued-shell">
+      <nav class="ued-breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Home</a>
+        <span aria-hidden="true"> / </span>
+        <span aria-current="page">URL Encoder &amp; Decoder</span>
+      </nav>
+
+      <section class="ued-hero">
+        <p class="ued-eyebrow">Free online developer tool</p>
+        <h1>URL Encoder &amp; Decoder Online</h1>
+        <p class="ued-lead">
+          Encode or decode URL text, query parameter values, and complete links.
+          Choose the right encoding mode, convert special characters, and copy
+          your result. Your text is processed in your browser without being
+          uploaded to an encoding service.
+        </p>
+      </section>
+
+      <section class="ued-tool-card" aria-labelledby="ued-tool-title">
+        <div class="ued-tool-top">
+          <div>
+            <h2 id="ued-tool-title">Encode or decode a URL</h2>
+            <p>Paste your text below and choose Encode or Decode.</p>
+          </div>
+          <span class="ued-local-badge">✓ Browser-based processing</span>
+        </div>
+
+        <div class="ued-tool-body">
+          <div class="ued-toolbar">
+            <div>
+              <span class="ued-label">Conversion direction</span>
+              <div class="ued-direction" role="group" aria-label="Conversion direction">
+                <button type="button" id="ued-encode" data-direction="encode" aria-pressed="true">
+                  Encode
+                </button>
+                <button type="button" id="ued-decode" data-direction="decode" aria-pressed="false">
+                  Decode
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label class="ued-label" for="ued-mode">Encoding mode</label>
+              <select class="ued-mode" id="ued-mode">
+                <option value="component">URL component / query value</option>
+                <option value="uri">Complete URL</option>
+                <option value="form">HTML form value</option>
+                <option value="rfc3986">RFC 3986 strict component</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="ued-fields">
+            <div class="ued-field">
+              <div class="ued-field-heading">
+                <label for="ued-input">Input text</label>
+                <span id="ued-input-count">0 characters</span>
+              </div>
+              <textarea class="ued-textarea" id="ued-input"
+                placeholder="Type or paste text, a query parameter, or a URL…"
+                spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+            </div>
+
+            <div class="ued-field">
+              <div class="ued-field-heading">
+                <label for="ued-output">Converted result</label>
+                <span id="ued-output-count">0 characters</span>
+              </div>
+              <textarea class="ued-textarea ued-output" id="ued-output"
+                placeholder="Your converted result appears here…"
+                spellcheck="false" readonly aria-label="Converted result"></textarea>
+            </div>
+          </div>
+
+          <div class="ued-controls">
+            <button class="ued-btn ued-btn-primary" id="ued-run" type="button">
+              Encode
+            </button>
+            <button class="ued-btn ued-btn-secondary" id="ued-copy" type="button" disabled>
+              Copy result
+            </button>
+            <button class="ued-btn ued-btn-secondary" id="ued-swap" type="button" disabled>
+              Swap input / output
+            </button>
+            <button class="ued-btn ued-btn-secondary" id="ued-sample" type="button">
+              Try sample
+            </button>
+            <button class="ued-btn ued-btn-secondary" id="ued-clear" type="button">
+              Clear
+            </button>
+          </div>
+
+          <div class="ued-options">
+            <label class="ued-check">
+              <input type="checkbox" id="ued-bulk">
+              <span>Process each line separately (bulk mode)</span>
+            </label>
+            <label class="ued-check">
+              <input type="checkbox" id="ued-plus-space">
+              <span>Treat + as a space when decoding component values</span>
+            </label>
+          </div>
+
+          <p class="ued-mode-help" id="ued-mode-help">
+            Component mode is for a single value, such as a search term or query
+            parameter. It encodes characters that could otherwise change the
+            structure of a URL.
+          </p>
+
+          <div class="ued-stats" aria-label="Conversion statistics">
+            <span>Input: <strong id="ued-stat-input">0 characters</strong></span>
+            <span>Output: <strong id="ued-stat-output">0 bytes</strong></span>
+            <span>Percent sequences: <strong id="ued-stat-percent">0</strong></span>
+          </div>
+
+          <p class="ued-status" id="ued-status" role="status" aria-live="polite">
+            Ready. Paste text above to get started.
+          </p>
+
+          <div class="ued-trust">
+            <span>No signup required</span>
+            <span>No file upload</span>
+            <span>Supports Unicode and emoji</span>
+          </div>
+        </div>
+      </section>
+
+      <article class="ued-content">
+        <section id="what-is-url-encoding">
+          <h2>What is URL encoding?</h2>
+          <p>
+            URL encoding, also called percent-encoding, represents characters
+            using percent signs followed by hexadecimal values. It helps
+            represent text safely when that text is used inside a URL component,
+            such as a query parameter, path segment, or fragment.
+          </p>
+          <p>
+            For example, a space is usually represented as <code>%20</code>,
+            while an ampersand inside a single parameter value becomes
+            <code>%26</code>. This matters because an ampersand can separate
+            query parameters. Encoding it when it is part of a value prevents
+            it from being mistaken for a separator.
+          </p>
+
+          <div class="ued-example">
+            <strong>Example: encode a query parameter value</strong>
+            <code>Plain text: research &amp; development</code><br>
+            <code>Encoded: research%20%26%20development</code>
+          </div>
+
+          <p>
+            This URL encoder and decoder applies the selected conversion in your
+            browser. The output is text that you can copy into your code,
+            address bar, API request, or other workflow. Encoding alone does
+            not verify that a link exists or that its destination is safe.
+          </p>
+        </section>
+
+        <section id="encoding-modes">
+          <h2>Choose the correct URL encoding mode</h2>
+          <p>
+            Different parts of a URL have different rules. Choose the mode
+            that matches what you are converting to avoid changing the
+            structure of a complete link or leaving unsafe characters in a
+            single parameter value.
+          </p>
+
+          <div class="ued-mode-grid">
+            <div class="ued-info-card">
+              <h3>URL component</h3>
+              <p>
+                Best for an individual query value, search term, path segment,
+                or other text that will occupy one URL component. It uses
+                JavaScript's <code>encodeURIComponent()</code> behavior.
+              </p>
+            </div>
+
+            <div class="ued-info-card">
+              <h3>Complete URL</h3>
+              <p>
+                Best when you have an entire URL and want to preserve its
+                structural characters, such as slashes and query delimiters.
+                It uses <code>encodeURI()</code> behavior.
+              </p>
+            </div>
+
+            <div class="ued-info-card">
+              <h3>HTML form value</h3>
+              <p>
+                Uses the familiar form-encoding convention in which a space
+                becomes <code>+</code>. This is useful for
+                <code>application/x-www-form-urlencoded</code> values.
+              </p>
+            </div>
+
+            <div class="ued-info-card">
+              <h3>RFC 3986 strict component</h3>
+              <p>
+                Applies component encoding and additionally percent-encodes
+                characters such as <code>!</code>, <code>'</code>,
+                <code>(</code>, <code>)</code>, and <code>*</code> for a
+                stricter percent-encoded representation.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="how-to-use">
+          <h2>How to use this URL encoder and decoder</h2>
+          <ol>
+            <li>
+              <strong>Enter your text.</strong>
+              Paste a URL, query parameter value, encoded string, or other
+              text into the Input text box.
+            </li>
+            <li>
+              <strong>Choose Encode or Decode.</strong>
+              Select Encode to convert ordinary text into percent-encoded
+              text, or Decode to turn valid encoded sequences back into
+              readable characters.
+            </li>
+            <li>
+              <strong>Select the appropriate mode.</strong>
+              Use component mode for one parameter value and complete URL
+              mode for an entire link. Choose form mode when spaces should
+              use the plus-sign convention.
+            </li>
+            <li>
+              <strong>Copy your result.</strong>
+              Review the converted output and use Copy result. Use Swap
+              input / output to make the previous result the next input.
+            </li>
+          </ol>
+          <p>
+            For bulk conversion, enable the option to process each line
+            separately. Each line is then converted independently, which
+            is convenient for lists of search terms, test values, and
+            percent-encoded strings.
+          </p>
+        </section>
+
+        <section id="common-mistakes">
+          <h2>Common URL encoding mistakes</h2>
+
+          <h3>Encoding an entire URL as if it were one parameter</h3>
+          <p>
+            Component encoding turns structural characters such as
+            <code>:</code>, <code>/</code>, <code>?</code>, and
+            <code>&amp;</code> into encoded sequences. That is correct for
+            a single value, but it can make a complete URL unsuitable for
+            direct navigation. Use Complete URL mode for an entire address.
+          </p>
+
+          <h3>Encoding a value twice</h3>
+          <p>
+            Double encoding happens when an already encoded string is
+            encoded again. For example, <code>%20</code> may become
+            <code>%2520</code> because the percent sign is encoded as
+            <code>%25</code>. When a result looks unexpectedly encoded,
+            check whether your application or another processing step
+            encoded it more than once.
+          </p>
+
+          <h3>Confusing + with %20</h3>
+          <p>
+            A plus sign represents a space in form-style query encoding.
+            In other URL contexts, a plus sign may be a literal plus. Use
+            the form mode for form values, or enable the plus-as-space
+            option when decoding a component value that came from a
+            form-style query string.
+          </p>
+
+          <h3>Assuming encoding is encryption</h3>
+          <p>
+            URL encoding is a character-representation technique, not a
+            security mechanism. Anyone who receives an encoded string can
+            generally decode it. Do not use URL encoding to protect
+            passwords, access tokens, or confidential data.
+          </p>
+        </section>
+
+        <section id="use-cases">
+          <h2>When should you use a URL encoder or decoder?</h2>
+          <ul>
+            <li>
+              Encoding search terms containing spaces or special characters
+              before inserting them into a query parameter.
+            </li>
+            <li>
+              Preparing parameter values for API requests, test URLs,
+              callbacks, and redirect parameters.
+            </li>
+            <li>
+              Decoding a percent-encoded URL or query value to understand
+              what text it represents.
+            </li>
+            <li>
+              Checking how ampersands, equal signs, plus signs, accented
+              characters, and emoji are represented.
+            </li>
+            <li>
+              Preparing example values for JavaScript code, debugging
+              request parameters, and documenting URL behavior.
+            </li>
+          </ul>
+          <p>
+            The tool performs text conversion only. It does not send requests
+            to URLs, follow redirects, inspect remote webpages, encrypt
+            information, or guarantee that a resulting URL will work.
+          </p>
+        </section>
+
+        <section id="faq" class="ued-faq">
+          <h2>Frequently asked questions</h2>
+
+          <details>
+            <summary>What is a URL encoder and decoder?</summary>
+            <p>
+              A URL encoder converts text into a percent-encoded
+              representation for use in URL components. A URL decoder
+              converts valid percent-encoded sequences back into readable
+              characters. This tool supports both directions.
+            </p>
+          </details>
+
+          <details>
+            <summary>How do I encode a URL online?</summary>
+            <p>
+              Paste your text into the input box, choose Encode, select
+              Component mode for an individual value or Complete URL mode
+              for an entire URL, and copy the converted result.
+            </p>
+          </details>
+
+          <details>
+            <summary>What is the difference between encodeURI and encodeURIComponent?</summary>
+            <p>
+              <code>encodeURI()</code> is intended for a complete URI and
+              preserves characters that define URL structure.
+              <code>encodeURIComponent()</code> is intended for an individual
+              component and encodes characters that could otherwise act as
+              URL delimiters. Choose your mode based on what the input
+              represents.
+            </p>
+          </details>
+
+          <details>
+            <summary>Should a space be encoded as %20 or +?</summary>
+            <p>
+              <code>%20</code> is the usual percent-encoded representation
+              for a space. In form-style encoding, a space is often
+              represented by <code>+</code>. Which form is appropriate
+              depends on the URL component and the system consuming it.
+            </p>
+          </details>
+
+          <details>
+            <summary>Can I encode Unicode characters and emoji?</summary>
+            <p>
+              Yes. The tool uses the browser's built-in URL encoding
+              functions, which support valid Unicode text. Characters
+              outside the basic Latin set are represented through their
+              UTF-8 percent-encoded bytes. Invalid JavaScript Unicode
+              sequences can produce an encoding error.
+            </p>
+          </details>
+
+          <details>
+            <summary>Why does decoding sometimes fail?</summary>
+            <p>
+              Decoding can fail if percent escapes are incomplete or
+              malformed, or if encoded bytes do not form valid text.
+              Check for sequences such as an incomplete percent escape
+              or invalid hexadecimal characters and try again.
+            </p>
+          </details>
+
+          <details>
+            <summary>Is my input uploaded to a server?</summary>
+            <p>
+              This tool carries out its encoding and decoding operations
+              in your browser using built-in JavaScript functions. The
+              conversion code does not upload the text to an encoding
+              API. As with any website, avoid entering confidential
+              information into a page if your wider browser or device
+              environment is not trusted.
+            </p>
+          </details>
+
+          <details>
+            <summary>Does URL encoding make a link safe or secure?</summary>
+            <p>
+              No. Encoding changes how characters are represented; it does
+              not encrypt the data, validate a destination, remove malicious
+              behavior, or replace proper input validation and security
+              controls.
+            </p>
+          </details>
+        </section>
+
+        <section id="related-tools">
+          <h2>Explore more free online tools</h2>
+          <p>
+            Continue with related utilities for text, developer workflows,
+            and website maintenance.
+          </p>
+          <div class="ued-related">
+            <a href="regex-tester.html">Regex Tester</a>
+            <a href="text-diff-checker.html">Text Diff Checker</a>
+            <a href="json-to-csv.html">JSON to CSV Converter</a>
+            <a href="sitemap-xml-validator.html">Sitemap XML Validator</a>
+            <a href="word-counter.html">Word Counter</a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer class="ued-footer">
+    <div class="ued-shell ued-footer-inner">
+      <p>© <span id="ued-year">2026</span> Online Tools &amp; Converters.</p>
+      <p><a href="index.html">Home</a> · <a href="sitemap.xml">XML Sitemap</a></p>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const $ = (id) => document.getElementById(id);
+
+      const input = $("ued-input");
+      const output = $("ued-output");
+      const mode = $("ued-mode");
+      const bulk = $("ued-bulk");
+      const plusSpace = $("ued-plus-space");
+      const runButton = $("ued-run");
+      const copyButton = $("ued-copy");
+      const swapButton = $("ued-swap");
+      const status = $("ued-status");
+      const encodeButton = $("ued-encode");
+      const decodeButton = $("ued-decode");
+      const modeHelp = $("ued-mode-help");
+
+      let direction = "encode";
+
+      const modeDescriptions = {
+        component:
+          "Component mode is for a single value, such as a search term or query parameter. It encodes characters that could otherwise change the structure of a URL.",
+        uri:
+          "Complete URL mode preserves structural characters such as : / ? # and &. Use it for an entire URL, not for one individual query parameter value.",
+        form:
+          "Form mode uses application/x-www-form-urlencoded behavior. Spaces become +, and literal plus signs are encoded so they can be distinguished from spaces.",
+        rfc3986:
+          "RFC 3986 strict component mode percent-encodes individual values and also escapes ! ' ( ) and * for a stricter component representation."
+      };
+
+      function setStatus(message, type = "") {
+        status.textContent = message;
+        status.className = "ued-status" +
+          (type ? " is-" + type : "");
+      }
+
+      function characterCount(value) {
+        return Array.from(value).length;
+      }
+
+      function setDirection(nextDirection) {
+        direction = nextDirection;
+        encodeButton.setAttribute(
+          "aria-pressed",
+          String(direction === "encode")
+        );
+        decodeButton.setAttribute(
+          "aria-pressed",
+          String(direction === "decode")
+        );
+        runButton.textContent =
+          direction === "encode" ? "Encode" : "Decode";
+
+        updateOptionAvailability();
+        convert();
+      }
+
+      function encodeForm(value) {
+        return new URLSearchParams([["q", value]])
+          .toString()
+          .slice(2);
+      }
+
+      function decodeForm(value) {
+        const params = new URLSearchParams("q=" + value);
+        return params.get("q") ?? "";
+      }
+
+      function encodeRFC3986(value) {
+        return encodeURIComponent(value).replace(
+          /[!'()*]/g,
+          (character) =>
+            "%" + character.charCodeAt(0)
+              .toString(16)
+              .toUpperCase()
+        );
+      }
+
+      function transformOne(value) {
+        if (direction === "encode") {
+          switch (mode.value) {
+            case "uri":
+              return encodeURI(value);
+            case "form":
+              return encodeForm(value);
+            case "rfc3986":
+              return encodeRFC3986(value);
+            case "component":
+            default:
+              return encodeURIComponent(value);
+          }
+        }
+
+        switch (mode.value) {
+          case "uri":
+            return decodeURI(value);
+          case "form":
+            return decodeForm(value);
+          case "rfc3986":
+            return decodeURIComponent(value);
+          case "component": {
+            const source = plusSpace.checked
+              ? value.replace(/\+/g, " ")
+              : value;
+            return decodeURIComponent(source);
+          }
+          default:
+            return decodeURIComponent(value);
+        }
+      }
+
+      function updateStatistics(source, result) {
+        $("ued-input-count").textContent =
+          characterCount(source) + " characters";
+        $("ued-output-count").textContent =
+          characterCount(result) + " characters";
+        $("ued-stat-input").textContent =
+          characterCount(source) + " characters";
+        $("ued-stat-output").textContent =
+          new Blob([result]).size + " bytes";
+
+        const sequences =
+          result.match(/%[0-9a-f]{2}/gi) || [];
+        $("ued-stat-percent").textContent = sequences.length;
+
+        copyButton.disabled = result.length === 0;
+        swapButton.disabled = result.length === 0;
+      }
+
+      function updateOptionAvailability() {
+        plusSpace.disabled = !(
+          direction === "decode" &&
+          mode.value === "component"
+        );
+
+        if (mode.value === "form" || direction !== "decode") {
+          plusSpace.checked = false;
+        }
+
+        modeHelp.textContent = modeDescriptions[mode.value];
+      }
+
+      function convert() {
+        const source = input.value;
+
+        if (!source) {
+          output.value = "";
+          updateStatistics(source, "");
+          setStatus("Paste or type text to get started.");
+          return;
+        }
+
+        if (bulk.checked) {
+          const lines = source.split(/\r\n|\n|\r/);
+          let errors = 0;
+
+          const converted = lines.map((line) => {
+            try {
+              return transformOne(line);
+            } catch {
+              errors++;
+              return "[Conversion error: check this line's encoding]";
+            }
+          });
+
+          output.value = converted.join("\n");
+          updateStatistics(source, output.value);
+
+          if (errors > 0) {
+            setStatus(
+              errors + " line(s) could not be converted. Check malformed " +
+              "percent escapes or invalid encoded text.",
+              "error"
+            );
+          } else {
+            setStatus(
+              "Converted " + lines.length +
+              " line(s) using " + mode.options[mode.selectedIndex].text + ".",
+              "success"
+            );
+          }
+          return;
+        }
+
+        try {
+          output.value = transformOne(source);
+          updateStatistics(source, output.value);
+          setStatus(
+            (direction === "encode" ? "Encoded" : "Decoded") +
+            " successfully using " +
+            mode.options[mode.selectedIndex].text + ".",
+            "success"
+          );
+        } catch {
+          output.value = "";
+          updateStatistics(source, "");
+          setStatus(
+            "Conversion failed. Check malformed percent escapes, such as %GG, " +
+            "or incomplete encoded character sequences.",
+            "error"
+          );
+        }
+      }
+
+      async function copyOutput() {
+        if (!output.value) {
+          setStatus("There is no result to copy.");
+          return;
+        }
+
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(output.value);
+            setStatus("Result copied to the clipboard.", "success");
+            return;
+          }
+        } catch {
+          // Try the selection fallback below.
+        }
+
+        output.focus();
+        output.select();
+
+        let copied = false;
+        try {
+          copied = document.execCommand("copy");
+        } catch {
+          copied = false;
+        }
+
+        setStatus(
+          copied
+            ? "Result copied to the clipboard."
+            : "Clipboard access was blocked. The result is selected; copy it manually.",
+          copied ? "success" : ""
+        );
+      }
+
+      $("ued-nav-toggle").addEventListener("click", () => {
+        const nav = $("ued-navigation");
+        const isOpen = nav.classList.toggle("is-open");
+        $("ued-nav-toggle").setAttribute(
+          "aria-expanded",
+          String(isOpen)
+        );
+      });
+
+      encodeButton.addEventListener("click", () => setDirection("encode"));
+      decodeButton.addEventListener("click", () => setDirection("decode"));
+
+      runButton.addEventListener("click", convert);
+      input.addEventListener("input", convert);
+
+      mode.addEventListener("change", () => {
+        updateOptionAvailability();
+        convert();
+      });
+
+      bulk.addEventListener("change", convert);
+      plusSpace.addEventListener("change", convert);
+
+      copyButton.addEventListener("click", copyOutput);
+
+      swapButton.addEventListener("click", () => {
+        if (!output.value) return;
+
+        const previousOutput = output.value;
+        input.value = previousOutput;
+        setDirection(direction === "encode" ? "decode" : "encode");
+        input.focus();
+      });
+
+      $("ued-sample").addEventListener("click", () => {
+        bulk.checked = false;
+
+        if (direction === "encode") {
+          input.value = "research & development = 50% + café ☕";
+        } else {
+          input.value = "research%20%26%20development%20%3D%2050%25%20%2B%20caf%C3%A9%20%E2%98%95";
+        }
+
+        convert();
+      });
+
+      $("ued-clear").addEventListener("click", () => {
+        input.value = "";
+        output.value = "";
+        updateStatistics("", "");
+        setStatus("Input and output cleared.");
+        input.focus();
+      });
+
+      $("ued-year").textContent = new Date().getFullYear();
+
+      updateOptionAvailability();
+      updateStatistics("", "");
+    })();
+  </script>
+
+  <script src="/script.js" defer></script>
+</body>
+</html>
