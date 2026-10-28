@@ -22,13 +22,18 @@
     .contact-card h2 { margin-top: 0; font-size: 1.4rem; }
     .contact-field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 18px; }
     .contact-field label { font-weight: 650; }
-    .contact-field input, .contact-field select, .contact-field textarea { width: 100%; box-sizing: border-box; padding: 12px 13px; border: 1px solid var(--border-color, #cbd5e1); border-radius: 9px; font: inherit; background: transparent; color: inherit; }
+    .contact-field input, .contact-field select, .contact-field textarea { width: 100%; box-sizing: border-box; padding: 12px 13px; border: 1px solid var(--border-color, #cbd5e1); border-radius: 9px; font: inherit; }
     .contact-field textarea { min-height: 145px; resize: vertical; }
     .contact-field input:focus, .contact-field select:focus, .contact-field textarea:focus { outline: 2px solid #2563eb; outline-offset: 2px; }
     .contact-submit { display: inline-block; border: 0; border-radius: 9px; padding: 12px 18px; font: inherit; font-weight: 700; background: #1d4ed8; color: white; cursor: pointer; }
     .contact-submit:hover { background: #1e40af; }
     .contact-note { font-size: .94rem; line-height: 1.7; }
     .contact-status { margin-top: 16px; line-height: 1.6; }
+    .contact-list { margin: 14px 0 0; padding-left: 1.2rem; line-height: 1.8; }
+    .contact-faq { margin-top: 18px; }
+    .contact-faq h3 { margin: 0 0 10px; font-size: 1.05rem; }
+    .contact-faq-item + .contact-faq-item { margin-top: 14px; }
+    .contact-faq-item strong { display: block; margin-bottom: 6px; }
     .page-header { border-bottom: 1px solid var(--border-color, #e5e7eb); }
     .page-header-inner { max-width: 1100px; margin: auto; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
     .page-brand { display: flex; align-items: center; gap: 10px; color: inherit; text-decoration: none; font-weight: 800; }
@@ -73,9 +78,9 @@
       <span class="contact-label">Contact us</span>
       <h1>Questions, feedback, or a tool issue?</h1>
       <p>
-        Use this page to prepare a message about Online Tools &amp; Converters.
-        You can report a problem with a tool, suggest an improvement, or share
-        feedback about your experience.
+        Use this page to send a message about Online Tools &amp; Converters.
+        Whether you want to report a bug, suggest a useful feature, or ask a
+        question about a tool, we want to hear from you.
       </p>
     </section>
 
@@ -146,17 +151,43 @@
       <aside class="contact-card">
         <h2>How can we help?</h2>
         <p>
-          To help us understand a technical issue, include the name of the
-          tool, what you were trying to do, and what happened.
+          The most useful messages include the name of the tool, what you were
+          trying to do, and what happened. This helps us understand the issue
+          and fix it quickly.
         </p>
         <p>
-          Please do not include passwords, payment details, or other
-          confidential information in your message.
+          Please do not include passwords, payment details, or confidential
+          information in your message.
         </p>
+        <ul class="contact-list">
+          <li>Report broken or confusing tool behavior</li>
+          <li>Suggest a new utility or improvement</li>
+          <li>Ask a question about a calculation or feature</li>
+          <li>Share feedback on usability or website layout</li>
+        </ul>
+
+        <div class="contact-faq">
+          <h3>Quick answers</h3>
+
+          <div class="contact-faq-item">
+            <strong>Do I need to include a URL?</strong>
+            If the issue is page-specific, adding the link helps a lot.
+          </div>
+
+          <div class="contact-faq-item">
+            <strong>What if I have a feature idea?</strong>
+            Tell us what problem you want the tool to solve and what would make it easier to use.
+          </div>
+
+          <div class="contact-faq-item">
+            <strong>Is this website only for developers?</strong>
+            Not at all. We keep the tools practical for creators, students, marketers, and everyday busy users.
+          </div>
+        </div>
+
         <p class="contact-note">
           <strong>Important:</strong> The form prepares a message in your
-          device's email application. It does not send messages directly
-          from this website.
+          device's email application. It does not send messages directly from this website.
         </p>
         <p><a href="/#tool-directory">Browse the available tools →</a></p>
       </aside>
@@ -181,7 +212,6 @@
     document.getElementById("contact-form").addEventListener("submit", function (event) {
       event.preventDefault();
 
-      // Replace this value with the actual contact email for the .cc website.
       const CONTACT_EMAIL = "REPLACE_WITH_YOUR_CONTACT_EMAIL";
       const status = document.getElementById("contact-status");
 
