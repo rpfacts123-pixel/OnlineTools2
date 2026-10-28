@@ -3,58 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <title>About Online Tools &amp; Converters</title>
   <meta name="description" content="Learn about Online Tools & Converters, a practical collection of online utilities for creators, developers, students, and everyday digital tasks.">
   <link rel="canonical" href="https://onlinetoolsandconverters.cc/about.html">
-
   <link rel="stylesheet" href="/style.css">
   <script src="/script.js" defer></script>
-
   <style>
-    .info-page { max-width: 1050px; margin: 0 auto; padding: 40px 20px 64px; }
-    .info-hero { padding: 38px 0 28px; }
-    .info-label { color: var(--accent-color, #2563eb); font-weight: 700; font-size: .88rem; letter-spacing: .08em; text-transform: uppercase; }
-    .info-hero h1 { font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.15; margin: 12px 0 18px; }
-    .info-intro { max-width: 760px; font-size: 1.12rem; line-height: 1.8; }
-    .info-section { margin-top: 32px; padding: 26px; border: 1px solid var(--border-color, #e5e7eb); border-radius: 16px; background: var(--card-background, #fff); }
-    .info-section h2 { margin-top: 0; font-size: 1.4rem; }
-    .info-section p, .info-section li { line-height: 1.8; }
-    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin-top: 18px; }
-    .info-card { padding: 20px; border: 1px solid var(--border-color, #e5e7eb); border-radius: 12px; }
-    .info-card h3 { margin-top: 0; font-size: 1.05rem; }
-    .info-card p { margin-bottom: 0; }
-    .info-feature-list { margin: 16px 0 0; padding-left: 1.3rem; }
-    .info-feature-list li + li { margin-top: 8px; }
-    .page-header { border-bottom: 1px solid var(--border-color, #e5e7eb); }
-    .page-header-inner { max-width: 1100px; margin: auto; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
-    .page-brand { display: flex; align-items: center; gap: 10px; color: inherit; text-decoration: none; font-weight: 800; }
-    .page-logo { display: inline-grid; place-items: center; width: 42px; height: 42px; border-radius: 12px; background: #1d4ed8; color: white; }
-    .page-nav { display: flex; flex-wrap: wrap; gap: 16px; }
-    .page-nav a { color: inherit; text-decoration: none; font-size: .95rem; }
-    .page-nav a:hover { text-decoration: underline; }
-    .page-footer { border-top: 1px solid var(--border-color, #e5e7eb); padding: 24px 20px; text-align: center; line-height: 1.8; }
-    .page-footer a { color: inherit; margin: 0 8px; }
-    @media (max-width: 600px) {
-      .info-page { padding: 24px 16px 44px; }
-      .info-section { padding: 20px; }
-      .page-header-inner { align-items: flex-start; }
-      .page-nav { gap: 12px; }
+    body { background: #f7f8f3; color: #182722; font-family: Inter, Arial, sans-serif; margin: 0; line-height: 1.7; }
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(1080px, calc(100% - 32px)); margin: 0 auto; }
+    .site-header {
+      position: sticky; top: 0; z-index: 8; background: rgba(255,255,255,.96); border-bottom: 1px solid #e5ece7;
+    }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 74px; }
+    .brand { display: inline-flex; align-items: center; gap: 12px; font-weight: 800; color: #123c36; }
+    .brand-mark { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 12px; background: #123c36; color: #d6ef72; font-weight: 900; }
+    .nav { display: flex; flex-wrap: wrap; gap: 18px; color: #4d5f59; }
+    .nav a:hover { text-decoration: underline; }
+    main { padding: 42px 0 56px; }
+    .hero { padding: 18px 0 16px; }
+    .eyebrow {
+      display: inline-block; padding: 7px 12px; border-radius: 999px; background: #edf6df; border: 1px solid #dfe8c5; color: #375a2e; font-size: 0.74rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+    }
+    h1 { font-size: clamp(2.2rem, 4vw, 3.4rem); line-height: 1.1; margin: 18px 0 14px; color: #123c36; }
+    .lead { max-width: 780px; font-size: 1.08rem; color: #4d5f59; }
+    .section {
+      margin-top: 26px; background: #ffffff; border: 1px solid #e5ece7; border-radius: 18px; padding: 28px; box-shadow: 0 10px 22px rgba(18,60,54,.04);
+    }
+    .section h2 { color: #123c36; font-size: clamp(1.6rem, 2vw, 2.2rem); margin: 0 0 14px; }
+    .section p, .section li { color: #384c46; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px; margin-top: 18px; }
+    .card { background: #fbfcfa; border: 1px solid #e5ece7; border-radius: 14px; padding: 18px; }
+    .card h3 { margin: 0 0 10px; color: #123c36; }
+    ul { margin: 0; padding-left: 1.25rem; }
+    .cta-links { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 18px; }
+    .cta-links a {
+      display: inline-block; padding: 10px 16px; background: #123c36; color: white; border-radius: 10px; font-weight: 700;
+    }
+    .site-footer {
+      border-top: 1px solid #e5ece7; background: #fff; padding: 24px 0 34px; color: #556861;
+    }
+    .footer-inner { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    @media (max-width: 700px) {
+      .grid { grid-template-columns: 1fr; }
+      .nav { gap: 10px; font-size: 0.82rem; }
     }
   </style>
 </head>
-
 <body>
-  <header class="page-header">
-    <div class="page-header-inner">
-      <a class="page-brand" href="/" aria-label="Online Tools and Converters home">
-        <span class="page-logo">OT</span>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/" aria-label="Online Tools and Converters home">
+        <span class="brand-mark">OT</span>
         <span>Online Tools &amp; Converters</span>
       </a>
-
-      <nav class="page-nav" aria-label="Main navigation">
+      <nav class="nav" aria-label="Main navigation">
         <a href="/">Home</a>
-        <a href="/#tool-directory">All tools</a>
+        <a href="/#tools">All tools</a>
         <a href="/#categories">Categories</a>
         <a href="/about.html" aria-current="page">About</a>
         <a href="/contact.html">Contact</a>
@@ -62,134 +67,91 @@
     </div>
   </header>
 
-  <main class="info-page">
-    <section class="info-hero">
-      <span class="info-label">About the website</span>
+  <main>
+    <div class="container hero">
+      <span class="eyebrow">About the website</span>
       <h1>A practical toolbox for everyday digital work</h1>
-
-      <p class="info-intro">
-        Online Tools &amp; Converters is a growing collection of simple online utilities built to help people complete common digital tasks without wasting time. Instead of hunting across different websites for one-off solutions, visitors can find practical tools in one place and use them immediately.
+      <p class="lead">
+        Online Tools &amp; Converters is a growing collection of simple online utilities created to help people complete common digital tasks faster and with less friction. Instead of hunting across several websites for one specific function, users can find a practical tool in one place and move on with their work.
       </p>
-
-      <p class="info-intro">
-        The website is designed for normal people doing real work: content creators preparing posts, students checking text and data, developers validating technical details, marketers reviewing numbers, and small business owners handling everyday digital tasks. The goal is to make useful tools available, easy to understand, and easy to use.
+      <p class="lead">
+        The website is designed for real use. That means it supports writers, developers, students, marketers, small business owners, and everyday users who need quick help with formatting, validation, conversion, calculations, and website-related checks.
       </p>
-    </section>
+    </div>
 
-    <section class="info-section">
+    <div class="container section">
       <h2>Why this website exists</h2>
-      <p>
-        Many day-to-day tasks are small, but they still take time. Someone may need to clean up text, compare two versions of a document, review a CSV file, check a sitemap, convert a value, or prepare metadata for a video. These tasks are common, but they often require separate tools, various websites, and a lot of unnecessary friction.
-      </p>
-      <p>
-        Online Tools &amp; Converters was created to bring these common resources together in a single and more helpful place. The idea is not to overcomplicate the experience. It is to provide straightforward utilities that solve real problems quickly and without needing advanced knowledge or extra software.
-      </p>
-    </section>
+      <p>Many digital tasks are small but still time-consuming. A person might need to compare text, clean a CSV file, validate a sitemap, review robots rules, generate metadata, convert values, or check a technical result before using it. These tasks rarely need a large or complicated platform, but they often need quick access to a useful utility.</p>
+      <p>Online Tools &amp; Converters was created to bring those everyday needs together in a single and more helpful place. The idea is to reduce clutter, keep the experience simple, and make common tools easier to find and use when they are needed the most.</p>
+    </div>
 
-    <section class="info-section">
+    <div class="container section">
       <h2>Who this website is for</h2>
-      <p>
-        The site is useful for a wide range of people because digital work happens across many different roles. Writers and editors may need help with text formatting or word-related checks. Developers may need validation or conversion tools for technical data. Students may need cleaner workflows for files, content, and structured information. Business owners and marketers may need calculators, tools, and quick checkers to save time.
-      </p>
-      <ul class="info-feature-list">
-        <li>Content creators who want faster workflows for editing, formatting, or publishing-related tasks.</li>
-        <li>Developers and technical users who need quick utilities for validation, conversion, and structured data work.</li>
-        <li>Students and researchers who want simple online tools for everyday digital tasks without installing software.</li>
-        <li>Marketers and entrepreneurs who need calculators, checks, and practical utilities for their daily operations.</li>
-      </ul>
-    </section>
-
-    <section class="info-section">
-      <h2>What can you find here?</h2>
-      <p>
-        The website covers different types of practical utilities for creators, developers, students, website owners, and business users. Every tool is built around a clear purpose, whether that is text processing, data handling, technical validation, SEO support, creator productivity, or quick calculation help.
-      </p>
-
-      <div class="info-grid">
-        <article class="info-card">
-          <h3>Text and data tools</h3>
-          <p>
-            Utilities for comparing text, processing CSV data, converting structured content, and fixing common formatting or encoding issues in a cleaner workflow.
-          </p>
-        </article>
-
-        <article class="info-card">
-          <h3>Developer and website tools</h3>
-          <p>
-            Resources for developer tasks involving robots.txt checks, sitemap validation, URL encoding, metadata, regular expressions, and related technical work.
-          </p>
-        </article>
-
-        <article class="info-card">
-          <h3>Calculators and utility tools</h3>
-          <p>
-            Practical calculators for everyday decision-making, technical estimates, and quick value checks that save time during work or planning.
-          </p>
-        </article>
-
-        <article class="info-card">
-          <h3>Creator and productivity tools</h3>
-          <p>
-            Tools such as metadata generators and related helpers that assist with planning, publishing, and content preparation for online platforms.
-          </p>
-        </article>
+      <p>The site is useful across many different roles because digital work happens in many different ways. The same person may need a text tool one moment and a technical validation page the next.</p>
+      <div class="grid">
+        <div class="card">
+          <h3>Content creators</h3>
+          <p>Writers, editors, marketers, and publishers often need help with formatting, metadata, cleanup, and quick content checks before publishing or sharing work online.</p>
+        </div>
+        <div class="card">
+          <h3>Developers and technical users</h3>
+          <p>People working with websites, APIs, structured content, or technical validation often need help with regex, conversion, file review, and other developer-focused tasks.</p>
+        </div>
+        <div class="card">
+          <h3>Students and researchers</h3>
+          <p>Students and researchers often need simple tools that can handle everyday digital work without installing heavy software or using a more complicated platform.</p>
+        </div>
+        <div class="card">
+          <h3>Small businesses and marketing teams</h3>
+          <p>Teams working on campaigns, website improvements, and daily planning often need calculators, content helpers, and quick validation tools that support practical decisions.</p>
+        </div>
       </div>
-    </section>
+    </div>
 
-    <section class="info-section">
+    <div class="container section">
+      <h2>What you can find here</h2>
+      <p>The website brings together different types of practical utilities, all designed around a clear purpose. Some tools help with text and data cleanup, some support website checks and SEO work, and others help with calculations and creator productivity.</p>
+      <div class="grid">
+        <div class="card">
+          <h3>Text and data tools</h3>
+          <p>These tools help people clean up text, compare content, process structured data, and solve common formatting or validation problems that appear during everyday digital work.</p>
+        </div>
+        <div class="card">
+          <h3>Developer and website tools</h3>
+          <p>These resources include sitemap checks, robots.txt validation, URL encoding, metadata tools, regex testing, and other tasks that support website or technical work.</p>
+        </div>
+        <div class="card">
+          <h3>Calculators and utility tools</h3>
+          <p>These pages help with cost estimates, value checks, and practical calculations that support business planning and technical evaluation.</p>
+        </div>
+        <div class="card">
+          <h3>Creator and productivity tools</h3>
+          <p>These tools are designed to support content planning, publishing workflows, and technical preparation for online content creation.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container section">
       <h2>Our approach</h2>
-      <p>
-        We aim to build tools around real tasks rather than adding features without a clear purpose. Each tool should help with a specific job, be easy to understand, and work in a way that feels natural to the person using it. Rather than creating complicated interfaces, the focus is on clarity, speed, and practical value.
-      </p>
-      <p>
-        We also aim to improve the website over time by maintaining existing tools, correcting issues, and adding functionality where it makes sense. That matters because a good utility should not only work once; it should continue to serve real users reliably over time.
-      </p>
-    </section>
+      <p>We aim to build tools around real problems rather than adding features without a clear purpose. Each page should be easy to understand, practical to use, and designed to help with a specific job instead of making the process feel more complicated.</p>
+      <p>We also want to keep improving the website over time by fixing issues, refining pages, and adding useful tools where they genuinely help people do work more efficiently.</p>
+    </div>
 
-    <section class="info-section">
-      <h2>How the tools are meant to be used</h2>
-      <p>
-        These tools are meant to reduce friction in the everyday moments when a quick job has to be done. They are useful when you want a fast answer, a clean conversion, or a reliable check before moving on to the next task. In many cases, the value is not just the result itself but the time saved by avoiding manual work.
-      </p>
-      <p>
-        That said, it is still important to review important output before using it in a final setting. Results may depend on the input you provide, and some tasks still require a human check before final use, especially when they affect business decisions, technical implementation, or publishing accuracy.
-      </p>
-    </section>
-
-    <section class="info-section">
-      <h2>Use results thoughtfully</h2>
-      <p>
-        Different tools have different capabilities and limitations. Calculations depend on the information entered, file-processing results should be checked, and generated suggestions can require final review before being relied on completely. This is especially true for technical or business-sensitive work.
-      </p>
-      <p>
-        Please review important results before using them for business, technical, publishing, or other consequential decisions. Avoid entering confidential information into a tool unless you understand how it handles that information and whether the tool is intended for that use case.
-      </p>
-    </section>
-
-    <section class="info-section">
+    <div class="container section">
       <h2>Questions or feedback?</h2>
-      <p>
-        If you have found a problem, want to suggest a new tool, or think a page could be improved, the Contact page is the right place to send feedback. We welcome suggestions that help improve the usefulness, clarity, and reliability of the website.
-      </p>
-      <p><a href="/contact.html">Go to the Contact page →</a></p>
-      <p><a href="/">Explore the online tools →</a></p>
-    </section>
+      <p>If you have found a problem, want to suggest a new utility, or think that a page could be improved, the Contact page is the right place to share your feedback. We welcome ideas that help the website become more useful and more helpful for the people who use it.</p>
+      <div class="cta-links">
+        <a href="/contact.html">Go to the Contact page</a>
+        <a href="/">Explore the tools</a>
+      </div>
+    </div>
   </main>
 
-  <footer class="page-footer">
-    <strong>OT · Online Tools &amp; Converters</strong>
-    <p>Practical online utilities, converters, and calculators for everyday digital work.</p>
-    <nav aria-label="Footer navigation">
-      <a href="/">Home</a>
-      <a href="/about.html">About</a>
-      <a href="/contact.html">Contact</a>
-    </nav>
-    <p>© <span id="copyright-year">2026</span> Online Tools &amp; Converters.</p>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>OT · Online Tools &amp; Converters</p>
+      <p>Practical online utilities, converters, and calculators for everyday digital work.</p>
+    </div>
   </footer>
-
-  <script>
-    document.getElementById("copyright-year").textContent =
-      new Date().getFullYear();
-  </script>
 </body>
 </html>
