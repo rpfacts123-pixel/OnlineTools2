@@ -6,20 +6,20 @@
   <meta name="theme-color" content="#151629">
   <meta name="color-scheme" content="light">
 
-  <title>Online Tools &amp; Converters</title>
-  <meta name="description" content="Find practical online tools for text, data, SEO, development, creators, and everyday calculations in one directory.">
+  <title>Free Online Tools &amp; Converters for Everyday Tasks</title>
+  <meta name="description" content="Find practical online tools for text, CSV and JSON data, website development, SEO, creators, calculations, and business tasks. Search 30 tools in one place.">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href="https://onlinetoolsandconverters.cc/">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Online Tools &amp; Converters">
   <meta property="og:title" content="Online Tools &amp; Converters">
-  <meta property="og:description" content="Browse practical utility pages for text, data, SEO, development, and everyday digital tasks.">
+  <meta property="og:description" content="Find a practical tool for your next task, from fixing text and checking files to calculations and website utilities.">
   <meta property="og:url" content="https://onlinetoolsandconverters.cc/">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Online Tools &amp; Converters">
-  <meta name="twitter:description" content="Browse practical utility pages for text, data, SEO, development, and everyday digital tasks.">
+  <meta name="twitter:description" content="Browse practical online utilities, file tools, developer helpers, and calculators.">
 
   <link rel="stylesheet" href="/style.css">
 
@@ -95,7 +95,193 @@
   </script>
 
   <style>
-    /* existing CSS unchanged */
+    :root {
+      --bg: #f4f7ff;
+      --bg-soft: #eef3ff;
+      --panel: #ffffff;
+      --panel-alt: #f9fbff;
+      --ink: #172033;
+      --muted: #5f6b7c;
+      --line: #dfe7f5;
+      --accent: #2563eb;
+      --accent-dark: #1d4ed8;
+      --shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+      color: var(--ink);
+      background: var(--bg);
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; }
+    .container { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
+    .skip-link {
+      position: absolute; left: -9999px; top: 0; background: #fff; padding: 10px 12px; z-index: 100;
+      border: 2px solid var(--accent);
+    }
+    .skip-link:focus { left: 16px; top: 16px; }
+
+    .site-header {
+      background: rgba(255,255,255,0.94);
+      border-bottom: 1px solid var(--line);
+      position: sticky; top: 0; z-index: 20; backdrop-filter: blur(8px);
+    }
+    .header-inner {
+      display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 74px;
+    }
+    .brand {
+      display: inline-flex; align-items: center; gap: 12px; font-weight: 800; letter-spacing: -0.02em;
+    }
+    .brand-mark {
+      width: 38px; height: 38px; border-radius: 12px; background: var(--accent); color: #fff;
+      display: grid; place-items: center; font-size: 0.8rem; font-weight: 900;
+    }
+    .brand-name span { color: var(--accent); }
+    .nav {
+      display: flex; align-items: center; gap: 18px; flex-wrap: wrap; color: var(--muted);
+      font-size: 0.95rem; font-weight: 600;
+    }
+    .nav a:hover { color: var(--ink); }
+
+    .hero {
+      padding: 52px 0 28px;
+      background: radial-gradient(circle at top left, rgba(37,99,235,0.12), transparent 40%), var(--bg);
+    }
+    .hero-layout {
+      display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 32px; align-items: center;
+    }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: #e9f1ff; color: var(--accent-dark);
+      border: 1px solid #cfe0ff; border-radius: 999px; font-size: 0.78rem; letter-spacing: 0.08em; font-weight: 800; text-transform: uppercase;
+    }
+    .eyebrow-mark {
+      width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block;
+    }
+    h1 {
+      margin: 18px 0 12px; font-size: clamp(2.6rem, 5vw, 4.1rem); line-height: 1.05; letter-spacing: -0.05em;
+    }
+    h1 span { color: var(--accent); }
+    .hero-copy {
+      max-width: 62ch; color: var(--muted); font-size: 1.08rem; line-height: 1.75;
+    }
+
+    .search-panel {
+      display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid var(--line); border-radius: 14px;
+      box-shadow: var(--shadow); padding: 10px 12px; margin-top: 18px; max-width: 740px;
+    }
+    .search-icon { font-size: 1.4rem; color: var(--muted); }
+    .search-panel input {
+      flex: 1; min-width: 0; border: 0; outline: none; font: inherit; font-size: 1rem; background: transparent; color: var(--ink);
+    }
+    .search-submit {
+      border: 0; border-radius: 10px; background: var(--accent); color: #fff; font: inherit; font-weight: 700; padding: 12px 18px; cursor: pointer;
+    }
+    .search-submit:hover { background: var(--accent-dark); }
+
+    .quick-searches {
+      display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 16px; color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .quick-searches span { font-weight: 700; }
+    .quick-search {
+      display: inline-flex; align-items: center; padding: 7px 12px; border-radius: 999px; background: #fff; border: 1px solid var(--line);
+      color: var(--ink); font-weight: 600;
+    }
+
+    .hero-art {
+      position: relative; min-height: 340px; display: grid; place-items: center;
+    }
+    .art-orbit {
+      position: absolute; inset: 32px 18px 14px 18px; border-radius: 24px; background: linear-gradient(135deg, #e7f0ff, #f9fbff);
+      border: 1px solid var(--line); box-shadow: var(--shadow);
+    }
+    .art-card {
+      position: relative; width: min(360px, 90%); background: rgba(255,255,255,0.96); border: 1px solid var(--line);
+      box-shadow: var(--shadow); border-radius: 18px; padding: 18px; z-index: 1;
+    }
+    .art-card-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px;
+    }
+    .art-logo { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 10px; background: var(--accent); color: #fff; font-weight: 900; }
+    .art-card-title { font-weight: 800; font-size: 1.1rem; }
+    .art-count { color: var(--muted); font-size: 0.88rem; font-weight: 700; }
+    .art-row {
+      display: grid; grid-template-columns: 50px 1fr; gap: 12px; align-items: center; padding: 12px 0; border-top: 1px solid var(--line);
+    }
+    .art-icon {
+      display: inline-grid; place-items: center; width: 46px; height: 46px; border-radius: 12px; background: var(--bg-soft); color: var(--accent-dark);
+      font-size: 0.7rem; font-weight: 800; letter-spacing: 0.08em;
+    }
+    .art-row strong { display: block; font-size: 1rem; }
+    .art-row small { color: var(--muted); }
+
+    .hero-note {
+      margin-top: 18px; width: fit-content; padding: 8px 14px; background: rgba(37,99,235,0.08); border: 1px solid rgba(37,99,235,0.15);
+      color: var(--accent-dark); font-weight: 700; border-radius: 999px; font-size: 0.85rem;
+    }
+
+    .directory, .quick-picks {
+      padding: 32px 0 18px;
+    }
+    .section-heading {
+      display: flex; justify-content: space-between; gap: 18px; align-items: end; margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .eyebrow-light {
+      display: inline-block; margin: 0 0 8px; color: var(--accent-dark); font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.75rem;
+    }
+    h2 {
+      margin: 0; font-size: clamp(1.8rem, 3vw, 2.6rem); letter-spacing: -0.04em;
+    }
+
+    .tool-grid {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 18px;
+    }
+    .tool-card {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 18px; box-shadow: 0 8px 18px rgba(15, 23, 42, 0.03); height: 100%;
+    }
+    .tool-card-head {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;
+    }
+    .tool-icon {
+      display: inline-grid; place-items: center; width: 40px; height: 40px; background: var(--bg-soft); color: var(--accent-dark); border-radius: 12px; font-weight: 900;
+    }
+    .tool-card h3 { margin: 0 0 8px; font-size: 1.18rem; }
+    .tool-card p { margin: 0; color: var(--muted); }
+
+    .quick-picks-grid {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 18px;
+    }
+    .quick-pick {
+      display: flex; gap: 14px; align-items: flex-start; padding: 18px; border-radius: 18px; border: 1px solid var(--line); background: #fff; box-shadow: 0 8px 18px rgba(15, 23, 42, 0.03);
+    }
+    .quick-pick-icon {
+      display: inline-grid; place-items: center; width: 52px; height: 52px; border-radius: 14px; background: var(--bg-soft); color: var(--accent-dark); font-weight: 900; font-size: 0.72rem;
+    }
+    .quick-pick h3 { margin: 0 0 8px; font-size: 1.08rem; }
+    .quick-pick p { margin: 0; color: var(--muted); }
+
+    .site-footer {
+      border-top: 1px solid var(--line); background: #fff; margin-top: 24px;
+    }
+    .footer-inner {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 20px 0 28px; color: var(--muted);
+    }
+    .footer-links { display: flex; gap: 18px; flex-wrap: wrap; }
+
+    @media (max-width: 900px) {
+      .hero-layout, .tool-grid, .quick-picks-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .header-inner { align-items: flex-start; padding: 12px 0; }
+      .nav { gap: 10px; }
+      .search-panel { flex-direction: column; align-items: stretch; }
+      .search-submit { width: 100%; }
+    }
   </style>
 </head>
 
@@ -177,7 +363,7 @@
           </div>
         </div>
       </div>
-      <div class="hero-note">Built for speed and everyday tasks</div>
+      <div class="container"><div class="hero-note">Built for speed and everyday tasks</div></div>
     </section>
 
     <section class="directory" aria-labelledby="why-use-otc">
@@ -191,27 +377,21 @@
           Many small tasks are repetitive, time-consuming, and spread across multiple websites. This directory is designed to keep those tools in one practical place so people can solve a problem quickly and move on.
         </p>
 
-        <div class="tool-grid" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
+        <div class="tool-grid">
           <article class="tool-card">
-            <div class="tool-card-head">
-              <span class="tool-icon">T</span>
-            </div>
+            <div class="tool-card-head"><span class="tool-icon">T</span></div>
             <h3>Built for real work</h3>
             <p>Each tool is focused on a specific task, from editing text and checking data to generating SEO or developer-friendly output.</p>
           </article>
 
           <article class="tool-card">
-            <div class="tool-card-head">
-              <span class="tool-icon">D</span>
-            </div>
+            <div class="tool-card-head"><span class="tool-icon">D</span></div>
             <h3>Simple by design</h3>
             <p>We keep the interface clean and practical so users can jump straight into the task without confusion or unnecessary steps.</p>
           </article>
 
           <article class="tool-card">
-            <div class="tool-card-head">
-              <span class="tool-icon">P</span>
-            </div>
+            <div class="tool-card-head"><span class="tool-icon">P</span></div>
             <h3>Helpful for many users</h3>
             <p>Whether you are working as a creator, technical user, student, marketer, or business owner, these tools are meant to save time.</p>
           </article>
@@ -221,12 +401,12 @@
 
     <section class="quick-picks" id="categories">
       <div class="container">
-        <div class="quick-picks-head">
+        <div class="section-heading">
           <div>
             <p class="eyebrow-light">Quick categories</p>
             <h2>Browse by task</h2>
           </div>
-          <a class="all-tools-link" href="#tools">View all tools</a>
+          <a href="#tools" style="color: var(--accent-dark); font-weight: 700;">View all tools</a>
         </div>
 
         <div class="quick-picks-grid">
@@ -237,7 +417,6 @@
               <p>Fix formatting, compare content, and clean up text quickly.</p>
             </div>
           </a>
-
           <a href="#tools" class="quick-pick">
             <span class="quick-pick-icon">CSV</span>
             <div>
@@ -245,7 +424,6 @@
               <p>Convert, clean, and review CSV, JSON, and structured datasets.</p>
             </div>
           </a>
-
           <a href="#tools" class="quick-pick">
             <span class="quick-pick-icon">SEO</span>
             <div>
@@ -253,7 +431,6 @@
               <p>Check sitemap and robots rules, validate content, and review technical details.</p>
             </div>
           </a>
-
           <a href="#tools" class="quick-pick">
             <span class="quick-pick-icon">DEV</span>
             <div>
@@ -261,7 +438,6 @@
               <p>Work with regex, cURL, YAML, JSON, and common web development tasks.</p>
             </div>
           </a>
-
           <a href="#tools" class="quick-pick">
             <span class="quick-pick-icon">CRT</span>
             <div>
@@ -269,7 +445,6 @@
               <p>Generate metadata, improve content planning, and support digital publishing.</p>
             </div>
           </a>
-
           <a href="#tools" class="quick-pick">
             <span class="quick-pick-icon">CAL</span>
             <div>
@@ -285,31 +460,16 @@
       <div class="container">
         <div class="section-heading">
           <h2>Explore the directory</h2>
-          <p>Browse practical online tools for common tasks across text, content, development, SEO, and business workflows.</p>
+          <p style="max-width: 720px; color: var(--muted); margin: 0;">Browse practical online tools for common tasks across text, content, development, SEO, and business workflows.</p>
         </div>
 
-        <div class="directory-toolbar">
-          <div class="result-summary"><strong>30</strong> tools available</div>
-          <button type="button" class="clear-button" id="clearFilters">Clear filters</button>
-        </div>
-
-        <div class="filter-bar" aria-label="Tool filters">
-          <button class="filter-button" type="button" data-filter="all" aria-pressed="true">All</button>
-          <button class="filter-button" type="button" data-filter="text">Text</button>
-          <button class="filter-button" type="button" data-filter="data">Data</button>
-          <button class="filter-button" type="button" data-filter="developer">Developer</button>
-          <button class="filter-button" type="button" data-filter="seo">SEO</button>
-          <button class="filter-button" type="button" data-filter="creator">Creator</button>
-          <button class="filter-button" type="button" data-filter="business">Business</button>
-        </div>
-
-        <div class="tool-grid" id="toolGrid">
-          <a class="tool-card-link" href="/youtube-metadata-generator.html"><article class="tool-card"><h3>YouTube Metadata Generator</h3><p>Create title, description, and tags for videos.</p></article></a>
-          <a class="tool-card-link" href="/sitemap-xml-validator.html"><article class="tool-card"><h3>Sitemap XML Validator</h3><p>Check XML sitemaps and identify structural issues.</p></article></a>
-          <a class="tool-card-link" href="/mojibrake-fixer.html"><article class="tool-card"><h3>Mojibake Fixer</h3><p>Repair garbled text and encoding problems.</p></article></a>
-          <a class="tool-card-link" href="/cron-expression-parser.html"><article class="tool-card"><h3>Cron Expression Parser</h3><p>Validate cron syntax and preview next run times.</p></article></a>
-          <a class="tool-card-link" href="/url-encode-decode.html"><article class="tool-card"><h3>URL Encoder &amp; Decoder</h3><p>Convert text and query strings for URLs safely.</p></article></a>
-          <a class="tool-card-link" href="/toml-formatter.html"><article class="tool-card"><h3>TOML Formatter</h3><p>Format and validate TOML config files.</p></article></a>
+        <div class="tool-grid">
+          <a href="/youtube-metadata-generator.html" class="tool-card"><article class="tool-card"><div class="tool-card-head"><span class="tool-icon">YT</span></div><h3>YouTube Metadata Generator</h3><p>Create title, description, and tags for videos.</p></article></a>
+          <a href="/sitemap-xml-validator.html" class="tool-card"><article class="tool-card"><div class="tool-card-head"><span class="tool-icon">S</span></div><h3>Sitemap XML Validator</h3><p>Check XML sitemaps and identify structural issues.</p></article></a>
+          <a href="/mojibrake-fixer.html" class="tool-card"><article class="tool-card"><div class="tool-card-head"><span class="tool-icon">M</span></div><h3>Mojibake Fixer</h3><p>Repair garbled text and encoding problems.</p></article></a>
+          <a href="/cron-expression-parser.html" class="tool-card"><article class="tool-card"><div class="tool-card-head"><span class="tool-icon">C</span></div><h3>Cron Expression Parser</h3><p>Validate cron syntax and preview next run times.</p></article></a>
+          <a href="/url-encode-decode.html" class="tool-card"><article class="tool-card"><div class="tool-card-head"><span class="tool-icon">URL</span></div><h3>URL Encoder &amp; Decoder</h3><p>Convert text and query strings for URLs safely.</p></article></a>
+          <a href="/toml-formatter.html" class="tool-card"><article class="tool-card"><div class="tool-card-head"><span class="tool-icon">T</span></div><h3>TOML Formatter</h3><p>Format and validate TOML config files.</p></article></a>
         </div>
       </div>
     </section>
@@ -325,13 +485,5 @@
       </div>
     </div>
   </footer>
-
-  <script>
-    document.getElementById("clearFilters").addEventListener("click", function () {
-      document.querySelectorAll(".filter-button").forEach(function (button) {
-        button.setAttribute("aria-pressed", button.dataset.filter === "all");
-      });
-    });
-  </script>
 </body>
 </html>
