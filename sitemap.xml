@@ -1,120 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
-  <!-- Homepage -->
   <url>
     <loc>https://onlinetoolsandconverters.cc/</loc>
   </url>
-
-  <!-- Website information pages -->
   <url>
-    <loc>https://onlinetoolsandconverters.cc/about</loc>
+    <loc>https://onlinetoolsandconverters.cc/about.html</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/contact</loc>
+    <loc>https://onlinetoolsandconverters.cc/contact.html</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/privacy-policy</loc>
-  </url>
-
-  <!-- Creator and media tools -->
-  <url>
-    <loc>https://onlinetoolsandconverters.cc/youtube-metadata-generator</loc>
+    <loc>https://onlinetoolsandconverters.cc/privacy-policy.html</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/passport-photo-print-sheet-maker</loc>
+    <loc>https://onlinetoolsandconverters.cc/youtube-metadata-generator.html</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/srt-subtitle-checker</loc>
-  </url>
-
-  <!-- Text and data tools -->
-  <url>
-    <loc>https://onlinetoolsandconverters.cc/ai-plagiarism-checker</loc>
+    <loc>https://onlinetoolsandconverters.cc/passport-photo-print-sheet-maker.html</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/apple-health-export-to-csv</loc>
+    <loc>https://onlinetoolsandconverters.cc/srt-subtitle-checker.html</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/csv-duplicate-row-remover</loc>
+    <loc>https://onlinetoolsandconverters.cc/ai-plagiarism-checker.html</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/csv-json%20to%20sql-converter</loc>
+    <loc>https://onlinetoolsandconverters.cc/apple-health-export-to-csv.html</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/merge-vcf-files</loc>
+    <loc>https://onlinetoolsandconverters.cc/csv-duplicate-row-remover.html</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/mojibrake-fixer</loc>
+    <loc>https://onlinetoolsandconverters.cc/csv-json%20to%20sql-converter.html</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/telegram-json-viewer</loc>
+    <loc>https://onlinetoolsandconverters.cc/merge-vcf-files.html</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/text-diff-checker</loc>
+    <loc>https://onlinetoolsandconverters.cc/mojibrake-fixer.html</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/toml-formatter</loc>
+    <loc>https://onlinetoolsandconverters.cc/telegram-json-viewer.html</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/url-encode-decode</loc>
+    <loc>https://onlinetoolsandconverters.cc/text-diff-checker.html</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/word-counter</loc>
+    <loc>https://onlinetoolsandconverters.cc/toml-formatter.html</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/yaml-diff-checker</loc>
-  </url>
-
-  <!-- Developer and website tools -->
-  <url>
-    <loc>https://onlinetoolsandconverters.cc/Favicon-generator</loc>
+    <loc>https://onlinetoolsandconverters.cc/url-encode-decode.html</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/Robots-txt-generator-and-validator</loc>
+    <loc>https://onlinetoolsandconverters.cc/word-counter.html</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/batch-pgn-validator</loc>
+    <loc>https://onlinetoolsandconverters.cc/yaml-diff-checker.html</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/cron-expression-parser</loc>
+    <loc>https://onlinetoolsandconverters.cc/Favicon-generator.html</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/curl-converter</loc>
+    <loc>https://onlinetoolsandconverters.cc/Robots-txt-generator-and-validator.html</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/ipv4-subnet-calculator</loc>
+    <loc>https://onlinetoolsandconverters.cc/batch-pgn-validator.html</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/regex-tester</loc>
+    <loc>https://onlinetoolsandconverters.cc/cron-expression-parser.html</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/sha512-hash-generator</loc>
+    <loc>https://onlinetoolsandconverters.cc/curl-converter.html</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/sitemap-xml-validator</loc>
+    <loc>https://onlinetoolsandconverters.cc/ipv4-subnet-calculator.html</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/wcag-contrast-checker</loc>
+    <loc>https://onlinetoolsandconverters.cc/regex-tester.html</loc>
   </url>
-
-  <!-- Calculators -->
   <url>
-    <loc>https://onlinetoolsandconverters.cc/electricity-cost-calculator</loc>
+    <loc>https://onlinetoolsandconverters.cc/sha512-hash-generator.html</loc>
+  </url>
+  <url>
+    <loc>https://onlinetoolsandconverters.cc/sitemap-xml-validator.html</loc>
+  </url>
+  <url>
+    <loc>https://onlinetoolsandconverters.cc/wcag-contrast-checker.html</loc>
+  </url>
+  <url>
+    <loc>https://onlinetoolsandconverters.cc/electricity-cost-calculator.html</loc>
   </url>
   <url>
     <loc>https://onlinetoolsandconverters.cc/joules-to-volts-calculator</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/solution-concentration-dilution-calculator</loc>
-  </url>
-
-  <!-- Business tools -->
-  <url>
-    <loc>https://onlinetoolsandconverters.cc/ad-profitability-calculator</loc>
+    <loc>https://onlinetoolsandconverters.cc/solution-concentration-dilution-calculator.html</loc>
   </url>
   <url>
-    <loc>https://onlinetoolsandconverters.cc/ppc-affiliate-roi-calculator</loc>
+    <loc>https://onlinetoolsandconverters.cc/ad-profitability-calculator.html</loc>
   </url>
-
+  <url>
+    <loc>https://onlinetoolsandconverters.cc/ppc-affiliate-roi-calculator.html</loc>
+  </url>
 </urlset>
